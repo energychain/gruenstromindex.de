@@ -78,7 +78,11 @@ $(document).ready(function() {
             root: $('#roottopic').val(),
             autoconnect: $("#mqttAutoConnect").is(":checked")
         }
-
+        if(mqttsettings.root.length > 2) {
+          if(mqttsettings.root.substr(-1) != "/") {
+            mqttsettings.root = mqttsettings.root+"/";
+          }
+        }
         const client = mqtt.connect(mqttsettings.url);
         client.on("connect", () => {
             client.subscribe(mqttsettings.root+"presence", (err) => {
