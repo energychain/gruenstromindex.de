@@ -110,7 +110,7 @@ $(document).ready(function() {
     } else {
       const populateRoot = function() {
         if(window.wallet) {
-          $('#roottopic').val("gruenstrom/"+window.wallet.address+"");
+          $('#roottopic').val("gruenstrom/"+window.wallet.address+"/");
         } else {
           setTimeout(populateRoot, 1000);
         }
