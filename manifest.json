@@ -1,5 +1,1 @@
-{"short_name":"GrünstromIndex","name":"Corrently GrünstromIndex","icons":[
-    {"src":"https://app.gruenstromindex.de/assets/img/favicon-196x196.png","type":"image/png","sizes":"196x196","purpose":"any maskable"},
-    {"src":"https://app.gruenstromindex.de/assets/img/favicon-196x196.png","type":"image/png","sizes":"196x196","purpose":"any maskable"},
-    {"src":"https://app.gruenstromindex.de/assets/img/corrently_transparent-1.png","type":"image/png","sizes":"512x512","purpose":"maskable"}
-    ],"start_url":"/assets/js/","background_color":"#fcfafa","theme_color":"#4d9604","display":"fullscreen"}
+{"short_name":"GrünstromIndex","name":"Corrently GrünstromIndex","icons":[{"src":"https://app.gruenstromindex.de/assets/img/favicon-196x196.png","type":"image/png","sizes":"196x196","purpose":"any maskable"},{"src":"https://app.gruenstromindex.de/assets/img/corrently_transparent-1.png","type":"image/png","sizes":"512x512","purpose":"any maskable"}],"start_url":"/assets/js/","background_color":"#fcfafa","theme_color":"#4d9604","display":"fullscreen"}
