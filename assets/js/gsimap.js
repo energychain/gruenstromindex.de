@@ -69,7 +69,7 @@ $(function() {
     now.setHours(now.getHours() + idx + 1);
     now.setMinutes(0);
     now.setSeconds(0);
-    $('#time').html(now.toLocaleString('de-DE').substring(0,16));
+    $('#time').html('🕑 '+now.toLocaleString('de-DE').substring(0,16));
     if(typeof data_to_map === 'undefined') data_to_map = window.mapdata;
     window.mapdata = data_to_map;
     if(typeof data_to_map == 'undefined') return;
