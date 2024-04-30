@@ -1,0 +1,2 @@
+# gruenstromindex.de
+Regionaler Grünstrom
