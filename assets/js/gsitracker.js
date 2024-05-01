@@ -57,8 +57,8 @@ const handleReadingButtonEvents = function() {
           $('#presentJWTContent').val(data2.jwt);
           $('#presentJSON').val(JSON.stringify(data2.json, undefined, 4));
           
-         let text ="<blockquote>Für die Inhaber der Kennung <abbr class='text-primary' title='"+data2.json.holder+"'>"+data2.json.holder.substring(0,6)+"...</abbr> wird ";
-         text += "ein Stromverbrauch unter der Kennung <abbr class='text-primary' title='"+data2.json.sub+"'>"+data2.json.sub.substring(0,6)+"...</abbr> von "+(data2.json.consumption/1000)+"kWh und eine Emission von "+(data2.json.emission/1000).toFixed(3).replace('.',',')+"kgCO<sub></sub> ";
+         let text ="<blockquote>Für den Inhaber der Kennung <abbr class='text-primary' title='"+data2.json.holder+"'>"+data2.json.holder.substring(0,6)+"...</abbr> wird ";
+         text += "ein Stromverbrauch unter der Kennung <abbr class='text-primary' title='"+data2.json.sub+"'>"+data2.json.sub.substring(0,6)+"...</abbr> von "+(data2.json.consumption/1000)+"kWh bei einer Emission von "+(data2.json.emission/1000).toFixed(3).replace('.',',')+"kgCO<sub></sub> ";
          text += "am "+new Date(data2.json.iat*1000).toLocaleString()+" durch den Inhaber der Kennung <abbr class='text-primary' title='"+data2.json.iss+"'>"+data2.json.iss.substring(0,6)+"...</abbr>  bestätigt ";
          text += "für den Zeitraum von "+new Date(data2.json.nbf*1000).toLocaleString()+" bis "+new Date(data2.json.exp*1000).toLocaleString()+" mit der digitalen Signatur <abbr class='text-primary' title='"+data2.json.sig+"'>"+data2.json.sig.substring(0,6)+"...</abbr>  </blockquote."
           text += "<br/><p class='text-muted'>"+""+"</p>";
