@@ -284,8 +284,9 @@ $(document).ready(function() {
       });
 
       $('#frmJWTValidate').on('submit',function(e) {
-        $('#modalPresentation').modal('show');
         e.preventDefault();
+        console.log("In Here");
+        $('#modalPresentation').modal('show');
         qrVerify();
       });
       $('#openQRCam').on('click',function(e) {
