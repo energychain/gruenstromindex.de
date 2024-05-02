@@ -20,6 +20,55 @@ const trackerRowHTML = function(tracker) {
   return html;
 }
 
+const qrVerify = function() {
+  const url = 'https://api.corrently.io/v2.0/scope2/eventResolver';
+        
+  let startData = {
+    jwt: $('#jwtInput').val()
+  };
+  
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(startData)
+  })
+  .then(response => response.json())
+  .then(data => {
+    data.verification.payload.did = data.verification.issuer;
+    data.verification.payload.sig = "DIDSIG:"+JSON.stringify(data.verification.signer);
+    renderDID({
+      jwt: $('#jwtInput').val(),
+      json:data.verification.payload
+    })
+    
+    console.log(data);
+  });
+}
+const renderDID = function(data2) {
+  $('#qrcode').html('');
+  $('#presentJWTContent').val(data2.jwt);
+  $('#presentJSON').val(JSON.stringify(data2.json, undefined, 4));
+  let text = "";
+  try {
+   text +="<blockquote>Für den Inhaber der Kennung <abbr class='text-primary' title='Consumer:"+data2.json.consumer+"'>"+data2.json.consumer.substring(0,6)+"...</abbr> wird ";
+    text += "ein Stromverbrauch in "+data2.json.country+"-"+data2.json.zip+" unter der Kennung <abbr class='text-primary' title='"+data2.json.sub+"'>"+data2.json.sub.substring(0,6)+"...</abbr> von "+(data2.json.consumption/1000)+"kWh bei einer Emission von "+(data2.json.emission/1000).toFixed(3).replace('.',',')+"kgCO<sub></sub> ";
+    text += "am "+new Date(data2.json.iat*1000).toLocaleString()+" durch den Inhaber der Kennung <abbr class='text-primary' title='Notary:"+data2.json.notary+"'>"+data2.json.notary.substring(0,6)+"...</abbr>  bestätigt ";
+    text += "für den Zeitraum von "+new Date(data2.json.start*1000).toLocaleString()+" bis "+new Date(data2.json.end*1000).toLocaleString()+" mit der digitalen Signatur <abbr class='text-primary' title='"+data2.json.sig+"'>"+data2.json.sig.substring(0,6)+"...</abbr>  </blockquote."
+    text += "<br/><hr style='margin-top:15px;'><p class='text-muted'>"+data2.json.did+"</p>";
+  } catch(e) {}
+
+ $('#presentText').html(text);
+  var qrcode = new QRCode(document.getElementById("qrcode"), {
+    text: data2.jwt,
+    width: 512,
+    height: 512,
+    colorDark : "#000000",
+    colorLight : "#ffffff",
+    correctLevel : QRCode.CorrectLevel.M
+ });
+}
 const handleReadingButtonEvents = function() {
   $('.btnReading').off();
   $('.btnReading').on('click',function(e) {
@@ -53,24 +102,7 @@ const handleReadingButtonEvents = function() {
         })
         .then(response => response.json())
         .then(data2 => {
-          $('#qrcode').html('');
-          $('#presentJWTContent').val(data2.jwt);
-          $('#presentJSON').val(JSON.stringify(data2.json, undefined, 4));
-          
-         let text ="<blockquote>Für den Inhaber der Kennung <abbr class='text-primary' title='"+data2.json.holder+"'>"+data2.json.holder.substring(0,6)+"...</abbr> wird ";
-         text += "ein Stromverbrauch unter der Kennung <abbr class='text-primary' title='"+data2.json.sub+"'>"+data2.json.sub.substring(0,6)+"...</abbr> von "+(data2.json.consumption/1000)+"kWh bei einer Emission von "+(data2.json.emission/1000).toFixed(3).replace('.',',')+"kgCO<sub></sub> ";
-         text += "am "+new Date(data2.json.iat*1000).toLocaleString()+" durch den Inhaber der Kennung <abbr class='text-primary' title='"+data2.json.iss+"'>"+data2.json.iss.substring(0,6)+"...</abbr>  bestätigt ";
-         text += "für den Zeitraum von "+new Date(data2.json.nbf*1000).toLocaleString()+" bis "+new Date(data2.json.exp*1000).toLocaleString()+" mit der digitalen Signatur <abbr class='text-primary' title='"+data2.json.sig+"'>"+data2.json.sig.substring(0,6)+"...</abbr>  </blockquote."
-          text += "<br/><p class='text-muted'>"+""+"</p>";
-         $('#presentText').html(text);
-          var qrcode = new QRCode(document.getElementById("qrcode"), {
-            text: data2.jwt,
-            width: 512,
-            height: 512,
-            colorDark : "#000000",
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.M
-        });
+            renderDID(data2);
         });
       });
     });
@@ -250,4 +282,36 @@ $(document).ready(function() {
           });
         });
       });
+
+      $('#frmJWTValidate').on('submit',function(e) {
+        $('#modalPresentation').modal('show');
+        e.preventDefault();
+        qrVerify();
+      });
+      $('#openQRCam').on('click',function(e) {
+        $('#modalQR').modal('show');
+
+        function onScanSuccess(decodedText, decodedResult) {
+          // handle the scanned code as you like, for example:  
+          $('#modalQR').modal('hide');
+          $('#jwtInput').val(decodedText);
+          $('#modalPresentation').modal('show');
+          qrVerify();
+         
+        }
+        
+        function onScanFailure(error) {
+          // handle scan failure, usually better to ignore and keep scanning.
+          // for example:
+          console.warn(`Code scan error = ${error}`);
+        }
+        
+        let html5QrcodeScanner = new Html5QrcodeScanner(
+          "reader",
+          { fps: 10, qrbox: {width: 250, height: 250} },
+          /* verbose= */ false);
+        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+
+      
+      })
 });
