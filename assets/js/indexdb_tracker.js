@@ -36,15 +36,19 @@ function connectDB(callback) {
 function addData(db,data, callback) {
   const transaction = db.transaction(storeName, "readwrite");
   const objectStore = transaction.objectStore(storeName);
+  try {
     const request = objectStore.add(data);
 
     request.onerror = (event) => {
-    console.error("Error adding data:", event.target.error);
+       updateByEventID(db, data.eventId, data, callback);
     };
 
     request.onsuccess = (event) => {
-    callback();
+       callback();
     };
+  } catch(e) {
+    updateByEventID(db, data.eventId, data, callback);
+  }
 }
 
 function getByEventID(db, eventId, callback) {
@@ -78,6 +82,6 @@ function updateByEventID(db, eventId, data, callback) {
     };
   
     request.onsuccess = (event) => {
-      callback();
+      callback(data);
     };
   }
