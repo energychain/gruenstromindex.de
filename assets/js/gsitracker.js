@@ -3,20 +3,28 @@ const trackerRowHTML = function(tracker,fromDelegation) {
   let disableManual = '';
   if((tracker.reading == '[delegation]') && (typeof fromDelegation == 'undefined') && (fromDelegation !== null)) {
     delegation = true;
-    disableManual = ' disabled="disabled" ';
+   
     let data = JSON.parse(tracker.did);
     
     // hier können wir einen Update Timer starten...
+    const updater =function(tracker) {
+      validateDelegation(tracker.consumption,function(data) {
+        let html = trackerRowHTML(JSON.parse(data.did),true);
+        $('#trackerRow'+tracker.eventId).replaceWith(html);
+        handleReadingButtonEvents();
+      })
 
-    validateDelegation(tracker.consumption,function(data) {
-      let html = trackerRowHTML(JSON.parse(data.did),true);
-      $('#trackerRow'+tracker.eventId).replaceWith(html);
-    })
+    }
+    updater(tracker);
+    setInterval(function() { 
+      updater(tracker); 
+    }, 900000);
 
     tracker.reading = data.reading;
     tracker.consumption = data.consumption;
     tracker.emission = data.emission;
   }
+  if(fromDelegation) {  disableManual = ' disabled="disabled" '; }
   
   let html = "";
   html += '<tr id="trackerRow'+tracker.eventId+'">';
@@ -225,6 +233,10 @@ $(document).ready(function() {
     $('#trackerNav').append('<li class="nav-item text-center"><a class="nav-link" href="#gsiTracker"><svg class="bi bi-plugin" xmlns="http://www.w3.org/2000/svg" style="color: #147a50;" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a7 7 0 1 1 2.898 5.673c-.167-.121-.216-.406-.002-.62l1.8-1.8a3.5 3.5 0 0 0 4.572-.328l1.414-1.415a.5.5 0 0 0 0-.707l-.707-.707 1.559-1.563a.5.5 0 1 0-.708-.706l-1.559 1.562-1.414-1.414 1.56-1.562a.5.5 0 1 0-.707-.706l-1.56 1.56-.707-.706a.5.5 0 0 0-.707 0L5.318 5.975a3.5 3.5 0 0 0-.328 4.571l-1.8 1.8c-.58.58-.62 1.6.121 2.137A8 8 0 1 0 0 8a.5.5 0 0 0 1 0"></path></svg><br/>Tracker</a></li>');
     $('#gsiAddTracker').on('click',function() {
         $('#modalTracker').modal('show');
+    });
+    $('#addManagedBtn').on('click',function() {
+        $('#modalManaged').modal('show');
+        $('#modalTracker').modal('hide');
     });
     $('#addManaged').on('submit',function(e) {
       e.preventDefault();
