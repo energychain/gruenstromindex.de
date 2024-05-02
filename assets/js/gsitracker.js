@@ -54,7 +54,7 @@ const renderDID = function(data2) {
   try {
    text +="<blockquote>Für den Inhaber der Kennung <abbr class='text-primary' title='Consumer:"+data2.json.consumer+"'>"+data2.json.consumer.substring(0,6)+"...</abbr> wird ";
     text += "ein Stromverbrauch in "+data2.json.country+"-"+data2.json.zip+" unter der Kennung <abbr class='text-primary' title='"+data2.json.sub+"'>"+data2.json.sub.substring(0,6)+"...</abbr> von "+(data2.json.consumption/1000)+"kWh bei einer Emission von "+(data2.json.emission/1000).toFixed(3).replace('.',',')+"kgCO<sub></sub> ";
-    text += "am "+new Date(data2.json.iat*1000).toLocaleString()+" durch den Inhaber der Kennung <abbr class='text-primary' title='Notary:"+data2.json.notary+"'>"+data2.json.notary.substring(0,6)+"...</abbr>  bestätigt ";
+    text += "am "+new Date(data2.json.iat*1000).toLocaleString()+" von der Kennung <abbr class='text-primary' title='Notary:"+data2.json.notary+"'>"+data2.json.notary.substring(0,6)+"...</abbr>  bestätigt ";
     text += "für den Zeitraum von "+new Date(data2.json.start*1000).toLocaleString()+" bis "+new Date(data2.json.end*1000).toLocaleString()+" mit der digitalen Signatur <abbr class='text-primary' title='"+data2.json.sig+"'>"+data2.json.sig.substring(0,6)+"...</abbr>  </blockquote."
     text += "<br/><hr style='margin-top:15px;'><p class='text-muted'>"+data2.json.did+"</p>";
   } catch(e) {}
