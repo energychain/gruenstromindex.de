@@ -14,7 +14,7 @@ $(document).ready(function(){
                 let startData = {
                     name:"Corrently GrünstromSchalter",
                     content:$('#sendMessage').val(),
-                    after:new Date(time * 1).toISOString().substring(0,16),
+                    after:new Date(time * 1).toISOString(),
                     title:"Corrently GrünstromSchalter",
                     id:$('#oneSignalId').val()
                   };
