@@ -78,9 +78,11 @@ $(document).ready(function() {
                 if(data.forecast[i].timeStamp> now) {
                   if(firstStamp=-1) firstStamp = i;
                     points.push( {
-                            x:new Date(data.forecast[i].timeStamp).toLocaleString("de-DE"),
+                          //  x:new Date(data.forecast[i].timeStamp).toLocaleString("de-DE"),
+                          x:data.forecast[i].timeStamp,
                             y:Math.round(data.forecast[i].gsi),
-                            t:data.forecast[i].timeStamp,
+                           t:new Date(data.forecast[i].timeStamp),
+                       
                             backgroundColor:"#ff0000"
                     }); 
                 }
@@ -101,11 +103,13 @@ $(document).ready(function() {
                 points[i].backgroundColor = bgcolor;
             }
             points.sort((a,b) => a.t - b.t);
+            /*
             for(let i=0;i<points.length;i++) {
                 if((i % 6 !== 0)&&(i!==0)) {
                     points[i].x = "";
                 }
             }
+            */
             
             const ctx = document.getElementById('chart'+zip).getContext('2d');
             const chart = new Chart(ctx, {
@@ -116,18 +120,29 @@ $(document).ready(function() {
                   label: 'GrünstromIndex',
                   data: points.map(item => item.y),
                   backgroundColor: points.map(item => item.backgroundColor),
-                  borderColor: '#000',  // Optional: Set border color for bars
-                  borderWidth: 1       // Optional: Set border width for bars
+                  borderColor: '#000',  
+                  borderWidth: 1,
+                  fill: true,
                 }]
               },
               options: {
+               responsive: true,
                 scales: {
-                  yAxes: [{
-                    ticks: {
-                      beginAtZero: true
-                    }
-                  }]
+                  y: {
+                    min:0,
+                    max:100
+                  },
+                  x: {
+                    type:"time",
+                    time: {
+                      tooltipFormat: 'DD.MM HH:mm',
+                      unit: 'hour'
+                    },
+                    min: points[0].x,
+                    max: points[0].x + Math.round((points[points.length-1].x - points[0].x)/4),
+                  }
                 },
+                
                 onClick: function(e, elements) {
                   if(typeof elements[0] !== 'undefined') {
                     const clickedIndex = elements[0].index;
@@ -137,14 +152,40 @@ $(document).ready(function() {
                     $('.submitSwitch').removeAttr('disabled');
                     $('#modalSwitch').modal('show');
                   }
-                },
+                }, 
+                
                 plugins: {
                     legend: {
                       display: false // Set display to false to hide the legend
+                    },
+                  zoom: {
+                      pan: {
+                        enabled: true,
+                        mode: 'x',
+                        min:points[0].x
+                      },
+                      zoom: {
+                        wheel: {
+                          enabled: false,
+                        },
+                        pinch: {
+                          enabled: false
+                        },
+                          mode: 'x',
+                        }
                     }
-                }
+                  }
+                
               }
             });
+            window.fcchart = chart;
+            //window.fcchart.zoom(1.5);
+/*
+            setTimeout(function() {
+              console.log("zoom");
+              window.fcchart.zoom(0.5);
+              window.fcchart.pan({x: new Date().getTime()})
+            },1000);*/
         });
     }
     let orte = window.localStorage.getItem("orte");
