@@ -21,7 +21,7 @@ $(document).ready(function(){
                   content:$('#sendMessage').val(),
                   after:new Date($('#sendAt').attr('data') * 1).toISOString().substring(0,16),
                   title:"Corrently GrünstromSchalter",
-                  id:('#oneSignalId').val()
+                  id:$('#oneSignalId').val()
                 };
                 
                 fetch(url, {
