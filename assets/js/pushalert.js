@@ -3,7 +3,6 @@ const commitBackend = function(time,href) {
     let startData = {
         name:"Corrently GrünstromSchalter",
         content:$('#sendMessage').val(),
-        after:new Date(time * 1).toISOString(),
         title:"Corrently GrünstromSchalter",
         id:$('#oneSignalId').val()
       };
