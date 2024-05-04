@@ -29,11 +29,37 @@ const trackerRowHTML = function(tracker,fromDelegation) {
   if(tracker.type == "generation") { multipl = -1; }
   let html = "";
   html += '<tr id="trackerRow'+tracker.eventId+'">';
-  html += '<td>'+tracker.name+'</td>';
+  try{
+        
+    tracker.did = JSON.parse(tracker.did);
+  } catch(e) {
+    tracker.did = {};
+  }
+ 
+  if((tracker.did.ownerId == window.wallet.address)||(tracker.did.entity == window.wallet.address)) {
+    html += '<td title="Eigentümer">';
+   
+    html += '<svg class="bi bi-wallet" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">';
+    html += '<path d="M0 3a2 2 0 0 1 2-2h13.5a.5.5 0 0 1 0 1H15v2a1 1 0 0 1 1 1v8.5a1.5 1.5 0 0 1-1.5 1.5h-12A2.5 2.5 0 0 1 0 12.5zm1 1.732V12.5A1.5 1.5 0 0 0 2.5 14h12a.5.5 0 0 0 .5-.5V5H2a1.99 1.99 0 0 1-1-.268M1 3a1 1 0 0 0 1 1h12V2H2a1 1 0 0 0-1 1"></path>';
+    html += '</svg>';
+  
+    html += '<span class="">';
+  } else {
+    html += '<td title="Betrachter">';
+
+    html += '<svg class="bi bi-link-45deg" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">';
+    html += '<path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.002 1.002 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z"></path>';
+    html += ' <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243z"></path>';
+    html +='</svg>';
+
+    html += '<span class="text-muted">';
+  }
+  html += ' '+tracker.name+'</span></td>';
   html += '<td align="right">'+(multipl * tracker.consumption/1000).toFixed(3).replace('.',',')+'</td>';
   html += '<td align="right">'+(multipl * tracker.emission/1000).toFixed(3).replace('.',',')+'</td>';
   html += '<td>'+new Date(tracker.iat*1000).toLocaleString()+'</td>';
   html += '<td>';
+  
   html += '<button title="Nachweisen" style="background-color:#147a50;margin-right:5px;" class="btn btn-primary btn-sm btnPresent" data-eventId="'+tracker.eventId+'">';
   html += '<svg class="bi bi-postage" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">';
   html += '<path d="M4.75 3a.75.75 0 0 0-.75.75v8.5c0 .414.336.75.75.75h6.5a.75.75 0 0 0 .75-.75v-8.5a.75.75 0 0 0-.75-.75zM11 12H5V4h6z"></path>';
