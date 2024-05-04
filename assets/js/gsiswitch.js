@@ -34,7 +34,9 @@ $(document).ready(function() {
             addSwitchData(db,await signJSON(switchData), () => { 
                 console.log("Data added successfully.");
                 if($('#checkPush').is(':checked')) {
-                    location.href="./pushalert.html?switch="+switchData.name+"&time="+switchData.time+"&state="+switchData.state
+                    let state = "ausschalten";
+                    if(switchData.state == 1) state = "einschalten";
+                    location.href="./pushalert.html?switch="+switchData.name+"&time="+switchData.time+"&state="+state
                 } else {
                     location.reload()
                 }
