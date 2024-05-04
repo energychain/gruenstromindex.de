@@ -33,7 +33,11 @@ $(document).ready(function() {
         connectSwitchDB( async (db) => {
             addSwitchData(db,await signJSON(switchData), () => { 
                 console.log("Data added successfully.");
-                location.reload()
+                if($('#checkPush').is(':checked')) {
+                    location.href="./pushalert.html?switch="+switchData.name+"&time="+switchData.time+"&state="+switchData.state
+                } else {
+                    location.reload()
+                }
                 });
         });
     });
