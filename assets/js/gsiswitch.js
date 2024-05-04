@@ -22,6 +22,7 @@ $(document).ready(function() {
     });
 
     $('#switchForm').on('submit',async function(e) {
+        e.preventDefault();
         $('.submitSwitch').attr('disabled',true);
 
         const switchData = {
