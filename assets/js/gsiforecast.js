@@ -82,7 +82,7 @@ $(document).ready(function() {
                           x:data.forecast[i].timeStamp,
                             y:Math.round(data.forecast[i].gsi),
                            t:new Date(data.forecast[i].timeStamp),
-                       
+                          time:data.forecast[i].timeStamp * 1,
                             backgroundColor:"#ff0000"
                     }); 
                 }
@@ -146,9 +146,9 @@ $(document).ready(function() {
                 onClick: function(e, elements) {
                   if(typeof elements[0] !== 'undefined') {
                     const clickedIndex = elements[0].index;
-                    $('#switchTime').val(new Date(points[clickedIndex].t).toLocaleString("de-DE"));
+                    $('#switchTime').val(new Date(points[clickedIndex].time).toLocaleString("de-DE"));
                     $('#switchName').val('');
-                    $('#switchTime').attr('data',points[clickedIndex].t);
+                    $('#switchTime').attr('data',points[clickedIndex].time);
                     $('.submitSwitch').removeAttr('disabled');
                     $('#modalSwitch').modal('show');
                   }
