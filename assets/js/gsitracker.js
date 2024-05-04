@@ -328,8 +328,18 @@ $(document).ready(function() {
         html += '</tr>';
         html += '</thead>';
         html += '<tbody>';
-      
+
+        let totalKWH =0;
+        let totalCO2 =0;
+
         for(let i=0;i<entries.length;i++) {
+          if(entries[i].type === "consumption") {
+            totalKWH += entries[i].consumption * 1;
+            totalCO2 += entries[i].emission * 1;
+          } else {
+            totalKWH += entries[i].consumption * (-1);
+            totalCO2 += entries[i].emission * (-1);
+          }
           html += trackerRowHTML(entries[i]);
           const gsiEvent = new CustomEvent('mqtt-subscribe', {detail:"tracker/"+entries[i].eventId+"/reading"});
           document.dispatchEvent(gsiEvent);
@@ -341,7 +351,8 @@ $(document).ready(function() {
       
         html += '</tbody>';
         html += '</table>';
-      
+        $('#totalKWH').html(Math.round(totalKWH/1000));
+        $('#totalCO2').html(Math.round(totalCO2/1000));
         return html;
       }
       connectDB((db) => {
