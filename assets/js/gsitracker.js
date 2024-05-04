@@ -139,7 +139,7 @@ const updateLastResolved = function() {
     let resolution = JSON.parse(window.localStorage.getItem('lastResolvedJWT'));
     html += '<h4>Letzte Prüfung</h4>';
     html += '<table class="table table-condensed">';
-    html += '<tr><td>Geräte Kennung</td><td>'+resolution.json.consumer+'</td></tr>';
+    html += '<tr><td>Entität</td><td>'+resolution.json.entity+'</td></tr>';
     html += '<tr><td>Ort</td><td>'+resolution.json.country+"-"+resolution.json.zip+'</td></tr>';
     html += '<tr><td>Stromverbrauch</td><td>'+(resolution.json.consumption/1000).toFixed(3).replace('.',',')+' kWh</td></tr>';
     html += '<tr><td>Emission</td><td>'+(resolution.json.emission/1000).toFixed(3).replace('.',',')+' kgCO<sub>2</sub></td></tr>';
