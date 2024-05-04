@@ -36,7 +36,7 @@ $(document).ready(function() {
                 if($('#checkPush').is(':checked')) {
                     let state = "ausschalten";
                     if(switchData.state == 1) state = "einschalten";
-                    location.href="./pushalert.html?switch="+switchData.name+"&time="+switchData.time+"&state="+state
+                    location.href="./pushalert.html?switch="+encodeURIComponent(switchData.name)+"&time="+switchData.time+"&state="+state
                 } else {
                     location.reload()
                 }
