@@ -18,6 +18,9 @@ $(document).ready(function(){
                     title:"Corrently GrünstromSchalter",
                     id:$('#oneSignalId').val()
                   };
+                  if(time > 0 ) {
+                    startData.after = new Date(time * 1).toISOString();
+                  }
                 fetch(url, {
                     method: 'POST',
                     headers: {
@@ -38,7 +41,7 @@ $(document).ready(function(){
                 commitBackend($('#sendAt').attr('data'),'./?#gsiTracker')
             });
             $('#testButton').on('click', function(e) {
-                commitBackend(new Date().getTime(),'#');
+                commitBackend(0,'#');
             });
         }
     }
