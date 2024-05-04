@@ -333,12 +333,17 @@ $(document).ready(function() {
         let totalCO2 =0;
 
         for(let i=0;i<entries.length;i++) {
-          if(entries[i].type === "consumption") {
-            totalKWH += entries[i].consumption * 1;
-            totalCO2 += entries[i].emission * 1;
-          } else {
-            totalKWH += entries[i].consumption * (-1);
-            totalCO2 += entries[i].emission * (-1);
+          try {
+           const did = JSON.parse(entries[i].did);
+            if(entries[i].type === "consumption") {
+              totalKWH += did.consumption * 1;
+              totalCO2 += did.emission * 1;
+            } else {
+              totalKWH += did.consumption * (-1);
+              totalCO2 += did.emission * (-1);
+            }
+          } catch(e) {
+
           }
           html += trackerRowHTML(entries[i]);
           const gsiEvent = new CustomEvent('mqtt-subscribe', {detail:"tracker/"+entries[i].eventId+"/reading"});
