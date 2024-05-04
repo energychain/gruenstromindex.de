@@ -85,7 +85,7 @@ const renderDID = function(data2) {
         type = "Erzeugung";
         multpl = -1;
     }
-   text +="<strong>Kryptographisch geprüfter Sachverhalt</strong><br/><blockquote>Für den Inhaber der ID <abbr class='text-primary' title='Consumer:"+data2.json.consumer+"'>"+data2.json.consumer.substring(0,6)+"...</abbr> wird ";
+   text +="<strong>Kryptographisch geprüfter Sachverhalt</strong><br/><blockquote>Für den Inhaber der ID <abbr class='text-primary' title='Entity:"+data2.json.entity+"'>"+data2.json.entity.substring(0,6)+"...</abbr> wird ";
     text += "ein "+type+" in "+data2.json.country+"-"+data2.json.zip+" unter der ID <abbr class='text-primary' title='"+data2.json.sub+"'>"+data2.json.sub.substring(0,6)+"...</abbr> von "+(data2.json.consumption/1000)+"kWh bei einer Emission von "+(multpl * data2.json.emission/1000).toFixed(3).replace('.',',')+"kgCO<sub></sub> ";
     text += "für den Zeitraum von "+new Date(data2.json.start*1000).toLocaleString()+" bis "+new Date(data2.json.end*1000).toLocaleString();
     text += " am "+new Date(data2.json.iat*1000).toLocaleString()+" von der ID <abbr class='text-primary' title='Notary:"+data2.json.notary+"'>"+data2.json.notary.substring(0,6)+"...</abbr>  bestätigt ";
