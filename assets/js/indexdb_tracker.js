@@ -8,18 +8,18 @@ function connectDB(callback) {
     request.onupgradeneeded = (event) => {
     db = event.target.result;
     const objectStore = db.createObjectStore(storeName, { keyPath: "eventId"});
-    
-    objectStore.createIndex("ownerId", "ownerId", { unique: false });
-    objectStore.createIndex("zip", "zip", { unique: false });
-    objectStore.createIndex("gsi", "gsi", { unique: false });
-    objectStore.createIndex("reading", "reading", { unique: false });
-    objectStore.createIndex("name", "name", { unique: false });
-    objectStore.createIndex("iad", "iad", { unique: false });
-    objectStore.createIndex("sig", "sig", { unique: true });
-    objectStore.createIndex("did", "did", { unique: true });
-    objectStore.createIndex("consumption", "consumption", { unique: false });
-    objectStore.createIndex("emission", "emission", { unique: false });
-    objectStore.createIndex("pending", "pending", { unique: false });
+      objectStore.createIndex("ownerId", "ownerId", { unique: false });
+      objectStore.createIndex("zip", "zip", { unique: false });
+      objectStore.createIndex("gsi", "gsi", { unique: false });
+      objectStore.createIndex("reading", "reading", { unique: false });
+      objectStore.createIndex("name", "name", { unique: false });
+      objectStore.createIndex("iad", "iad", { unique: false });
+      objectStore.createIndex("sig", "sig", { unique: true });
+      objectStore.createIndex("did", "did", { unique: true });
+      objectStore.createIndex("consumption", "consumption", { unique: false });
+      objectStore.createIndex("emission", "emission", { unique: false });
+      objectStore.createIndex("pending", "pending", { unique: false });
+      objectStore.createIndex("type", "type", { unique: false });
     };
     
     request.onsuccess = (event) => {

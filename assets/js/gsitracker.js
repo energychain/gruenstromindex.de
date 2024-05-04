@@ -25,12 +25,13 @@ const trackerRowHTML = function(tracker,fromDelegation) {
     tracker.emission = data.emission;
   }
   if(fromDelegation) {  disableManual = ' disabled="disabled" '; }
-  
+  let multipl = 1;
+  if(tracker.type == "generation") { multipl = -1; }
   let html = "";
   html += '<tr id="trackerRow'+tracker.eventId+'">';
   html += '<td>'+tracker.name+'</td>';
-  html += '<td align="right">'+(tracker.consumption/1000).toFixed(3).replace('.',',')+'</td>';
-  html += '<td align="right">'+(tracker.emission/1000).toFixed(3).replace('.',',')+'</td>';
+  html += '<td align="right">'+(multipl * tracker.consumption/1000).toFixed(3).replace('.',',')+'</td>';
+  html += '<td align="right">'+(multipl * tracker.emission/1000).toFixed(3).replace('.',',')+'</td>';
   html += '<td>'+new Date(tracker.iat*1000).toLocaleString()+'</td>';
   html += '<td>';
   html += '<button title="Nachweisen" style="background-color:#147a50;margin-right:5px;" class="btn btn-primary btn-sm btnPresent" data-eventId="'+tracker.eventId+'">';
@@ -78,8 +79,14 @@ const renderDID = function(data2) {
   $('#presentJSON').val(JSON.stringify(data2.json, undefined, 4));
   let text = "";
   try {
+    let type = "Stromverbrauch";
+    let multpl = 1;
+    if(data2.json.type == "generation") {
+        type = "Erzeugung";
+        multpl = -1;
+    }
    text +="<strong>Kryptographisch geprüfter Sachverhalt</strong><br/><blockquote>Für den Inhaber der ID <abbr class='text-primary' title='Consumer:"+data2.json.consumer+"'>"+data2.json.consumer.substring(0,6)+"...</abbr> wird ";
-    text += "ein Stromverbrauch in "+data2.json.country+"-"+data2.json.zip+" unter der ID <abbr class='text-primary' title='"+data2.json.sub+"'>"+data2.json.sub.substring(0,6)+"...</abbr> von "+(data2.json.consumption/1000)+"kWh bei einer Emission von "+(data2.json.emission/1000).toFixed(3).replace('.',',')+"kgCO<sub></sub> ";
+    text += "ein "+type+" in "+data2.json.country+"-"+data2.json.zip+" unter der ID <abbr class='text-primary' title='"+data2.json.sub+"'>"+data2.json.sub.substring(0,6)+"...</abbr> von "+(data2.json.consumption/1000)+"kWh bei einer Emission von "+(multpl * data2.json.emission/1000).toFixed(3).replace('.',',')+"kgCO<sub></sub> ";
     text += "für den Zeitraum von "+new Date(data2.json.start*1000).toLocaleString()+" bis "+new Date(data2.json.end*1000).toLocaleString();
     text += " am "+new Date(data2.json.iat*1000).toLocaleString()+" von der ID <abbr class='text-primary' title='Notary:"+data2.json.notary+"'>"+data2.json.notary.substring(0,6)+"...</abbr>  bestätigt ";
     text += " mit der digitalen Signatur <abbr class='text-primary' title='"+data2.json.sig+"'>"+data2.json.sig.substring(0,6)+"...</abbr>  </blockquote."
@@ -106,7 +113,7 @@ const updateLastResolved = function() {
     let resolution = JSON.parse(window.localStorage.getItem('lastResolvedJWT'));
     html += '<h4>Letzte Prüfung</h4>';
     html += '<table class="table table-condensed">';
-    html += '<tr><td>Verbraucher Kennung</td><td>'+resolution.json.consumer+'</td></tr>';
+    html += '<tr><td>Geräte Kennung</td><td>'+resolution.json.consumer+'</td></tr>';
     html += '<tr><td>Ort</td><td>'+resolution.json.country+"-"+resolution.json.zip+'</td></tr>';
     html += '<tr><td>Stromverbrauch</td><td>'+(resolution.json.consumption/1000).toFixed(3).replace('.',',')+' kWh</td></tr>';
     html += '<tr><td>Emission</td><td>'+(resolution.json.emission/1000).toFixed(3).replace('.',',')+' kgCO<sub>2</sub></td></tr>';
@@ -212,6 +219,7 @@ const updateDid = async function(updateData) {
           data.iat = data2.iat;
           data.eventId = data2.eventId;
           data.name = data2.name;
+          data.type = data2.type;
           // Here we publish
 
           updateByEventID(db, data2.eventId, data, () => {
@@ -264,9 +272,14 @@ $(document).ready(function() {
               ownerId: window.wallet.address,
               name: $('#nameTracker').val(),
               reading:$('#readingTracker').val()*1000,
-              iat: Math.round(new Date().getTime()/1000)
+              iat: Math.round(new Date().getTime()/1000),
+              type: "consumption"
             };
-            
+
+            if($("#typeGeneration").is(":checked")) {
+              startData.type = "generation";
+            }
+
             fetch(url, {
               method: 'POST',
               headers: {
