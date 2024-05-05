@@ -35,7 +35,6 @@ const trackerRowHTML = function(tracker,fromDelegation) {
   } catch(e) {
     tracker.did = {};
   }
-  console.log(tracker);
 
   if((tracker.did.aud == window.wallet.address)||(tracker.did.entity == window.wallet.address)||(tracker.ownerId == window.wallet.address)) {
     
@@ -67,8 +66,8 @@ const trackerRowHTML = function(tracker,fromDelegation) {
 
   html += '<td>'+new Date(tracker.iat*1000).toLocaleString()+'</td>';
   html += '<td>';
-  html += '<button title="Löschen" style="background-color:#147a50;margin-right:5px;" class="btn btn-primary btn-sm btnRemoveTracker" data-eventId="'+tracker.eventId+'">';
-  html +=  '<svg class="bi bi-trash3" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"></path></svg>';
+  html += '<button title="Manuelle Ablesung" '+disableManual+' style="background-color:#147a50;margin-right:5px" class="btn btn-primary btn-sm btnReading" data-eventId="'+tracker.eventId+'">';
+  html += '<svg class="bi bi-speedometer" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2M3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8m9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5m.754-4.246a.389.389 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.389.389 0 0 0-.029-.518z"></path><path fill-rule="evenodd" d="M6.664 15.889A8 8 0 1 1 9.336.11a8 8 0 0 1-2.672 15.78zm-4.665-4.283A11.945 11.945 0 0 1 8 10c2.186 0 4.236.585 6.001 1.606a7 7 0 1 0-12.002 0z"></path></svg>';
   html += '</button>';
   html += '<button title="Nachweisen" style="background-color:#147a50;margin-right:5px;" class="btn btn-primary btn-sm btnPresent" data-eventId="'+tracker.eventId+'">';
   html += '<svg class="bi bi-postage" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">';
@@ -76,9 +75,17 @@ const trackerRowHTML = function(tracker,fromDelegation) {
   html += '<path d="M3.5 1a1 1 0 0 0 1-1h1a1 1 0 0 0 2 0h1a1 1 0 0 0 2 0h1a1 1 0 1 0 2 0H15v1a1 1 0 1 0 0 2v1a1 1 0 1 0 0 2v1a1 1 0 1 0 0 2v1a1 1 0 1 0 0 2v1a1 1 0 1 0 0 2v1h-1.5a1 1 0 1 0-2 0h-1a1 1 0 1 0-2 0h-1a1 1 0 1 0-2 0h-1a1 1 0 1 0-2 0H1v-1a1 1 0 1 0 0-2v-1a1 1 0 1 0 0-2V9a1 1 0 1 0 0-2V6a1 1 0 0 0 0-2V3a1 1 0 0 0 0-2V0h1.5a1 1 0 0 0 1 1M3 3v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1"></path>';
   html += '</svg>';
   html += '</button>';
-  html += '<button title="Manuelle Ablesung" '+disableManual+' style="background-color:#147a50;" class="btn btn-primary btn-sm btnReading" data-eventId="'+tracker.eventId+'">';
-  html += '<svg class="bi bi-speedometer" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2M3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8m9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5m.754-4.246a.389.389 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.389.389 0 0 0-.029-.518z"></path><path fill-rule="evenodd" d="M6.664 15.889A8 8 0 1 1 9.336.11a8 8 0 0 1-2.672 15.78zm-4.665-4.283A11.945 11.945 0 0 1 8 10c2.186 0 4.236.585 6.001 1.606a7 7 0 1 0-12.002 0z"></path></svg>';
+
+  html += '<button title="Inhaberschaft übertragen" style="background-color:#e6b41e;margin-right:5px;" class="btn btn-primary btn-sm btnTransferTracker" data-eventId="'+tracker.eventId+'">';
+  html +=  '<svg class="bi bi-forward" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">';
+  html +=  '<path d="M9.502 5.513a.144.144 0 0 0-.202.134V6.65a.5.5 0 0 1-.5.5H2.5v2.9h6.3a.5.5 0 0 1 .5.5v1.003c0 .108.11.176.202.134l3.984-2.933a.51.51 0 0 1 .042-.028.147.147 0 0 0 0-.252.51.51 0 0 1-.042-.028zM8.3 5.647a1.144 1.144 0 0 1 1.767-.96l3.994 2.94a1.147 1.147 0 0 1 0 1.946l-3.994 2.94a1.144 1.144 0 0 1-1.767-.96v-.503H2a.5.5 0 0 1-.5-.5v-3.9a.5.5 0 0 1 .5-.5h6.3z"></path>';
+  html +=  '</svg>';
   html += '</button>';
+
+  html += '<button title="Löschen" style="background-color:#e6b41e;margin-right:5px;" class="btn btn-primary btn-sm btnRemoveTracker" data-eventId="'+tracker.eventId+'">';
+  html +=  '<svg class="bi bi-trash3" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"></path></svg>';
+  html += '</button>';
+
   html += '</td>';
   html += '</tr>';
   return html;
@@ -179,6 +186,40 @@ const handleReadingButtonEvents = function() {
                     location.reload()
                 },100);
       });
+    })
+  });
+  $('.btnTransferTracker').off();
+  $('.btnTransferTracker').on('click',function(e) {
+    $('#modalTransferTracker').modal('show');
+    $('#modalTransferTracker').attr('data',$(e.currentTarget).attr("data-eventId"));
+   
+    $('#transferTrackerFrm').off();
+    $('#transferTrackerFrm').on('submit',function(e) {
+      e.preventDefault();
+      connectDB((db) => {
+        getByEventID(db, $('#modalTransferTracker').attr('data'), async (data) => {
+          const url = 'https://api.corrently.io/v2.0/scope2/eventTransferOwnership';
+      
+          let startData = {
+            eventId: $('#modalTransferTracker').attr('data'),
+            transferTo: $('#transferTo').val(),
+            did:JSON.parse(data.did),
+            iat: Math.round(new Date().getTime()/1000)
+          };
+          
+          fetch(url, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(await signJSON(startData))
+            })
+            .then(response => response.json())
+            .then(data => {
+               console.log("Transfer DID",data);
+            });
+        });
+      })
     })
   });
   $('.btnReading').off();
