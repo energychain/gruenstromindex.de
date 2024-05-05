@@ -85,3 +85,18 @@ function updateByEventID(db, eventId, data, callback) {
       callback(data);
     };
   }
+
+  function deleteByID(db, eventId, callback) {
+    const transaction = db.transaction(storeName, "readwrite");
+    const objectStore = transaction.objectStore(storeName);
+  
+    const request = objectStore.delete(eventId);
+  
+    request.onerror = (event) => {
+      console.error("Error deleting data:", event.target.error);
+    };
+  
+    request.onsuccess = (event) => {
+      callback();
+    };
+  }

@@ -35,8 +35,10 @@ const trackerRowHTML = function(tracker,fromDelegation) {
   } catch(e) {
     tracker.did = {};
   }
- 
-  if((tracker.did.ownerId == window.wallet.address)||(tracker.did.entity == window.wallet.address)) {
+  console.log(tracker);
+
+  if((tracker.did.aud == window.wallet.address)||(tracker.did.entity == window.wallet.address)||(tracker.ownerId == window.wallet.address)) {
+    
     html += '<td title="Eigentümer">';
    
     html += '<svg class="bi bi-wallet" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">';
@@ -57,9 +59,17 @@ const trackerRowHTML = function(tracker,fromDelegation) {
   html += ' '+tracker.name+'</span></td>';
   html += '<td align="right">'+(multipl * tracker.consumption/1000).toFixed(3).replace('.',',')+'</td>';
   html += '<td align="right">'+(multipl * tracker.emission/1000).toFixed(3).replace('.',',')+'</td>';
+  if(tracker.consumption !== 0) {
+    html += '<td align="right">'+Math.round(1000*multipl*(tracker.emission/tracker.consumption))+'</td>';
+  } else {
+    html += '<td>&nbsp;</td>';
+  }
+
   html += '<td>'+new Date(tracker.iat*1000).toLocaleString()+'</td>';
   html += '<td>';
-  
+  html += '<button title="Löschen" style="background-color:#147a50;margin-right:5px;" class="btn btn-primary btn-sm btnRemoveTracker" data-eventId="'+tracker.eventId+'">';
+  html +=  '<svg class="bi bi-trash3" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"></path></svg>';
+  html += '</button>';
   html += '<button title="Nachweisen" style="background-color:#147a50;margin-right:5px;" class="btn btn-primary btn-sm btnPresent" data-eventId="'+tracker.eventId+'">';
   html += '<svg class="bi bi-postage" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">';
   html += '<path d="M4.75 3a.75.75 0 0 0-.75.75v8.5c0 .414.336.75.75.75h6.5a.75.75 0 0 0 .75-.75v-8.5a.75.75 0 0 0-.75-.75zM11 12H5V4h6z"></path>';
@@ -150,6 +160,27 @@ const updateLastResolved = function() {
   $('#lastResolvedFront').html(html);
 }
 const handleReadingButtonEvents = function() {
+  $('.btnRemoveTracker').off();
+  $('.btnRemoveTracker').on('click',function(e) {
+    $('#modalRemoveTracker').modal('show');
+    $('#modalRemoveTracker').attr('data',$(e.currentTarget).attr("data-eventId"));
+    let testK = $(e.currentTarget).attr("data-eventId").substring(0,5);
+
+    $('#testKennung').html(testK);
+    $('#removeTracker').attr('pattern',testK);
+
+    $(e.currentTarget).attr("data-eventId");
+    $('#removeTrackerFrm').off();
+    $('#removeTrackerFrm').on('submit',function(e) {
+      e.preventDefault();
+      connectDB((db) => {
+        deleteByID(db, $('#modalRemoveTracker').attr('data'), () => {});
+                setTimeout(function() {
+                    location.reload()
+                },100);
+      });
+    })
+  });
   $('.btnReading').off();
   $('.btnReading').on('click',function(e) {
     connectDB((db) => {
@@ -349,6 +380,7 @@ $(document).ready(function() {
         html += '<th>Name</th>';
         html += '<th style="text-align:right">Verbrauch (kWh)&nbsp;&nbsp;</th>';
         html += '<th style="text-align:right">CO<sub>2</sub>-Emission (kg)&nbsp;&nbsp;</th>';
+        html += '<th style="text-align:right">Ø g/kWh</th>';
         html += '<th>Aktualisierung</th>';
         html += '<th>&nbsp;</th>'
         html += '</tr>';
@@ -382,8 +414,15 @@ $(document).ready(function() {
       
         html += '</tbody>';
         html += '</table>';
-        $('#totalKWH').html(Math.round(totalKWH/1000));
-        $('#totalCO2').html(Math.round(totalCO2/1000));
+        if(totalKWH !== 0) {
+          let avg = (totalCO2/totalKWH)*1000
+          if(avg < 0) {
+            $('#trackerBadge').css('background-color','#147a50');
+          } else {
+            $('#trackerBadge').css('background-color','#e6b41e');
+          }
+          $('#avgCO2').html(Math.round( avg));
+        }
         return html;
       }
       connectDB((db) => {
