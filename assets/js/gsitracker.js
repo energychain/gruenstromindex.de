@@ -360,6 +360,7 @@ $(document).ready(function() {
         $('#modalTracker').modal('show');
     });
     $('#addManagedBtn').on('click',function() {
+        $('#managedAlert').hide();
         $('#modalManaged').modal('show');
         $('#modalTracker').modal('hide');
     });

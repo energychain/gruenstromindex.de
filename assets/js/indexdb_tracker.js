@@ -72,6 +72,8 @@ function updateByEventID(db, eventId, data, callback) {
     data.eventId = eventId; // Set the key of the entry to the eventId variable
     const did = JSON.parse(data.did);
     if(typeof did.err !== 'undefined') {
+        $('#managedAlert').html(did.err);
+        $('#managedAlert').hide();
         console.log(did.err);
         return;
     } 
