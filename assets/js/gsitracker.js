@@ -63,8 +63,27 @@ const trackerRowHTML = function(tracker,fromDelegation) {
   } else {
     html += '<td>&nbsp;</td>';
   }
+  const niceTime = function(timestamp) {
+      timestamp *= 1000;
+      const now = new Date().getTime();
+      const differenceInSeconds = Math.floor((now - timestamp) / 1000);
+      const minutes = Math.floor(differenceInSeconds / 60);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
 
-  html += '<td>'+new Date(tracker.iat*1000).toLocaleString()+'</td>';
+      if (differenceInSeconds < 60) {
+        return "gerade jetzt";
+      } else if (differenceInSeconds < 3600) {
+        return `vor ${minutes} Minuten`;
+      } else if (differenceInSeconds < (2*86400)) {
+        return `vor ${hours} Stunden`;
+      } else {
+        return new Date(timestamp).toLocaleString();
+      }
+  }
+
+
+  html += '<td>'+niceTime(tracker.iat)+'</td>';
   html += '<td>';
   html += '<button title="Manuelle Ablesung" '+disableManual+' style="background-color:#147a50;margin-right:5px" class="btn btn-primary btn-sm btnReading" data-eventId="'+tracker.eventId+'">';
   html += '<svg class="bi bi-speedometer" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2M3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8m9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5m.754-4.246a.389.389 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.389.389 0 0 0-.029-.518z"></path><path fill-rule="evenodd" d="M6.664 15.889A8 8 0 1 1 9.336.11a8 8 0 0 1-2.672 15.78zm-4.665-4.283A11.945 11.945 0 0 1 8 10c2.186 0 4.236.585 6.001 1.606a7 7 0 1 0-12.002 0z"></path></svg>';
@@ -76,7 +95,7 @@ const trackerRowHTML = function(tracker,fromDelegation) {
   html += '</svg>';
   html += '</button>';
 
-  html += '<button title="Inhaberschaft übertragen" style="background-color:#e6b41e;margin-right:5px;" class="btn btn-primary btn-sm btnTransferTracker" data-eventId="'+tracker.eventId+'">';
+  html += '<button title="Inhaberschaft übertragen" '+disableManual+' style="background-color:#e6b41e;margin-right:5px;" class="btn btn-primary btn-sm btnTransferTracker" data-eventId="'+tracker.eventId+'">';
   html +=  '<svg class="bi bi-forward" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">';
   html +=  '<path d="M9.502 5.513a.144.144 0 0 0-.202.134V6.65a.5.5 0 0 1-.5.5H2.5v2.9h6.3a.5.5 0 0 1 .5.5v1.003c0 .108.11.176.202.134l3.984-2.933a.51.51 0 0 1 .042-.028.147.147 0 0 0 0-.252.51.51 0 0 1-.042-.028zM8.3 5.647a1.144 1.144 0 0 1 1.767-.96l3.994 2.94a1.147 1.147 0 0 1 0 1.946l-3.994 2.94a1.144 1.144 0 0 1-1.767-.96v-.503H2a.5.5 0 0 1-.5-.5v-3.9a.5.5 0 0 1 .5-.5h6.3z"></path>';
   html +=  '</svg>';
