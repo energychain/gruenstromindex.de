@@ -235,6 +235,10 @@ const handleReadingButtonEvents = function () {
           })
             .then(response => response.json())
             .then(data => {
+              if(typeof did.err !== 'undefined') {
+                $('#manmanagedAlert').html(did.err);
+                $('#modalAlert').modal('show');
+              }
               console.log("Transfer DID", data);
             });
         });
