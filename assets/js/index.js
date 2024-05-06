@@ -3,9 +3,12 @@ if(window.localStorage.getItem("deviceKey")===null) {
     window.localStorage.setItem("deviceKey",wallet.privateKey);
 }
 window.wallet = new ethers.Wallet(window.localStorage.getItem("deviceKey"));
-
+$('#showAddress').val(window.wallet.address);
 
 $(document).ready(function() {
+    $('#openProfile').on('click',function() {
+        $('#modalProfile').modal('show');
+    });
     function getUrlParameter(paramName) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(paramName);
