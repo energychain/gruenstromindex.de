@@ -99,6 +99,13 @@ const trackerRowHTML = function (tracker, fromDelegation) {
   html += '</svg>';
   html += '</button>';
 
+  html += '<button title="Teilen" style="background-color:#147a50;margin-right:5px;" class="btn btn-primary btn-sm btnShare" data-eventId="' + tracker.eventId + '">';
+  html += '<svg class="bi bi-share" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">';
+  html += '<path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"></path>';
+  html += '</svg>';
+  html += '</button>';
+
+
   html += '<button title="Inhaberschaft übertragen" ' + disableManual + ' style="background-color:#e6b41e;margin-right:5px;" class="btn btn-primary btn-sm btnTransferTracker" data-eventId="' + tracker.eventId + '">';
   html += '<svg class="bi bi-forward" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">';
   html += '<path d="M9.502 5.513a.144.144 0 0 0-.202.134V6.65a.5.5 0 0 1-.5.5H2.5v2.9h6.3a.5.5 0 0 1 .5.5v1.003c0 .108.11.176.202.134l3.984-2.933a.51.51 0 0 1 .042-.028.147.147 0 0 0 0-.252.51.51 0 0 1-.042-.028zM8.3 5.647a1.144 1.144 0 0 1 1.767-.96l3.994 2.94a1.147 1.147 0 0 1 0 1.946l-3.994 2.94a1.144 1.144 0 0 1-1.767-.96v-.503H2a.5.5 0 0 1-.5-.5v-3.9a.5.5 0 0 1 .5-.5h6.3z"></path>';
@@ -210,6 +217,72 @@ const handleReadingButtonEvents = function () {
         }, 100);
       });
     })
+  });
+  $('.btnShare').off();
+  $('.btnShare').on('click',function(e) {
+    $('#shareFooter').show();
+    $('#shareWithId').hide();
+    $('#modalShare').modal('show');
+    $('#modalShare').attr('data', $(e.currentTarget).attr("data-eventId"));
+ 
+
+    $('#btnShareCam').on('click', function (e) {
+      $('#shareReader').show();
+      function onScanSuccess(decodedText, decodedResult) {
+        // handle the scanned code as you like, for example:  
+        $('#shareTo').val(decodedText)
+        $('#shareReader').hide();
+      }
+  
+      function onScanFailure(error) {
+        // handle scan failure, usually better to ignore and keep scanning.
+        // for example:
+        console.warn(`Code scan error = ${error}`);
+      }
+  
+      let html5QrcodeScanner = new Html5QrcodeScanner(
+        "shareReader",
+        { fps: 10, qrbox: { width: 320, height: 200 } },
+            /* verbose= */ false);
+      html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    });
+    $('#addShare').on('submit',async function(e) {
+    $('#shareFooter').hide();
+    e.preventDefault();
+    connectDB((db) => {
+      getByEventID(db, $('#modalShare').attr('data'), async (data) => {
+          const url = 'https://api.corrently.io/v2.0/scope2/eventShare';
+          let startData = {
+            eventId: $('#modalShare').attr('data'),
+            delegated: $('#shareTo').val(),
+            did: JSON.parse(data.did),
+            iat: Math.round(new Date().getTime() / 1000)
+          };
+
+          fetch(url, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(await signJSON(startData))
+          })
+            .then(response => response.json())
+            .then(data => {
+              console.log("Share DID", data);
+              $('#shareWithId').show();
+              var qrcode = new QRCode(document.getElementById("shareQRCode"), {
+                text: data.delegationId,
+                width: 300,
+                height: 300,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.M
+              });
+              $('#shareId').val(data.delegationId);
+            });
+      });
+    });
+    });
   });
   $('.btnTransferTracker').off();
   $('.btnTransferTracker').on('click', function (e) {
@@ -586,5 +659,25 @@ $(document).ready(function () {
       console.log(cb);
       console.log("Might Reload?");
     })
+  });
+  $('#btnManagedCam').on('click', function (e) {
+    $('#managedReader').show();
+    function onScanSuccess(decodedText, decodedResult) {
+      // handle the scanned code as you like, for example:  
+      $('#managedTrackerId').val(decodedText)
+      $('#managedReader').hide();
+    }
+
+    function onScanFailure(error) {
+      // handle scan failure, usually better to ignore and keep scanning.
+      // for example:
+      console.warn(`Code scan error = ${error}`);
+    }
+
+    let html5QrcodeScanner = new Html5QrcodeScanner(
+      "managedReader",
+      { fps: 10, qrbox: { width: 320, height: 200 } },
+          /* verbose= */ false);
+    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
   });
 });
