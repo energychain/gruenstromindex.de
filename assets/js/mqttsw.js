@@ -86,47 +86,50 @@ const localClient = function(mqttsettings) {
 };
 
 self.addEventListener("message", (event) => {
-    let payload = JSON.parse(event.data);
-    msgtarget = event.source;
-
-    if(typeof payload.mqttsettings !== 'undefined') {
-        mqttsettings = payload.mqttsettings;  
-    }
-    if((mqttclient == null) && (mqttsettings !== null)) {
-        mqttclient = localClient(mqttsettings);  
-    }
-    const processMessage = function() {
-        let message = eventq.pop();
-        try {
-            if(!initialconnect) {
-                throw new Error("Initial Connect Failed");
-            }
-            if((typeof message.publish !== 'undefined')&&(message.publish !== null)) { 
-                message.publish=JSON.parse(message.publish);
-                mqttclient.publish(mqttsettings.root+message.publish.topic, message.publish.message);
-            }
-            if(typeof message.subscribe !== 'undefined') {
-                mqttclient.subscribe(mqttsettings.root+message.subscribe, (err) => {
-                    if (!err) {
-                        // console.log("subscribed to",mqttsettings.root+message.subscribe);
-                    } else {
-                        console.error('MQTT Subscribe',err);
-                    }
-                });
-            }
-            if(mqttclient !== null) {
-                event.source.postMessage(JSON.stringify(mqttclient.state));
-                mqttclient.publish(mqttsettings.root+"presence", "ui");
-            }
-            if(eventq.length > 0) {
+    try {
+        let payload = JSON.parse(event.data);
+        msgtarget = event.source;
+    
+        if(typeof payload.mqttsettings !== 'undefined') {
+            mqttsettings = payload.mqttsettings;  
+        }
+        if((mqttclient == null) && (mqttsettings !== null)) {
+            mqttclient = localClient(mqttsettings);  
+        }
+        const processMessage = function() {
+            let message = eventq.pop();
+            try {
+                if(!initialconnect) {
+                    throw new Error("Initial Connect Failed");
+                }
+                if((typeof message.publish !== 'undefined')&&(message.publish !== null)) { 
+                    message.publish=JSON.parse(message.publish);
+                    mqttclient.publish(mqttsettings.root+message.publish.topic, message.publish.message);
+                }
+                if(typeof message.subscribe !== 'undefined') {
+                    mqttclient.subscribe(mqttsettings.root+message.subscribe, (err) => {
+                        if (!err) {
+                            // console.log("subscribed to",mqttsettings.root+message.subscribe);
+                        } else {
+                            console.error('MQTT Subscribe',err);
+                        }
+                    });
+                }
+                if(mqttclient !== null) {
+                    event.source.postMessage(JSON.stringify(mqttclient.state));
+                    mqttclient.publish(mqttsettings.root+"presence", "ui");
+                }
+                if(eventq.length > 0) {
+                    setTimeout(processMessage,100);
+                }
+            } catch(e) {
+                eventq.push(message);
                 setTimeout(processMessage,100);
             }
-        } catch(e) {
-            eventq.push(message);
-            setTimeout(processMessage,100);
         }
+        eventq.push(payload);
+        processMessage();
+    } catch(e) {
+
     }
-    eventq.push(payload);
-    processMessage();
-   
 });
