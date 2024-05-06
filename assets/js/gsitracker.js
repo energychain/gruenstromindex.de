@@ -236,7 +236,7 @@ const handleReadingButtonEvents = function () {
             .then(response => response.json())
             .then(data => {
               if(typeof data.err !== 'undefined') {
-                $('#manmanagedAlert').html(data.err);
+                $('#managedAlert').html(data.err);
                 $('#modalAlert').modal('show');
               }
               console.log("Transfer DID", data);
