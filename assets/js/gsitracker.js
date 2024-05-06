@@ -121,7 +121,7 @@ const trackerRowHTML = function (tracker, fromDelegation) {
   html += '</svg>';
   html += '</button>';
 
-  html += '<button title="Teilen" style="background-color:#147a50;margin-right:5px;" class="btn btn-primary btn-sm btnShare" data-eventId="' + tracker.eventId + '">';
+  html += '<button title="Teilen" ' + disableManual + ' style="background-color:#147a50;margin-right:5px;" class="btn btn-primary btn-sm btnShare" data-eventId="' + tracker.eventId + '">';
   html += '<svg class="bi bi-share" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">';
   html += '<path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"></path>';
   html += '</svg>';
@@ -551,7 +551,7 @@ $(document).ready(function () {
   }
 
   function createTable(entries) {
-    let html = '<table class="table table-condensed">';
+    let html = '<div class="table-responsive"><table class="table table-condensed">';
     html += '<thead>';
     html += '<tr>';
     html += '<th>Name</th>';
@@ -590,7 +590,7 @@ $(document).ready(function () {
     }
 
     html += '</tbody>';
-    html += '</table>';
+    html += '</table></div>';
     if (totalKWH !== 0) {
       let avg = (totalCO2 / totalKWH) * 1000
       if (avg < 0) {
