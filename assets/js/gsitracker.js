@@ -222,6 +222,7 @@ const handleReadingButtonEvents = function () {
   $('.btnShare').on('click',function(e) {
     $('#shareFooter').show();
     $('#shareWithId').hide();
+    $('#shareModalBody').show();
     $('#modalShare').modal('show');
     $('#modalShare').attr('data', $(e.currentTarget).attr("data-eventId"));
  
@@ -269,6 +270,7 @@ const handleReadingButtonEvents = function () {
             .then(response => response.json())
             .then(data => {
               console.log("Share DID", data);
+              $('#shareModalBody').hide();
               $('#shareWithId').show();
               var qrcode = new QRCode(document.getElementById("shareQRCode"), {
                 text: data.delegationId,
