@@ -24,7 +24,11 @@ const trackerRowHTML = function (tracker, fromDelegation) {
     tracker.consumption = data.consumption;
     tracker.emission = data.emission;
   }
-  if (fromDelegation) { disableManual = ' disabled="disabled" '; }
+  if (fromDelegation) { 
+    if(tracker.ownerId !== window.wallet.address) {
+      disableManual = ' disabled="disabled" '; 
+    }
+  }
   let multipl = 1;
   if (tracker.type == "generation") { multipl = -1; }
   let html = "";
