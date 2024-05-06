@@ -6,6 +6,15 @@ window.wallet = new ethers.Wallet(window.localStorage.getItem("deviceKey"));
 $('#showAddress').val(window.wallet.address);
 
 $(document).ready(function() {
+    var qrcode = new QRCode(document.getElementById("profileQR"), {
+        text: window.wallet.address,
+        width: 400,
+        height: 400,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+
     $('#openProfile').on('click',function() {
         $('#modalProfile').modal('show');
     });
