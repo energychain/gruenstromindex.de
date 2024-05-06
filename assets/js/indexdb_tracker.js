@@ -74,6 +74,7 @@ function updateByEventID(db, eventId, data, callback) {
     if(typeof did.err !== 'undefined') {
         $('#managedAlert').html(did.err);
         $('#managedAlert').show();
+        $('#modalAlert').modal('show');
         console.log(did.err);
         return;
     } 
