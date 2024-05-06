@@ -1,4 +1,5 @@
 const trackerRowHTML = function (tracker, fromDelegation) {
+  
   let delegation = false;
   let disableManual = '';
   if ((tracker.reading == '[delegation]') && (typeof fromDelegation == 'undefined') && (fromDelegation !== null)) {
@@ -13,7 +14,6 @@ const trackerRowHTML = function (tracker, fromDelegation) {
         $('#trackerRow' + tracker.eventId).replaceWith(html);
         handleReadingButtonEvents();
       })
-
     }
     updater(tracker);
     setInterval(function () {
@@ -240,6 +240,8 @@ const handleReadingButtonEvents = function () {
             .then(response => response.json())
             .then(data => {
               if(typeof data.err !== 'undefined') {
+                console.log("Type here");
+                $('#managedAlert').attr("data", $('#modalTransferTracker').attr('data'));
                 $('#managedAlert').html(data.err);
                 $('#modalAlert').modal('show');
               }
@@ -320,10 +322,20 @@ const validateDelegation = async function (delegationId, delegationCb) {
 }
 
 const updateDid = async function (updateData) {
+  if(typeof updateData.did !== 'undefined') {
+    let did = updateData.did;
+    try {
+      did = JSON.parse(did);
+    } catch(e) {}
+    if(typeof did.err !== 'undefined') {
+      console.log("updateDid cancelled ", did.err);
+      return
+    } 
+  }
   const data = updateData;
 
   if (data.reading == data.did.reading) {
-    // console.log("Replay");
+    console.log("Replay");
     return;
   }
   const url = 'https://api.corrently.io/v2.0/scope2/eventUpdate';
@@ -337,6 +349,7 @@ const updateDid = async function (updateData) {
     .then(response => response.json())
     .then(data2 => {
       connectDB((db) => {
+    
         data.did = JSON.stringify(data2);
         data.reading = data2.reading;
         data.consumption = data2.consumption;
@@ -346,7 +359,7 @@ const updateDid = async function (updateData) {
         data.name = data2.name;
         data.type = data2.type;
         // Here we publish
-
+        
         updateByEventID(db, data2.eventId, data, () => {
           $('#trackerRow' + data.eventId).replaceWith(trackerRowHTML(data));
           handleReadingButtonEvents();
@@ -522,6 +535,7 @@ $(document).ready(function () {
           document.dispatchEvent(readingEvent);
 
           let updateData = {
+            eventId: $('#readingUpdate').attr('data-eventId'),
             did: JSON.parse(data.did),
             reading: $('#readingUpdate').val() * 1000,
             iat: Math.round(new Date().getTime() / 1000)
@@ -567,4 +581,10 @@ $(document).ready(function () {
     html5QrcodeScanner.render(onScanSuccess, onScanFailure);
   });
   updateLastResolved();
+  $('#manageAlert').on('click',function() {
+    validateDelegation($('#managedAlert').attr("data"),function(cb) {
+      console.log(cb);
+      console.log("Might Reload?");
+    })
+  });
 });

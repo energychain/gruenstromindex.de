@@ -34,6 +34,7 @@ function connectDB(callback) {
 
 
 function addData(db,data, callback) {
+  
   const transaction = db.transaction(storeName, "readwrite");
   const objectStore = transaction.objectStore(storeName);
   try {
@@ -67,26 +68,39 @@ function getByEventID(db, eventId, callback) {
 }
 
 function updateByEventID(db, eventId, data, callback) {
-    const transaction = db.transaction(storeName, "readwrite");
-    const objectStore = transaction.objectStore(storeName);
-    data.eventId = eventId; // Set the key of the entry to the eventId variable
-    const did = JSON.parse(data.did);
-    if(typeof did.err !== 'undefined') {
+  const did = JSON.parse(data.did);
+   // Handle error cases in local Memmory
+   if(typeof data.reading === 'undefined') {
+      if(typeof  $('#readingUpdate').attr('data-eventId') !== 'undefined') {
+        $('#managedAlert').attr("data", $('#readingUpdate').attr('data-eventId'));
         $('#managedAlert').html(did.err);
         $('#managedAlert').show();
         $('#modalAlert').modal('show');
-        console.log(did.err);
-        return;
-    } 
-    const request = objectStore.put(data);
-  
-    request.onerror = (event) => {
-      console.error("Error updating data:", event.target.error);
-    };
-  
-    request.onsuccess = (event) => {
-      callback(data);
-    };
+      }
+    callback(data);
+   } else {
+      const transaction = db.transaction(storeName, "readwrite");
+      const objectStore = transaction.objectStore(storeName);
+      data.eventId = eventId; // Set the key of the entry to the eventId variable
+
+      if(typeof did.err !== 'undefined') {
+          $('#managedAlert').attr("data", did.eventId);
+          $('#managedAlert').html(did.err);
+          $('#managedAlert').show();
+          $('#modalAlert').modal('show');
+          console.log(did.err);
+          return;
+      } 
+      const request = objectStore.put(data);
+    
+      request.onerror = (event) => {
+        console.error("Error updating data:", event.target.error);
+      };
+    
+      request.onsuccess = (event) => {
+        callback(data);
+      };
+    }
   }
 
   function deleteByID(db, eventId, callback) {
