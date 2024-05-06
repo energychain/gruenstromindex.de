@@ -1,3 +1,33 @@
+const reqUpdates = {};
+
+const updater = async function() {
+  const runners = [];
+  for (const [key, value] of Object.entries(reqUpdates)) {
+    runners.push({
+      delegationId:key,
+      eventId:value
+    })
+  }
+  for(let i=0;i<runners.length;i++) {
+    const run = function() {
+      return new Promise((resolve, reject) => {
+        validateDelegation(runners[i].delegationId, function (data) {
+          let html = trackerRowHTML(JSON.parse(data.did), true);
+          $('#trackerRow' + runners[i].eventId).replaceWith(html);
+          setTimeout(function() {
+            resolve();
+          },(i*1000)+100);
+        })
+      })
+    }
+    await run();
+  }
+
+  handleReadingButtonEvents();
+}
+let updateTimer = null;
+
+
 const trackerRowHTML = function (tracker, fromDelegation) {
   
   let delegation = false;
@@ -7,22 +37,14 @@ const trackerRowHTML = function (tracker, fromDelegation) {
     delegation = true;
     let data = JSON.parse(deepTracker.did);
     // hier können wir einen Update Timer starten...
-    const updater = function (tracker) {
-      validateDelegation(tracker.consumption, function (data) {
-        let html = trackerRowHTML(JSON.parse(data.did), true);
-        $('#trackerRow' + tracker.eventId).replaceWith(html);
-        handleReadingButtonEvents();
-      })
-    }
-
-    updater(deepTracker);
-    setInterval(function () {
-      updater(deepTracker);
-    }, 900000);
-
+    reqUpdates[deepTracker.consumption] = deepTracker.eventId;
     deepTracker.reading = data.reading;
     deepTracker.consumption = data.consumption;
     deepTracker.emission = data.emission;
+    if(updateTimer == null) {
+      updateTimer = setInterval(updater, 60000);
+      updater();
+    }
   }
   if (fromDelegation) { 
     if(tracker.ownerId !== window.wallet.address) {
@@ -75,8 +97,8 @@ const trackerRowHTML = function (tracker, fromDelegation) {
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
 
-    if (differenceInSeconds < 60) {
-      return "gerade jetzt";
+    if (differenceInSeconds < 120) {
+      return "gerade eben";
     } else if (differenceInSeconds < 3600) {
       return `vor ${minutes} Minuten`;
     } else if (differenceInSeconds < (2 * 86400)) {
@@ -87,7 +109,7 @@ const trackerRowHTML = function (tracker, fromDelegation) {
   }
 
 
-  html += '<td>' + niceTime(tracker.iat) + '</td>';
+  html += '<td title="'+new Date(tracker.iat*1000).toLocaleString()+'">' + niceTime(tracker.iat) + '</td>';
   html += '<td>';
   html += '<button title="Manuelle Ablesung" ' + disableManual + ' style="background-color:#147a50;margin-right:5px" class="btn btn-primary btn-sm btnReading" data-eventId="' + tracker.eventId + '">';
   html += '<svg class="bi bi-speedometer" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2M3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8m9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5m.754-4.246a.389.389 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.389.389 0 0 0-.029-.518z"></path><path fill-rule="evenodd" d="M6.664 15.889A8 8 0 1 1 9.336.11a8 8 0 0 1-2.672 15.78zm-4.665-4.283A11.945 11.945 0 0 1 8 10c2.186 0 4.236.585 6.001 1.606a7 7 0 1 0-12.002 0z"></path></svg>';
@@ -367,7 +389,6 @@ const handleReadingButtonEvents = function () {
 
 const validateDelegation = async function (delegationId, delegationCb) {
   const url = 'https://api.corrently.io/v2.0/scope2/eventDelegation';
-
   let startData = {
     delegationId: delegationId,
     iat: Math.round(new Date().getTime() / 1000)
@@ -597,6 +618,7 @@ $(document).ready(function () {
       } else {
         const table = createTable(entries);
         $('#allTrackers').html(table);
+        
       }
 
 
@@ -622,6 +644,7 @@ $(document).ready(function () {
 
 
       });
+      updater();
     });
   });
 
