@@ -3,10 +3,9 @@ const trackerRowHTML = function (tracker, fromDelegation) {
   let delegation = false;
   let disableManual = '';
   if ((tracker.reading == '[delegation]') && (typeof fromDelegation == 'undefined') && (fromDelegation !== null)) {
+    const deepTracker = JSON.parse(JSON.stringify(tracker));
     delegation = true;
-
-    let data = JSON.parse(tracker.did);
-
+    let data = JSON.parse(deepTracker.did);
     // hier können wir einen Update Timer starten...
     const updater = function (tracker) {
       validateDelegation(tracker.consumption, function (data) {
@@ -15,14 +14,15 @@ const trackerRowHTML = function (tracker, fromDelegation) {
         handleReadingButtonEvents();
       })
     }
-    updater(tracker);
+
+    updater(deepTracker);
     setInterval(function () {
-      updater(tracker);
+      updater(deepTracker);
     }, 900000);
 
-    tracker.reading = data.reading;
-    tracker.consumption = data.consumption;
-    tracker.emission = data.emission;
+    deepTracker.reading = data.reading;
+    deepTracker.consumption = data.consumption;
+    deepTracker.emission = data.emission;
   }
   if (fromDelegation) { 
     if(tracker.ownerId !== window.wallet.address) {
