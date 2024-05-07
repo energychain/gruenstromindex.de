@@ -144,7 +144,7 @@ $(document).ready(function() {
             
               // Set Text
               if (tooltip.body) {
-                const titleLines = [points[tooltip.dataPoints[0].dataIndex].reco] || [];
+                const titleLines = [tooltip.title + ": "+points[tooltip.dataPoints[0].dataIndex].reco] || [];
                 const bodyLines = tooltip.body.map(b => b.lines);
                 const tableHead = document.createElement('thead');
             
