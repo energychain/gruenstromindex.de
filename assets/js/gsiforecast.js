@@ -120,7 +120,7 @@ $(document).ready(function() {
                 tooltipEl.style.position = 'absolute';
                 tooltipEl.style.transform = 'translate(-50%, 0)';
                 tooltipEl.style.transition = 'all .1s ease';
-                tooltipEl.style.minWidth = '250px'; 
+                tooltipEl.style.minWidth = '300px'; 
             
                 const table = document.createElement('table');
                 table.style.margin = '0px';
@@ -150,22 +150,7 @@ $(document).ready(function() {
                 const tableHead = document.createElement('thead');
             
                 titleLines.forEach(title => {
-                  const tr = document.createElement('tr');
-                  tr.style.borderWidth = 0;
-            
-                  const th = document.createElement('th');
-                  th.style.borderWidth = 0;
-                  const text = document.createTextNode(title);
-            
-                  th.appendChild(text);
-                  tr.appendChild(th);
-                  tableHead.appendChild(tr);
-                });
-            
-                const tableBody = document.createElement('tbody');
-                bodyLines.forEach((body, i) => {
-                  const colors = tooltip.labelColors[i];
-            
+                  const colors = tooltip.labelColors[0];
                   const span = document.createElement('span');
                   span.style.background = colors.backgroundColor;
                   span.style.borderColor = colors.borderColor;
@@ -175,31 +160,54 @@ $(document).ready(function() {
                   span.style.width = '10px';
                   span.style.display = 'inline-block';
 
-                  const span2 = document.createElement('span');
-                  span2.style.background = colors.backgroundColor;
-                  span2.style.borderColor = colors.borderColor;
-                  span2.style.borderWidth = '2px';
-                  span2.style.marginRight = '10px';
-                  span2.style.height = '10px';
-                  span2.style.width = '10px';
-                  span2.style.display = 'inline-block';
+                  const tr = document.createElement('tr');
+                  tr.style.borderWidth = 0;
             
+                  const th = document.createElement('th');
+                  th.style.borderWidth = 0;
+                  const text = document.createTextNode(title);
+                  th.appendChild(span);
+                  th.appendChild(text);
+                  tr.appendChild(th);
+                  tr.appendChild(document.createElement('th'));
+                  tableHead.appendChild(tr);
+                });
+            
+                const tableBody = document.createElement('tbody');
+                bodyLines.forEach((body, i) => {
+                  const colors = tooltip.labelColors[i];
+
                   const tr = document.createElement('tr');
                   tr.style.backgroundColor = 'inherit';
                   tr.style.borderWidth = 0;
             
                   const td = document.createElement('td');
                   td.style.borderWidth = 0;
-            
-                  const text = document.createTextNode(body);
-            
-                  td.appendChild(span);
+                  const text = document.createTextNode("GrünstromIndex");
+                  
                   td.appendChild(text);
-                  td.appendChild(document.createElement('br'));
-                  td.appendChild(span2);
-                  td.appendChild(document.createTextNode("CO2: "+points[tooltip.dataPoints[0].dataIndex].emission+"g/kWh"));
                   tr.appendChild(td);
+                  const td_gsivalue = document.createElement('td');
+                  td_gsivalue.appendChild(document.createTextNode(points[tooltip.dataPoints[0].dataIndex].y));
+                  tr.appendChild(td_gsivalue);
+
+//                  td.appendChild(document.createElement('br'));
+                 
+  //                td.appendChild(document.createTextNode("CO2: "+points[tooltip.dataPoints[0].dataIndex].emission+"g/kWh"));
+    //              tr.appendChild(td);
                   tableBody.appendChild(tr);
+                  const trco2 = document.createElement('tr');
+                  trco2.style.backgroundColor = 'inherit';
+                  trco2.style.borderWidth = 0;
+                  const tdco2 = document.createElement('td');
+                  tdco2.style.borderWidth = 0;
+                  const textco2 = document.createTextNode("CO2 Emission");
+                  tdco2.appendChild(textco2);
+                  trco2.appendChild(tdco2);
+                  const tdco2value = document.createElement('td');
+                  tdco2value.appendChild(document.createTextNode(points[tooltip.dataPoints[0].dataIndex].emission+"g/kWh"));
+                  trco2.appendChild(tdco2value);
+                  tableBody.appendChild(trco2);
                 });
             
                 const tableRoot = tooltipEl.querySelector('table');

@@ -6,6 +6,19 @@ window.wallet = new ethers.Wallet(window.localStorage.getItem("deviceKey"));
 $('#showAddress').val(window.wallet.address);
 
 $(document).ready(function() {
+    $('#doWallet').on('change',function() {
+        if($('#doWallet').is(':checked')) {
+            $('.withWallet').show();
+            window.localStorage.setItem("doWallet","true");
+        } else {
+            $('.withWallet').hide();
+            window.localStorage.setItem("doWallet","false");
+        }
+    });
+    if(window.localStorage.getItem("doWallet") == "true") {
+        $('.withWallet').show();
+        $('#doWallet').attr('checked','checked');
+    }
     var qrcode = new QRCode(document.getElementById("profileQR"), {
         text: window.wallet.address,
         width: 400,
