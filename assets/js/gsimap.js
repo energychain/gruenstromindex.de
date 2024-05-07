@@ -3,10 +3,11 @@ $(function() {
     let hridx = 0;
     let isFullScreen = false;
     let markers = {};
-    var map = new L.map('map',{ zoomControl: false }); // Using Leaflet library for example
+    var map = new L.map('map',{ zoomControl: false,scrollWheelZoom: false,dragging:false }); // Using Leaflet library for example
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '<span id="time"></span><span class="text-muted">&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors / Data: <a href="https://stromdao.de/">STROMDAO GmbH</a></span>'
         }).addTo(map);
+    //L.disableScrollWheelZoom(map);    
     map.setView([51.0062186,10.5910947], 6); // Center on Germany (adjust as needed)
 
 

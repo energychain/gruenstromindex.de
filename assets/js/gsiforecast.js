@@ -80,9 +80,10 @@ $(document).ready(function() {
                     points.push( {
                           //  x:new Date(data.forecast[i].timeStamp).toLocaleString("de-DE"),
                           x:data.forecast[i].timeStamp,
-                            y:Math.round(data.forecast[i].gsi),
-                           t:new Date(data.forecast[i].timeStamp),
+                          y:Math.round(data.forecast[i].gsi),
+                          t:new Date(data.forecast[i].timeStamp),
                           time:data.forecast[i].timeStamp * 1,
+                          emission:data.forecast[i].co2_g_standard,
                             backgroundColor:"#ff0000"
                     }); 
                 }
@@ -98,19 +99,130 @@ $(document).ready(function() {
             points.sort((a,b) => a.y - b.y);
             for(let i=0;i<points.length;i++) {
                 let bgcolor = "#909090";
-                if(i > points.length/3) bgcolor = "#e6b41e";
-                if(i > points.length*(2/3))  bgcolor = "#147a50";
+                let reco = "Verbrauch schlecht";
+                if(i > points.length/3) { bgcolor = "#e6b41e"; reco="Verbrauch mittel"; }
+                if(i > points.length*(2/3))  { bgcolor = "#147a50"; reco="Verbrauch gut"; }
                 points[i].backgroundColor = bgcolor;
+                points[i].reco = reco;
             }
             points.sort((a,b) => a.t - b.t);
-            /*
-            for(let i=0;i<points.length;i++) {
-                if((i % 6 !== 0)&&(i!==0)) {
-                    points[i].x = "";
-                }
-            }
-            */
+
+            const getOrCreateTooltip = (chart) => {
+              let tooltipEl = chart.canvas.parentNode.querySelector('div');
             
+              if (!tooltipEl) {
+                tooltipEl = document.createElement('div');
+                tooltipEl.style.background = 'rgba(0, 0, 0, 0.7)';
+                tooltipEl.style.borderRadius = '3px';
+                tooltipEl.style.color = 'white';
+                tooltipEl.style.opacity = 1;
+                tooltipEl.style.pointerEvents = 'none';
+                tooltipEl.style.position = 'absolute';
+                tooltipEl.style.transform = 'translate(-50%, 0)';
+                tooltipEl.style.transition = 'all .1s ease';
+            
+                const table = document.createElement('table');
+                table.style.margin = '0px';
+            
+                tooltipEl.appendChild(table);
+                chart.canvas.parentNode.appendChild(tooltipEl);
+              }
+            
+              return tooltipEl;
+            };
+            
+            const externalTooltipHandler = (context) => {
+              // Tooltip Element
+              const {chart, tooltip} = context;
+              const tooltipEl = getOrCreateTooltip(chart);
+            
+              // Hide if no tooltip
+              if (tooltip.opacity === 0) {
+                tooltipEl.style.opacity = 0;
+                return;
+              }
+            
+              // Set Text
+              if (tooltip.body) {
+                const titleLines = [points[tooltip.dataPoints[0].dataIndex].reco] || [];
+                const bodyLines = tooltip.body.map(b => b.lines);
+                const tableHead = document.createElement('thead');
+            
+                titleLines.forEach(title => {
+                  const tr = document.createElement('tr');
+                  tr.style.borderWidth = 0;
+            
+                  const th = document.createElement('th');
+                  th.style.borderWidth = 0;
+                  const text = document.createTextNode(title);
+            
+                  th.appendChild(text);
+                  tr.appendChild(th);
+                  tableHead.appendChild(tr);
+                });
+            
+                const tableBody = document.createElement('tbody');
+                bodyLines.forEach((body, i) => {
+                  const colors = tooltip.labelColors[i];
+            
+                  const span = document.createElement('span');
+                  span.style.background = colors.backgroundColor;
+                  span.style.borderColor = colors.borderColor;
+                  span.style.borderWidth = '2px';
+                  span.style.marginRight = '10px';
+                  span.style.height = '10px';
+                  span.style.width = '10px';
+                  span.style.display = 'inline-block';
+
+                  const span2 = document.createElement('span');
+                  span2.style.background = colors.backgroundColor;
+                  span2.style.borderColor = colors.borderColor;
+                  span2.style.borderWidth = '2px';
+                  span2.style.marginRight = '10px';
+                  span2.style.height = '10px';
+                  span2.style.width = '10px';
+                  span2.style.display = 'inline-block';
+            
+                  const tr = document.createElement('tr');
+                  tr.style.backgroundColor = 'inherit';
+                  tr.style.borderWidth = 0;
+            
+                  const td = document.createElement('td');
+                  td.style.borderWidth = 0;
+            
+                  const text = document.createTextNode(body);
+            
+                  td.appendChild(span);
+                  td.appendChild(text);
+                  td.appendChild(document.createElement('br'));
+                  td.appendChild(span2);
+                  td.appendChild(document.createTextNode("CO2: "+points[tooltip.dataPoints[0].dataIndex].emission+"g/kWh"));
+                  tr.appendChild(td);
+                  tableBody.appendChild(tr);
+                });
+            
+                const tableRoot = tooltipEl.querySelector('table');
+            
+                // Remove old children
+                while (tableRoot.firstChild) {
+                  tableRoot.firstChild.remove();
+                }
+            
+                // Add new children
+                tableRoot.appendChild(tableHead);
+                tableRoot.appendChild(tableBody);
+              }
+            
+              const {offsetLeft: positionX, offsetTop: positionY} = chart.canvas;
+            
+              // Display, position, and set styles for font
+              tooltipEl.style.opacity = 1;
+              tooltipEl.style.left = positionX + tooltip.caretX + 'px';
+              tooltipEl.style.top = positionY + tooltip.caretY + 'px';
+              tooltipEl.style.font = tooltip.options.bodyFont.string;
+              tooltipEl.style.padding = tooltip.options.padding + 'px ' + tooltip.options.padding + 'px';
+            };
+
             const ctx = document.getElementById('chart'+zip).getContext('2d');
             const chart = new Chart(ctx, {
               type: 'bar',
@@ -134,9 +246,22 @@ $(document).ready(function() {
                   },
                   x: {
                     type:"time",
+                    parser: function(utcMoment) {
+                      return moment(utcMoment, 'x'); // parse input as moment object
+                    },
                     time: {
                       tooltipFormat: 'DD.MM HH:mm',
-                      unit: 'hour'
+                      unit: 'hour',
+                     displayFormats: {
+                        hour: 'ddd HH:mm' // display format for hour unit
+                      },
+                    },
+                  
+                    ticks: {
+                      callback: function(value, index, values) {
+                        const momentValue = moment(values[index].value);
+                        return momentValue.format('ddd HH:mm'); // return desired format
+                      }
                     },
                     min: points[0].x,
                     max: points[0].x + Math.round((points[points.length-1].x - points[0].x)/4),
@@ -155,9 +280,31 @@ $(document).ready(function() {
                 }, 
                 
                 plugins: {
-                    legend: {
-                      display: false // Set display to false to hide the legend
-                    },
+                  tooltip: {
+                    enabled:false,
+                    intersect: false,
+                    mode: 'index',
+                    external: externalTooltipHandler
+                    /*
+                    callbacks: {
+                      title: function(context) {
+                       
+                        // This function returns the title of the tooltip, which can be empty if you don't want a title
+                        return points[context[0].dataIndex].reco;
+                      },
+                      label: function(context) {
+                        // This function returns the content of the tooltip
+                        var dataset = context.dataset;
+                        var index = context.dataIndex;
+                        var value = dataset.data[index];
+                        return 'GrünstromIndex: ' + value + '\n <br> SomeText, Emission: ' + value;
+                      }
+                    }
+                    */
+                  },
+                  legend: {
+                    display: false // Set display to false to hide the legend
+                  },
                   zoom: {
                       pan: {
                         enabled: true,
@@ -175,17 +322,9 @@ $(document).ready(function() {
                         }
                     }
                   }
-                
               }
             });
             window.fcchart = chart;
-            //window.fcchart.zoom(1.5);
-/*
-            setTimeout(function() {
-              console.log("zoom");
-              window.fcchart.zoom(0.5);
-              window.fcchart.pan({x: new Date().getTime()})
-            },1000);*/
         });
     }
     let orte = window.localStorage.getItem("orte");
