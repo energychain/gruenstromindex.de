@@ -11,7 +11,15 @@ const withWallet = function(fn) {
       $('#showAddress').val(window.wallet.address);
       const socket = io("https://signal.corrently.cloud/");
       socket.on(''+window.wallet.address, (message) => {
-        console.log('Push:', JSON.parse(message));
+        try {
+            message = JSON.parse(message);
+        } catch(e) {}  
+        if(message.type == "sharedTracker") {
+            $('#modalManaged').modal('show');
+            $('#managedTrackerId').val(message.delegationId);
+            $('#modalTracker').modal('hide');
+        }
+        console.log('Push:', message);
       });
       window.ipcsocket = socket;
 }

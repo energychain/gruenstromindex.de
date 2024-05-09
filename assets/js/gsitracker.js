@@ -303,7 +303,7 @@ const handleReadingButtonEvents = function () {
                 correctLevel: QRCode.CorrectLevel.M
               });
               $('#shareId').val(data.delegationId);
-              safeSendP2P($('#shareTo').val(), { type: "share", data: data.delegationId });
+              safeSendP2P($('#shareTo').val(), { type: "sharedTracker", delegationId: data.delegationId });
             });
       });
     });

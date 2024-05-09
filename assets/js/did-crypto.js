@@ -35,25 +35,3 @@ const safeSendP2P = async (recipient, payload) => {
         console.error("IPC Error",e);
     } 
 }
-
-const receiveMessages = function(address) {
-    const channel = '/'+address;
-    client.subscribe(channel, function(message) {
-        console.log(message);
-    });
-}
-
-const establishP2P = () => {
-    try {
-        const client = new Faye.Client('https://signal.corrently.cloud/');
-
-        client.disable('websocket'); // disable WebSockets to force the client to use long polling
-        
-        client.connect();
-        window.p2pipc = client;
-
-    } catch(e) {
-        console.error(e);
-    }
-
-}
