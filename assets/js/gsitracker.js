@@ -398,6 +398,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
   if(typeof window.validateDelegationSignatures[delegationId] == 'undefined') {
      window.validateDelegationSignatures[delegationId] = await signJSON(startData);
      if(typeof window.ipcsocket !== 'undefined') {
+      console.log("Listening for ", delegationId);
       window.ipcsocket.on(''+delegationId, (message) => {
         try {
             message = JSON.parse(message);
