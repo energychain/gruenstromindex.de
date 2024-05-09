@@ -415,9 +415,10 @@ const validateDelegation = async function (delegationId, delegationCb) {
               message.consumption = id;
               message.emission = id;
               message.ownerId = data.did.ownerId;
+              console.log("Debug",message);
               if(message.did.eventId !== id) {
                 if(typeof window.validateDelegationSignatures[message.eventId] == 'undefined') {
-                  console.log("Debug",message);
+                
                   listenToID(message.eventId);
                 }
               }
