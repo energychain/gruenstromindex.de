@@ -396,7 +396,27 @@ const validateDelegation = async function (delegationId, delegationCb) {
   };
   if(typeof window.validateDelegationSignatures == 'undefined') window.validateDelegationSignatures = {};
   if(typeof window.validateDelegationSignatures[delegationId] == 'undefined') {
-    window.validateDelegationSignatures[delegationId] = await signJSON(startData);
+     window.validateDelegationSignatures[delegationId] = await signJSON(startData);
+     if(typeof window.ipcsocket !== 'undefined') {
+      window.ipcsocket.on(''+delegationId, (message) => {
+        try {
+            message = JSON.parse(message);
+        } catch(e) {}  
+        if(message.type == "updateDid") {
+          delete message.type;
+          message.did = JSON.stringify(message.did);
+          message.reading = "[delegation]";
+          message.consumption = delegationId;
+          message.emission = delegationId;
+          message.ownerId = data.did.ownerId;
+  
+          addData(db, message, () => {
+            delegationCb(message);
+          });
+        }
+        console.log('UpdatedDID:', message);
+      });
+     }
   }
 
   fetch(url, {
@@ -418,6 +438,10 @@ const validateDelegation = async function (delegationId, delegationCb) {
         addData(db, data, () => {
           delegationCb(data);
         });
+        if(typeof window.ipcsocket !== 'undefined') {
+          data.type = "updateDid";
+          safeSendP2P.send(delegationId, JSON.stringify(data));
+        }
       });
     });
 }
