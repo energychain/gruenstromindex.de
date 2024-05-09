@@ -408,8 +408,8 @@ const validateDelegation = async function (delegationId, delegationCb) {
         message.ownerId = data.did.ownerId;
         console.log("Debug",message);
         if(message.did.eventId !== id) {
-          if(typeof window.validateDelegationSignatures[message.eventId] == 'undefined') {
-            listenToId(message.eventId);
+          if(typeof window.validateDelegationSignatures[message.did.eventId] == 'undefined') {
+            listenToId(message.did.eventId);
           }
         }
         addData(db, message, () => {
