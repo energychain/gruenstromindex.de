@@ -416,7 +416,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
           delegationCb(message);
         });
       }
-      console.log('UpdatedDID:', message.eventId);
+      console.log('UpdatedDID:', message);
     });
  
   }
