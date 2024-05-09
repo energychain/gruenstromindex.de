@@ -409,8 +409,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
         console.log("Debug",message);
         if(message.did.eventId !== id) {
           if(typeof window.validateDelegationSignatures[message.eventId] == 'undefined') {
-          
-            listenToID(message.eventId);
+            listenToId(message.eventId);
           }
         }
         addData(db, message, () => {
@@ -421,7 +420,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
     });
  
   }
-  
+
   const url = 'https://api.corrently.io/v2.0/scope2/eventDelegation';
   let startData = {
     delegationId: delegationId,
@@ -430,10 +429,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
   if(typeof window.validateDelegationSignatures == 'undefined') window.validateDelegationSignatures = {};
   if(typeof window.validateDelegationSignatures[delegationId] == 'undefined') {
      window.validateDelegationSignatures[delegationId] = await signJSON(startData);
-     
-        
-        listenToId(delegationId);
-     
+     listenToId(delegationId);
   }
 
   fetch(url, {
@@ -453,7 +449,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
         data.ownerId = data.did.ownerId;
         if(typeof window.validateDelegationSignatures[data.eventId] == 'undefined') {
           console.log("Debug Here",data);
-          listenToID(data.eventId);
+          listenToId(data.eventId);
         }
         addData(db, data, () => {
           delegationCb(data);
