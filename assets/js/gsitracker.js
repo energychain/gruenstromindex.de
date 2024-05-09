@@ -424,7 +424,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
                 delegationCb(message);
               });
             }
-            console.log('UpdatedDID:', message);
+            console.log('UpdatedDID:', message.eventId);
           });
        
         }
@@ -453,7 +453,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
         });
         if(typeof window.ipcsocket !== 'undefined') {
           data.type = "updateDid";
-          safeSendP2P(delegationId, JSON.stringify(data));
+          safeSendP2P(data.did.eventId, JSON.stringify(data));
         }
       });
     });
