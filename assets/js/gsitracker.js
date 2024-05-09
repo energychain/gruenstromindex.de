@@ -398,7 +398,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
   if(typeof window.validateDelegationSignatures[delegationId] == 'undefined') {
      window.validateDelegationSignatures[delegationId] = await signJSON(startData);
      if(typeof window.ipcsocket !== 'undefined') {
-      console.log("Handle socket.io");
+     
         const listenToId = function(id) {
           if(typeof window.validateDelegationSignatures[message.eventId] == 'undefined') {
             window.validateDelegationSignatures[message.eventId] = "[ipc]";
@@ -426,8 +426,9 @@ const validateDelegation = async function (delegationId, delegationCb) {
             }
             console.log('UpdatedDID:', message);
           });
-          listenToId(delegationId);
+       
         }
+        listenToId(delegationId);
      }
   }
 
