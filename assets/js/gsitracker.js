@@ -455,9 +455,11 @@ const validateDelegation = async function (delegationId, delegationCb) {
           delegationCb(data);
         });
         if(typeof window.ipcsocket !== 'undefined') {
-          data.type = "updateDid";
-          safeSendP2P(data.eventId, JSON.stringify(data));
-          console.log("Send For",data);
+          if(data.reading !== ' [delegation]') {
+            data.type = "updateDid";
+            safeSendP2P(data.eventId, JSON.stringify(data));
+            console.log("Send For",data.eventId);
+          }
         }
       });
     });
