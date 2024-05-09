@@ -393,13 +393,17 @@ const validateDelegation = async function (delegationId, delegationCb) {
     delegationId: delegationId,
     iat: Math.round(new Date().getTime() / 1000)
   };
+  if(typeof window.validateDelegationSignatures == 'undefined') window.validateDelegationSignatures = {};
+  if(typeof window.validateDelegationSignatures[delegationId] == 'undefined') {
+    window.validateDelegationSignatures[delegationId] = await signJSON(startData);
+  }
 
   fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(await signJSON(startData))
+    body: JSON.stringify(window.validateDelegationSignatures[delegationId])
   })
     .then(response => response.json())
     .then(data => {

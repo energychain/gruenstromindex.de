@@ -1,5 +1,9 @@
 $(document).ready(function() {
     function renderGSI(zip) {
+      let account = "0x0";
+      if(typeof window.wallet !== 'undefined') {
+        account = window.wallet.address;
+      }
         let html = '';
         html += '<div style="margin-bottom:50px;margin-top:10px;"><div class="card" id="card'+zip+'">'
         html += '<div class="card-body" style="background: var(--bs-card-cap-bg);">';
@@ -38,7 +42,7 @@ $(document).ready(function() {
           $('#modalDispatch').modal('show');
           $('#dispatchBody').html('');
           $('#dispatchTitle').html('wird geladen...');
-          $.getJSON("https://api.corrently.io/v2.0/gsi/dispatch?zip="+zip+"&account="+window.wallet.address,function(data) {
+          $.getJSON("https://api.corrently.io/v2.0/gsi/dispatch?zip="+zip+"&account="+account,function(data) {
             let html = '<h4>Energiequellen</h4>';
             html += '<table class="table table-condensed">';
             let sources = [];
@@ -70,7 +74,7 @@ $(document).ready(function() {
             $('#dispatchBtn'+zip).removeAttr('disabled');
           });         
         })
-        $.getJSON("https://api.corrently.io/v2.0/gsi/prediction?zip="+zip+"&account="+window.wallet.address,function(data) {
+        $.getJSON("https://api.corrently.io/v2.0/gsi/prediction?zip="+zip+"&account="+account,function(data) {
             let points = [];
             let now = new Date().getTime();
             let firstStamp = -1;
@@ -284,6 +288,8 @@ $(document).ready(function() {
                     $('#switchName').val('');
                     $('#switchTime').attr('data',points[clickedIndex].time);
                     $('.submitSwitch').removeAttr('disabled');
+                    $('.withWallet').show();
+                    window.localStorage.setItem("doWallet","true");
                     $('#modalSwitch').modal('show');
                   }
                 }, 

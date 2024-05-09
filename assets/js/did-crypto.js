@@ -18,6 +18,9 @@ const getJSONSignee = (json) => {
 }
 
 const signJSON = async (json) => {
+    while(typeof window.wallet == "undefined") { 
+        await new Promise(r => setTimeout(r, 10000));
+    }
   json.sig = await window.wallet.signMessage(JSON.stringify(json));
   return json
 }

@@ -1,9 +1,52 @@
-if(window.localStorage.getItem("deviceKey")===null) {
-    const wallet = ethers.Wallet.createRandom();
-    window.localStorage.setItem("deviceKey",wallet.privateKey);
+let wallet;
+const withWallet = function(fn) {
+    var qrcode = new QRCode(document.getElementById("profileQR"), {
+        text: window.wallet.address,
+        width: 400,
+        height: 400,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+      $('#showAddress').val(window.wallet.address);
 }
-window.wallet = new ethers.Wallet(window.localStorage.getItem("deviceKey"));
-$('#showAddress').val(window.wallet.address);
+const fallbackBrowserWallet = function() {
+    if(window.localStorage.getItem("deviceKey")===null) {
+        // If no Web3 provider is available, create a random wallet
+        wallet = ethers.Wallet.createRandom();
+        window.localStorage.setItem("deviceKey",wallet.privateKey);
+    }
+    if (!wallet) {
+        console.log("Fallback to insecure Browser Wallet");
+        wallet = new ethers.Wallet(window.localStorage.getItem("deviceKey"));
+    }
+    window.wallet = wallet;
+    withWallet();
+}
+// Check if window.ethereum is available (MetaMask or other Web3 provider)
+if (window.ethereum) {
+    // Request account access
+    window.ethereum.request({ method: 'eth_requestAccounts' })
+    .then(result => {
+        account = result[0];
+
+        // Create a provider using the Web3 provider from MetaMask
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+        // Get the signer (MetaMask account)
+        const signer = provider.getSigner();
+        window.wallet = signer;
+        // Get the address of the signer (MetaMask account)
+        signer.getAddress().then((address) => {
+            window.wallet.address = address;
+            withWallet();
+        });
+    })
+    .catch(error => {
+        console.error(error);
+        fallbackBrowserWallet();
+    });
+}  else fallbackBrowserWallet();
 
 $(document).ready(function() {
     $('#doWallet').on('change',function() {
@@ -19,14 +62,7 @@ $(document).ready(function() {
         $('.withWallet').show();
         $('#doWallet').attr('checked','checked');
     }
-    var qrcode = new QRCode(document.getElementById("profileQR"), {
-        text: window.wallet.address,
-        width: 400,
-        height: 400,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.M
-      });
+
 
     $('#openProfile').on('click',function() {
         $('#modalProfile').modal('show');
