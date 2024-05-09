@@ -389,6 +389,39 @@ const handleReadingButtonEvents = function () {
 }
 
 const validateDelegation = async function (delegationId, delegationCb) {
+  const listenToId = function(id) {
+    if(typeof window.ipcsocket == 'undefined') return;
+    if(typeof window.validateDelegationSignatures[id] == 'undefined') {
+      window.validateDelegationSignatures[id] = "[ipc]";
+    }
+    console.log("Listening for ", id);
+    window.ipcsocket.on(''+id, (message) => {
+      try {
+          message = JSON.parse(message);
+      } catch(e) {}  
+      if(message.type == "updateDid") {
+        delete message.type;
+        message.did = JSON.stringify(message.did);
+        message.reading = "[delegation]";
+        message.consumption = id;
+        message.emission = id;
+        message.ownerId = data.did.ownerId;
+        console.log("Debug",message);
+        if(message.did.eventId !== id) {
+          if(typeof window.validateDelegationSignatures[message.eventId] == 'undefined') {
+          
+            listenToID(message.eventId);
+          }
+        }
+        addData(db, message, () => {
+          delegationCb(message);
+        });
+      }
+      console.log('UpdatedDID:', message.eventId);
+    });
+ 
+  }
+  
   const url = 'https://api.corrently.io/v2.0/scope2/eventDelegation';
   let startData = {
     delegationId: delegationId,
@@ -398,38 +431,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
   if(typeof window.validateDelegationSignatures[delegationId] == 'undefined') {
      window.validateDelegationSignatures[delegationId] = await signJSON(startData);
      
-        const listenToId = function(id) {
-          if(typeof window.ipcsocket == 'undefined') return;
-          if(typeof window.validateDelegationSignatures[id] == 'undefined') {
-            window.validateDelegationSignatures[id] = "[ipc]";
-          }
-          console.log("Listening for ", id);
-          window.ipcsocket.on(''+id, (message) => {
-            try {
-                message = JSON.parse(message);
-            } catch(e) {}  
-            if(message.type == "updateDid") {
-              delete message.type;
-              message.did = JSON.stringify(message.did);
-              message.reading = "[delegation]";
-              message.consumption = id;
-              message.emission = id;
-              message.ownerId = data.did.ownerId;
-              console.log("Debug",message);
-              if(message.did.eventId !== id) {
-                if(typeof window.validateDelegationSignatures[message.eventId] == 'undefined') {
-                
-                  listenToID(message.eventId);
-                }
-              }
-              addData(db, message, () => {
-                delegationCb(message);
-              });
-            }
-            console.log('UpdatedDID:', message.eventId);
-          });
-       
-        }
+        
         listenToId(delegationId);
      
   }
