@@ -398,25 +398,35 @@ const validateDelegation = async function (delegationId, delegationCb) {
   if(typeof window.validateDelegationSignatures[delegationId] == 'undefined') {
      window.validateDelegationSignatures[delegationId] = await signJSON(startData);
      if(typeof window.ipcsocket !== 'undefined') {
-      console.log("Listening for ", delegationId);
-      window.ipcsocket.on(''+delegationId, (message) => {
-        try {
-            message = JSON.parse(message);
-        } catch(e) {}  
-        if(message.type == "updateDid") {
-          delete message.type;
-          message.did = JSON.stringify(message.did);
-          message.reading = "[delegation]";
-          message.consumption = delegationId;
-          message.emission = delegationId;
-          message.ownerId = data.did.ownerId;
-  
-          addData(db, message, () => {
-            delegationCb(message);
+        const listenToId = function(id) {
+          if(typeof window.validateDelegationSignatures[message.eventId] == 'undefined') {
+            window.validateDelegationSignatures[message.eventId] = "[ipc]";
+          }
+          console.log("Listening for ", id);
+          window.ipcsocket.on(''+id, (message) => {
+            try {
+                message = JSON.parse(message);
+            } catch(e) {}  
+            if(message.type == "updateDid") {
+              delete message.type;
+              message.did = JSON.stringify(message.did);
+              message.reading = "[delegation]";
+              message.consumption = id;
+              message.emission = id;
+              message.ownerId = data.did.ownerId;
+              if(message.did.eventId !== id) {
+                if(typeof window.validateDelegationSignatures[message.eventId] == 'undefined') {
+                  listenToID(message.eventId);
+                }
+              }
+              addData(db, message, () => {
+                delegationCb(message);
+              });
+            }
+            console.log('UpdatedDID:', message);
           });
+          listenToId(delegationId);
         }
-        console.log('UpdatedDID:', message);
-      });
      }
   }
 
