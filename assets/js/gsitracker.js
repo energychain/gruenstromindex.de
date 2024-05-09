@@ -397,9 +397,9 @@ const validateDelegation = async function (delegationId, delegationCb) {
   if(typeof window.validateDelegationSignatures == 'undefined') window.validateDelegationSignatures = {};
   if(typeof window.validateDelegationSignatures[delegationId] == 'undefined') {
      window.validateDelegationSignatures[delegationId] = await signJSON(startData);
-     if(typeof window.ipcsocket !== 'undefined') {
      
         const listenToId = function(id) {
+          if(typeof window.ipcsocket == 'undefined') return;
           if(typeof window.validateDelegationSignatures[id] == 'undefined') {
             window.validateDelegationSignatures[id] = "[ipc]";
           }
@@ -431,7 +431,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
        
         }
         listenToId(delegationId);
-     }
+     
   }
 
   fetch(url, {
@@ -449,7 +449,10 @@ const validateDelegation = async function (delegationId, delegationCb) {
         data.consumption = delegationId;
         data.emission = delegationId;
         data.ownerId = data.did.ownerId;
-
+        if(typeof window.validateDelegationSignatures[data.eventId] == 'undefined') {
+          console.log("Debug Here",data);
+          listenToID(data.eventId);
+        }
         addData(db, data, () => {
           delegationCb(data);
         });
