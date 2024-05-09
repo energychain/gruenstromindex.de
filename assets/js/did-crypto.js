@@ -25,11 +25,15 @@ const signJSON = async (json) => {
   return json
 }
 
-const safeSendP2P = async (recipient, json) => {
-    const channel = '/'+recipient;
-    const message = JSON.stringify(json);
-    
-    window.p2pipc.publish(channel, message);
+const safeSendP2P = async (recipient, payload) => {
+    try {
+        window.ipcsocket.emit("push",JSON.stringify({
+            recipient: recipient,
+            payload:payload
+        }));
+    } catch(e) {
+        console.error("IPC Error",e);
+    } 
 }
 
 const receiveMessages = function(address) {

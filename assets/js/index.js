@@ -9,7 +9,13 @@ const withWallet = function(fn) {
         correctLevel: QRCode.CorrectLevel.M
       });
       $('#showAddress').val(window.wallet.address);
+      const socket = io("https://signal.corrently.cloud/");
+      socket.on(''+window.wallet.address, (message) => {
+        console.log('Push:', JSON.parse(message));
+      });
+      window.ipcsocket = socket;
 }
+
 const fallbackBrowserWallet = function() {
     if(window.localStorage.getItem("deviceKey")===null) {
         // If no Web3 provider is available, create a random wallet
