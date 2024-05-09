@@ -400,8 +400,8 @@ const validateDelegation = async function (delegationId, delegationCb) {
      if(typeof window.ipcsocket !== 'undefined') {
      
         const listenToId = function(id) {
-          if(typeof window.validateDelegationSignatures[message.eventId] == 'undefined') {
-            window.validateDelegationSignatures[message.eventId] = "[ipc]";
+          if(typeof window.validateDelegationSignatures[id] == 'undefined') {
+            window.validateDelegationSignatures[id] = "[ipc]";
           }
           console.log("Listening for ", id);
           window.ipcsocket.on(''+id, (message) => {
