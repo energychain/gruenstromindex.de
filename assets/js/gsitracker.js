@@ -440,7 +440,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
         });
         if(typeof window.ipcsocket !== 'undefined') {
           data.type = "updateDid";
-          safeSendP2P.send(delegationId, JSON.stringify(data));
+          safeSendP2P(delegationId, JSON.stringify(data));
         }
       });
     });
