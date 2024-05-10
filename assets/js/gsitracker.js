@@ -445,12 +445,12 @@ const validateDelegation = async function (delegationId, delegationCb) {
     .then(response => response.json())
     .then(data => {
       connectDB((db) => {
-        if(typeof data == 'undefined') return;
+        if(typeof data == 'undefined') { console.log("No Data");return; }
+        if(typeof db == 'undefined') { console.log("No DB");return; }
         data.did = JSON.stringify(data);
         data.reading = "[delegation]";
         data.consumption = delegationId;
         data.emission = delegationId;
-        console.log('DATA',data);
         data.ownerId = data.did.ownerId;
         if(typeof window.validateDelegationSignatures[data.eventId] == 'undefined') {
           console.log("Debug Here",data);
