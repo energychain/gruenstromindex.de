@@ -308,7 +308,7 @@ const handleReadingButtonEvents = function () {
                 correctLevel: QRCode.CorrectLevel.M
               });
               $('#shareId').val(data.delegationId);
-              safeSendP2P($('#shareTo').val(), { type: "sharedTracker", delegationId: data.delegationId });
+              safeSendP2P($('#shareTo').val(), { type: "sharedTracker", delegationId: data.delegationId },"sharedTracker");
             });
       });
     });
@@ -480,7 +480,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
             data.type = "updateDID";
             data.sender = window.wallet.address;
             if(typeof data.err == 'undefined') {
-                safeSendP2P(data.eventId, JSON.stringify(data));
+                safeSendP2P(data.eventId, JSON.stringify(data),"updateDelegate");
             }
           }
         }
@@ -493,7 +493,7 @@ const updateDid = async function (updateData) {
     let did = updateData.did;
     try {
       did = JSON.parse(did);
-      safeSendP2P(did.eventId, JSON.stringify(did));
+      safeSendP2P(did.eventId, JSON.stringify(did),"updateDID");
     } catch(e) {}
     if(typeof did.err !== 'undefined') {
       console.log("updateDid cancelled ", did.err);
