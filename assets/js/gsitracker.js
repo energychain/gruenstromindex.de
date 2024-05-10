@@ -419,12 +419,20 @@ const validateDelegation = async function (delegationId, delegationCb) {
             listenToId(msg.did.eventId);
           }
         }
+
+        // as it is a Delegation we need to add the delegation ID not the real eventId
+        msg.eventId = id;
+        // Lets try with pure Update 
+        console.log("dCB Debug",msg);
+        delegationCb(msg);
+        /*
         connectDB((db) => {
             addData(db, msg, () => {
               console.log("dCB Debug",msg);
              delegationCb(msg);
           });
         });
+        */
       } else {
         console.log("Ignore socket msg",msg);
       }
