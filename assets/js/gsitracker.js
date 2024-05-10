@@ -436,6 +436,10 @@ const validateDelegation = async function (delegationId, delegationCb) {
      listenToId(delegationId);
   } else {
     if(window.validateDelegationSignatures[delegationId] == "[pending]") {
+      setTimeout(() => {
+        validateDelegation(delegationId,delegationCb);           
+      },3000);
+      console.log("Pending",delegationId);
       return;
     }
   }
