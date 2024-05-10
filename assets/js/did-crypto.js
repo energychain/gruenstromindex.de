@@ -27,10 +27,10 @@ const signJSON = async (json) => {
   return json
 }
 
-const safeSendP2P = async (recipient, payload) => {
+const safeSendP2P = async (eventId, payload) => {
     try {
         window.ipcsocket.emit("push",JSON.stringify({
-            recipient: recipient,
+            eventId: eventId,
             payload:payload,
             sender:window.wallet.address
         }));

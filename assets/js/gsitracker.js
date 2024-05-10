@@ -84,8 +84,8 @@ const trackerRowHTML = function (tracker, fromDelegation) {
   }
   html += ' ' + tracker.name + '</span></td>';
   if(!isNaN(tracker.consumption) && !isNaN(tracker.emission) && ((''+tracker.consumption).substring(0,2) !== "0x")) {
-  html += '<td align="right">' + (multipl * tracker.consumption / 1000).toFixed(3).replace('.', ',') + '</td>';
-  html += '<td align="right">' + (multipl * tracker.emission / 1000).toFixed(3).replace('.', ',') + '</td>';
+    html += '<td align="right">' + (multipl * tracker.consumption / 1000).toFixed(3).replace('.', ',') + '</td>';
+    html += '<td align="right">' + (multipl * tracker.emission / 1000).toFixed(3).replace('.', ',') + '</td>';
   } else {
     html += '<td>&nbsp;</td>';
     html += '<td>&nbsp;</td>';
