@@ -467,8 +467,10 @@ const validateDelegation = async function (delegationId, delegationCb) {
           if(data.reading !== ' [delegation]') {
             data.type = "updateDID";
             data.sender = window.wallet.address;
-            safeSendP2P(data.eventId, JSON.stringify(data));
-            console.log("Send For",data);
+            if(typeof data.err == 'undefined') {
+                safeSendP2P(data.eventId, JSON.stringify(data));
+                console.log("Send For",data);
+            }
           }
         }
       });
