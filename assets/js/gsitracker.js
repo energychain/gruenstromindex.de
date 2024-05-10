@@ -58,7 +58,7 @@ const trackerRowHTML = function (tracker, fromDelegation) {
   let multipl = 1;
   if (tracker.type == "generation") { multipl = -1; }
   let html = "";
-  html += '<tr id="trackerRow' + tracker.eventId + ' data-delegation="' + delegationId + '">';
+  html += '<tr id="trackerRow' + tracker.eventId + '" data-delegation="' + delegationId + '">';
   try {
 
     tracker.did = JSON.parse(tracker.did);
