@@ -415,8 +415,10 @@ const validateDelegation = async function (delegationId, delegationCb) {
             listenToId(msg.did.eventId);
           }
         }
-        addData(db, msg, () => {
-          delegationCb(msg);
+        connectDB((db) => {
+            addData(db, msg, () => {
+            delegationCb(msg);
+          });
         });
       } else {
         console.log("Ignore socket msg",msg);
