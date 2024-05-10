@@ -409,7 +409,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
         msg.consumption = id;
         msg.emission = id;
         msg.ownerId = msg.did.ownerId;
-        console.log("Debug",msg);
+
         if(msg.did.eventId !== id) {
           if(typeof window.validateDelegationSignatures[msg.did.eventId] == 'undefined') {
             listenToId(msg.did.eventId);
@@ -417,7 +417,8 @@ const validateDelegation = async function (delegationId, delegationCb) {
         }
         connectDB((db) => {
             addData(db, msg, () => {
-            delegationCb(msg);
+              console.log("dCB Debug",msg);
+             delegationCb(msg);
           });
         });
       } else {
