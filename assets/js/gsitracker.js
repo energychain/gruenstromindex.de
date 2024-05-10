@@ -396,25 +396,25 @@ const validateDelegation = async function (delegationId, delegationCb) {
     }
     console.log("Listening for ", id);
     window.ipcsocket.on(''+id, (message) => {
-      message = JSON.parse(message); 
-      if(message.type == "updateDID") {
+      msg = JSON.parse(message); 
+      if(msg.type == "updateDID") {
         //delete message.type;
-        message.did = JSON.stringify(message.did);
-        message.reading = "[delegation]";
-        message.consumption = id;
-        message.emission = id;
-        message.ownerId = data.did.ownerId;
-        console.log("Debug",message);
-        if(message.did.eventId !== id) {
-          if(typeof window.validateDelegationSignatures[message.did.eventId] == 'undefined') {
-            listenToId(message.did.eventId);
+        msg.did = JSON.stringify(msg.did);
+        msg.reading = "[delegation]";
+        msg.consumption = id;
+        msg.emission = id;
+        msg.ownerId = data.did.ownerId;
+        console.log("Debug",msg);
+        if(msg.did.eventId !== id) {
+          if(typeof window.validateDelegationSignatures[msg.did.eventId] == 'undefined') {
+            listenToId(msg.did.eventId);
           }
         }
-        addData(db, message, () => {
-          delegationCb(message);
+        addData(db, msg, () => {
+          delegationCb(msg);
         });
       } else {
-        console.log("Ignore socket msg",message);
+        console.log("Ignore socket msg",message,msg);
       }
     });
   }
