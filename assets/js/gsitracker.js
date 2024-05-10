@@ -397,6 +397,11 @@ const validateDelegation = async function (delegationId, delegationCb) {
     console.log("Listening for ", id);
     window.ipcsocket.on(''+id, (message) => {
       msg = JSON.parse(message); 
+      try {
+        msg = JSON.parse(msg);
+      } catch(e) {
+        
+      } 
       if(msg.type == "updateDID") {
         //delete message.type;
         msg.did = JSON.stringify(msg.did);
@@ -414,7 +419,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
           delegationCb(msg);
         });
       } else {
-        console.log("Ignore socket msg",message,msg);
+        console.log("Ignore socket msg",msg);
       }
     });
   }
