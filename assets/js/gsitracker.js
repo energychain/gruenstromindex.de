@@ -266,7 +266,7 @@ const handleReadingButtonEvents = function () {
         // for example:
         console.warn(`Code scan error = ${error}`);
       }
-  
+      $('#shareReader').html('');
       let html5QrcodeScanner = new Html5QrcodeScanner(
         "shareReader",
         { fps: 10, qrbox: { width: 320, height: 200 } },
