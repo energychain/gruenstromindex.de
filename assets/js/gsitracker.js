@@ -405,7 +405,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
       } 
       if(msg.type == "updateDID") {
         //delete message.type;
-        msg.did = JSON.stringify(msg.did);
+        msg.did = msg.did;
         msg.reading = "[delegation]";
         msg.consumption = id;
         msg.emission = id;
