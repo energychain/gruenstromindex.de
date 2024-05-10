@@ -431,8 +431,13 @@ const validateDelegation = async function (delegationId, delegationCb) {
   };
   if(typeof window.validateDelegationSignatures == 'undefined') window.validateDelegationSignatures = {};
   if(typeof window.validateDelegationSignatures[delegationId] == 'undefined') {
+    window.validateDelegationSignatures[delegationId] = "[pending]";
      window.validateDelegationSignatures[delegationId] = await signJSON(startData);
      listenToId(delegationId);
+  } else {
+    if(window.validateDelegationSignatures[delegationId] == "[pending]") {
+      return;
+    }
   }
 
   fetch(url, {
@@ -655,6 +660,7 @@ $(document).ready(function () {
         $('#trackerBadge').css('background-color', '#e6b41e');
       }
       $('#avgCO2').html(Math.round(avg));
+      $('#avgCO2').attr('title',totalCO2 + "/" + totalKWH);
     }
     return html;
   }

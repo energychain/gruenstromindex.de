@@ -9,7 +9,9 @@ const withWallet = function(fn) {
         correctLevel: QRCode.CorrectLevel.M
       });
       $('#showAddress').val(window.wallet.address);
-      const socket = io("https://signal.corrently.cloud/");
+      let signal_server = "https://signal.corrently.cloud";
+      if(location.protocol == "http:") { signal_server = "http://10.0.0.1:3037"; }
+      const socket = io(signal_server);
       socket.on(''+window.wallet.address, (message) => {
         try {
             message = JSON.parse(message);
