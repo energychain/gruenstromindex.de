@@ -445,6 +445,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
     .then(response => response.json())
     .then(data => {
       connectDB((db) => {
+        if(typeof data == 'undefined') return;
         data.did = JSON.stringify(data);
         data.reading = "[delegation]";
         data.consumption = delegationId;
