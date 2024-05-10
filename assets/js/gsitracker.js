@@ -11,6 +11,7 @@ const updater = async function() {
   for(let i=0;i<runners.length;i++) {
     const run = function() {
       return new Promise((resolve, reject) => {
+        console.log("Work with Runner",runners[i].delegationId);
         validateDelegation(runners[i].delegationId, function (data) {
           let html = trackerRowHTML(JSON.parse(data.did), true);
           console.log("Update HTML by Runner",runners[i].eventId);
@@ -33,12 +34,14 @@ const trackerRowHTML = function (tracker, fromDelegation) {
   console.log("Tracker",tracker);
   let delegation = false;
   let disableManual = '';
+  let delegationId = '';
   if ((tracker.reading == '[delegation]') && (typeof fromDelegation == 'undefined') && (fromDelegation !== null)) {
     const deepTracker = JSON.parse(JSON.stringify(tracker));
     delegation = true;
     let data = JSON.parse(deepTracker.did);
     // hier können wir einen Update Timer starten...
     reqUpdates[deepTracker.consumption] = deepTracker.eventId;
+    delegationId = deepTracker.consumption;
     deepTracker.reading = data.reading;
     deepTracker.consumption = data.consumption;
     deepTracker.emission = data.emission;
@@ -55,7 +58,7 @@ const trackerRowHTML = function (tracker, fromDelegation) {
   let multipl = 1;
   if (tracker.type == "generation") { multipl = -1; }
   let html = "";
-  html += '<tr id="trackerRow' + tracker.eventId + '">';
+  html += '<tr id="trackerRow' + tracker.eventId + ' data-delegation="' + delegationId + '">';
   try {
 
     tracker.did = JSON.parse(tracker.did);
