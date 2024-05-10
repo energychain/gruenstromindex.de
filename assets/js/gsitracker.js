@@ -11,10 +11,8 @@ const updater = async function() {
   for(let i=0;i<runners.length;i++) {
     const run = function() {
       return new Promise((resolve, reject) => {
-        console.log("Work with Runner",runners[i].delegationId);
         validateDelegation(runners[i].delegationId, function (data) {
           let html = trackerRowHTML(JSON.parse(data.did), true);
-          console.log("Update HTML by Runner",runners[i].eventId);
           $('#trackerRow' + runners[i].eventId).replaceWith(html);
           setTimeout(function() {
             resolve();
@@ -31,7 +29,6 @@ let updateTimer = null;
 
 
 const trackerRowHTML = function (tracker, fromDelegation) {
-  console.log("Tracker",tracker);
   let delegation = false;
   let disableManual = '';
   let delegationId = '';
@@ -295,7 +292,6 @@ const handleReadingButtonEvents = function () {
           })
             .then(response => response.json())
             .then(data => {
-              console.log("Share DID", data);
               $('#shareModalBody').hide();
               $('#shareWithId').show();
               var qrcode = new QRCode(document.getElementById("shareQRCode"), {
@@ -342,7 +338,6 @@ const handleReadingButtonEvents = function () {
             .then(response => response.json())
             .then(data => {
               if(typeof data.err !== 'undefined') {
-                console.log("Type here");
                 $('#managedAlert').attr("data", $('#modalTransferTracker').attr('data'));
                 $('#managedAlert').html(data.err);
                 $('#modalAlert').modal('show');
@@ -398,7 +393,6 @@ const validateDelegation = async function (delegationId, delegationCb) {
     if(typeof window.validateDelegationSignatures[id] == 'undefined') {
       window.validateDelegationSignatures[id] = "[ipc]";
     }
-    console.log("Listening for ", id);
     window.ipcsocket.on(''+id, (message) => {
       msg = JSON.parse(message); 
       try {
@@ -423,16 +417,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
         // as it is a Delegation we need to add the delegation ID not the real eventId
         msg.eventId = id;
         // Lets try with pure Update 
-        console.log("dCB Debug",msg);
         delegationCb(msg);
-        /*
-        connectDB((db) => {
-            addData(db, msg, () => {
-              console.log("dCB Debug",msg);
-             delegationCb(msg);
-          });
-        });
-        */
       } else {
         console.log("Ignore socket msg",msg);
       }
@@ -469,7 +454,6 @@ const validateDelegation = async function (delegationId, delegationCb) {
         data.ownerId = data.did.ownerId;
         if(typeof window.validateDelegationSignatures[data.eventId] == 'undefined') {
           if(typeof data.err == 'undefined') {
-            console.log("Debug Here",data);
             listenToId(data.eventId);
           }
         }
@@ -482,7 +466,6 @@ const validateDelegation = async function (delegationId, delegationCb) {
             data.sender = window.wallet.address;
             if(typeof data.err == 'undefined') {
                 safeSendP2P(data.eventId, JSON.stringify(data));
-                console.log("Send For",data);
             }
           }
         }
@@ -732,7 +715,6 @@ $(document).ready(function () {
 
   $('#frmJWTValidate').on('submit', function (e) {
     e.preventDefault();
-    console.log("In Here");
     $('#modalPresentation').modal('show');
     qrVerify();
   });
