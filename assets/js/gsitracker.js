@@ -416,9 +416,8 @@ const validateDelegation = async function (delegationId, delegationCb) {
           delegationCb(message);
         });
       }
-      console.log('UpdatedDID:', message);
+      console.log('UpdatedDID:', message.eventId);
     });
- 
   }
 
   const url = 'https://api.corrently.io/v2.0/scope2/eventDelegation';
@@ -458,7 +457,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
           if(data.reading !== ' [delegation]') {
             data.type = "updateDid";
             safeSendP2P(data.eventId, JSON.stringify(data));
-            console.log("Send For",data.eventId);
+            console.log("Send For",data);
           }
         }
       });
