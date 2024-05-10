@@ -398,7 +398,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
     window.ipcsocket.on(''+id, (message) => {
       try {
           message = JSON.parse(message);
-      } catch(e) {}  
+      } catch(e) { console.log("Invalid JSON",e,message);  }  
       if(message.type == "updateDID") {
         //delete message.type;
         message.did = JSON.stringify(message.did);
