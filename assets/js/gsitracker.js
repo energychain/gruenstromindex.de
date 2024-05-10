@@ -13,6 +13,7 @@ const updater = async function() {
       return new Promise((resolve, reject) => {
         validateDelegation(runners[i].delegationId, function (data) {
           let html = trackerRowHTML(JSON.parse(data.did), true);
+          console.log("Update HTML by Runner",runners[i].eventId);
           $('#trackerRow' + runners[i].eventId).replaceWith(html);
           setTimeout(function() {
             resolve();
