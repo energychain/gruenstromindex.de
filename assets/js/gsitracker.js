@@ -400,7 +400,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
           message = JSON.parse(message);
       } catch(e) {}  
       if(message.type == "updateDid") {
-        delete message.type;
+        //delete message.type;
         message.did = JSON.stringify(message.did);
         message.reading = "[delegation]";
         message.consumption = id;
@@ -415,8 +415,9 @@ const validateDelegation = async function (delegationId, delegationCb) {
         addData(db, message, () => {
           delegationCb(message);
         });
+      } else {
+        console.log("Ignore socket msg",message)
       }
-      console.log('UpdatedDID:', message.eventId);
     });
   }
 
