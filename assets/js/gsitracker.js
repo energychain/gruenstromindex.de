@@ -399,7 +399,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
       try {
           message = JSON.parse(message);
       } catch(e) {}  
-      if(message.type == "updateDid") {
+      if(message.type == "updateDID") {
         //delete message.type;
         message.did = JSON.stringify(message.did);
         message.reading = "[delegation]";
@@ -456,7 +456,8 @@ const validateDelegation = async function (delegationId, delegationCb) {
         });
         if(typeof window.ipcsocket !== 'undefined') {
           if(data.reading !== ' [delegation]') {
-            data.type = "updateDid";
+            data.type = "updateDID";
+            data.sender = window.wallet.address;
             safeSendP2P(data.eventId, JSON.stringify(data));
             console.log("Send For",data);
           }

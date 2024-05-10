@@ -29,7 +29,8 @@ const safeSendP2P = async (recipient, payload) => {
     try {
         window.ipcsocket.emit("push",JSON.stringify({
             recipient: recipient,
-            payload:payload
+            payload:payload,
+            sender:window.wallet.address
         }));
     } catch(e) {
         console.error("IPC Error",e);
