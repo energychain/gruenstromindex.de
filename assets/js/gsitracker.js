@@ -83,8 +83,13 @@ const trackerRowHTML = function (tracker, fromDelegation) {
     html += '<span class="text-muted">';
   }
   html += ' ' + tracker.name + '</span></td>';
+  if(!isNaN(tracker.consumption) &&!isNaN(tracker.emission)) {
   html += '<td align="right">' + (multipl * tracker.consumption / 1000).toFixed(3).replace('.', ',') + '</td>';
   html += '<td align="right">' + (multipl * tracker.emission / 1000).toFixed(3).replace('.', ',') + '</td>';
+  } else {
+    html += '<td>&nbsp;</td>';
+    html += '<td>&nbsp;</td>';
+  }
   if (tracker.consumption !== 0) {
     html += '<td align="right">' + Math.round(1000 * multipl * (tracker.emission / tracker.consumption)) + '</td>';
   } else {
@@ -393,6 +398,7 @@ const validateDelegation = async function (delegationId, delegationCb) {
     if(typeof window.validateDelegationSignatures[id] == 'undefined') {
       window.validateDelegationSignatures[id] = "[ipc]";
     }
+    console.log("Listining for",id);
     window.ipcsocket.on(''+id, (message) => {
       msg = JSON.parse(message); 
       try {
@@ -664,7 +670,7 @@ $(document).ready(function () {
         $('#trackerBadge').css('background-color', '#e6b41e');
       }
       $('#avgCO2').html(Math.round(avg));
-      $('#avgCO2').attr('title',totalCO2 + "/" + totalKWH);
+      $('#avgCO2').attr('title',totalCO2 + "/" + (totalKWH/1000));
     }
     return html;
   }
