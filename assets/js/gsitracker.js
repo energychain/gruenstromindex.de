@@ -12,7 +12,6 @@ const updater = async function() {
     const run = function() {
       return new Promise((resolve, reject) => {
         validateDelegation(runners[i].delegationId, function (data) {
-          console.log("runner",data.did);
           let html = trackerRowHTML(JSON.parse(data.did), true);
           $('#trackerRow' + runners[i].eventId).replaceWith(html);
           setTimeout(function() {
