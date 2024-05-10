@@ -689,7 +689,7 @@ $(document).ready(function () {
           $('#modalTracker').modal('show');
         })
       } else {
-        const table = createTable(entries);
+        let table = createTable(entries);
         table += '<hr/>';
         table += '<button class="btn btn-light" id="gsiAddTrackerFront">';
         table += '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-plus-circle-fill" style="width: 30px;height: 30px;color: #147a50;">';
