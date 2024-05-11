@@ -28,6 +28,10 @@ const signJSON = async (json) => {
 }
 
 const safeSendP2P = async (eventId, payload,type) => {
+    if(window.ipcsocket == null) {
+        console.log("No socket support");
+        return;
+    }
     try {
         window.ipcsocket.emit("push",JSON.stringify({
             eventId: eventId,

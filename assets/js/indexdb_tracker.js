@@ -67,12 +67,20 @@ function getByEventID(db, eventId, callback) {
     };
 }
 
-function updateByEventID(db, eventId, data, callback) {
+function updateByEventID(db, eId, data, callback) {
+  if($) {
+    if($('#modalAlert').hasClass('show')) {
+      setTimeout(function() {
+        updateByEventID(db, eId, data, callback);
+      },5000);
+    }
+  }
+  const eventId = eId;
   const did = JSON.parse(data.did);
    // Handle error cases in local Memmory
    if(typeof data.reading === 'undefined') {
       if(typeof  $('#readingUpdate').attr('data-eventId') !== 'undefined') {
-        $('#managedAlert').attr("data", $('#readingUpdate').attr('data-eventId'));
+        $('#modalAlert').attr("data", eventId);
         $('#managedAlert').html(did.err);
         $('#managedAlert').show();
         $('#modalAlert').modal('show');
@@ -84,7 +92,7 @@ function updateByEventID(db, eventId, data, callback) {
       data.eventId = eventId; // Set the key of the entry to the eventId variable
 
       if(typeof did.err !== 'undefined') {
-          $('#managedAlert').attr("data", did.eventId);
+          $('#modalAlert').attr("data", eventId);
           $('#managedAlert').html(did.err);
           $('#managedAlert').show();
           $('#modalAlert').modal('show');

@@ -9,21 +9,26 @@ const withWallet = function(fn) {
         correctLevel: QRCode.CorrectLevel.M
       });
       $('#showAddress').val(window.wallet.address);
-      let signal_server = "https://signal.corrently.cloud";
-      if(location.protocol == "http:") { signal_server = "http://10.0.0.1:3037"; }
-      const socket = io(signal_server);
-      socket.on(''+window.wallet.address, (message) => {
-        try {
-            message = JSON.parse(message);
-        } catch(e) {}  
-        if(message.type == "sharedTracker") {
-            $('#modalManaged').modal('show');
-            $('#managedTrackerId').val(message.delegationId);
-            $('#modalTracker').modal('hide');
-        }
-        console.log('Push:', message);
-      });
-      window.ipcsocket = socket;
+      if(location.protocol == "http:") { 
+        console.log("No socket support");
+        window.ipcsocket = null;
+            return;
+     } else {
+        let signal_server = "https://signal.corrently.cloud";
+        const socket = io(signal_server);
+        socket.on(''+window.wallet.address, (message) => {
+          try {
+              message = JSON.parse(message);
+          } catch(e) {}  
+          if(message.type == "sharedTracker") {
+              $('#modalManaged').modal('show');
+              $('#managedTrackerId').val(message.delegationId);
+              $('#modalTracker').modal('hide');
+          }
+          console.log('Push:', message);
+        });
+        window.ipcsocket = socket;
+     }
 }
 
 const fallbackBrowserWallet = function() {

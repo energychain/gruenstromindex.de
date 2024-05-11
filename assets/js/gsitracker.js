@@ -343,7 +343,7 @@ const handleReadingButtonEvents = function () {
             .then(response => response.json())
             .then(data => {
               if(typeof data.err !== 'undefined') {
-                $('#managedAlert').attr("data", $('#modalTransferTracker').attr('data'));
+                $('#modalAlert').attr("data", $('#modalTransferTracker').attr('data'));
                 $('#managedAlert').html(data.err);
                 $('#modalAlert').modal('show');
               }
@@ -394,7 +394,7 @@ const handleReadingButtonEvents = function () {
 
 const validateDelegation = async function (delegationId, delegationCb) {
   const listenToId = function(id) {
-    if(typeof window.ipcsocket == 'undefined') return;
+    if((typeof window.ipcsocket == 'undefined')||(window.ipcsocket==null)) return;
     if(typeof window.validateDelegationSignatures[id] == 'undefined') {
       window.validateDelegationSignatures[id] = "[ipc]";
     }
@@ -685,7 +685,7 @@ $(document).ready(function () {
         html += '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-plus-circle-fill" style="width: 30px;height: 30px;color: #147a50;">';
         html += '<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"></path>';
         html += '</svg>';
-        html += '&nbsp;Tracker erstellen</button>';
+        html += '&nbsp;Tracker hinzufügen</button>';
         $('#allTrackers').html(html);
         $('#gsiAddTrackerFront').on('click', function () {
           $('#modalTracker').modal('show');
@@ -697,7 +697,7 @@ $(document).ready(function () {
         table += '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-plus-circle-fill" style="width: 30px;height: 30px;color: #147a50;">';
         table += '<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"></path>';
         table += '</svg>';
-        table += '&nbsp;Tracker erstellen</button>';
+        table += '&nbsp;Tracker hinzufügen</button>';
         $('#allTrackers').html(table);
         $('#gsiAddTrackerFront').on('click', function () {
           $('#modalTracker').modal('show');
@@ -731,7 +731,15 @@ $(document).ready(function () {
       updater();
     });
   });
-
+  $('#removeAlert').on('click',function(e) {
+    connectDB((db) => {
+      deleteByID(db, $('#modalAlert').attr("data"), (dx) => { 
+        setTimeout(function () {
+          location.reload()
+        }, 100);
+      });
+    });
+  });
   $('#frmJWTValidate').on('submit', function (e) {
     e.preventDefault();
     $('#modalPresentation').modal('show');
@@ -763,7 +771,7 @@ $(document).ready(function () {
   });
   updateLastResolved();
   $('#manageAlert').on('click',function() {
-    validateDelegation($('#managedAlert').attr("data"),function(cb) {
+    validateDelegation($('#modalAlert').attr("data"),function(cb) {
       console.log(cb);
       console.log("Might Reload?");
     })
@@ -795,6 +803,8 @@ $(document).ready(function () {
                   html += '<th>Freigabe</th>';
                   html += '<th>An</th>';
                   html += '<th>Ab</th>';
+                  html += '<th>Bis</th>';
+                  html += '<th>&nbsp;</th>';
                   html += '</tr>';
                   for(let i=0;i<data.length;i++) {
                     if(typeof data[i].delegationId == 'undefined') continue;
@@ -803,6 +813,12 @@ $(document).ready(function () {
                     html += '<td><abbr class="text-primary" title="' + data[i].delegationId + '">' + data[i].delegationId.substring(0, 6) + '...</abbr></td>';
                     html += '<td> <abbr class="text-primary" title="' + data[i].delegated + '">' + data[i].delegated.substring(0, 6) + '...</abbr></td>';
                     html += '<td>' + new Date(data[i].iat*1000).toLocaleString() + '</td>';
+                    html += '<td>' + new Date(data[i].exp*1000).toLocaleString() + '</td>';
+                    html += '<td>';
+                    html += '<button title="Löschen" style="background-color:#e6b41e;margin-right:5px;" class="btn btn-primary btn-sm btnRemoveShare" data-delegationId="' + data[i].delegationId + '">';
+                    html += '<svg class="bi bi-trash3" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"></path></svg>';
+                    html += '</button>';
+                    html += '</td>';
                     html += '</tr>';
                   }
                   html += '</table>';
@@ -810,6 +826,33 @@ $(document).ready(function () {
                   console.log("Our Shares", data);
                   $('#modalShare').modal('hide');
                   $('#modalShares').modal('show');
+                  $('.btnRemoveShare').off();
+                  $('.btnRemoveShare').on('click',function(e) {
+                    const delegationId = $(this).attr('data-delegationId');
+                    connectDB((db) => {
+                      getByEventID(db, $('#modalShare').attr('data'), async (data) => {
+                          const url = 'https://api.corrently.io/v2.0/scope2/eventShareRemove';
+                          let startData = {
+                            eventId: eventId,
+                            delegationId: delegationId,
+                            did: JSON.parse(data.did),
+                            iat: Math.round(new Date().getTime() / 1000)
+                          };
+                
+                          fetch(url, {
+                              method: 'POST',
+                              headers: {
+                                'Content-Type': 'application/json'
+                              },
+                              body: JSON.stringify(await signJSON(startData))
+                          })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log("Should be removed",data);
+                          })
+                      });
+                    });
+                  });
                 });
               });
           });
