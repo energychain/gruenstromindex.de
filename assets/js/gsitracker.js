@@ -788,8 +788,21 @@ $(document).ready(function () {
               })
                 .then(response => response.json())
                 .then(data => {
+                  $('#tableShared').html('');
+                  let html = '';
+                  html += '<table class="table table-condensed">';
+                  for(let i=0;i<data.length;i++) {
+                    html += '<tr>';
+                    html += '<td>' + data[i].delegationId + '</td>';
+                    html += '<td>' + data[i].delegated + '</td>';
+                    html += '<td>' + new Date(data[i].iat*1000).toLocaleString() + '</td>';
+                    html += '</tr>';
+                  }
+                  html += '</table>';
+                  $('#tableShared').html(html);
                   console.log("Our Shares", data);
-                  $('#shareModalBody').hide();
+                  $('#shareModalBody').modal('hide');
+                  $('#modalShares').modal('show');
                 });
               });
           });
