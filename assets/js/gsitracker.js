@@ -791,6 +791,11 @@ $(document).ready(function () {
                   $('#tableShared').html('');
                   let html = '';
                   html += '<table class="table table-condensed">';
+                  html += '<tr>';
+                  html += '<th>Freigabe</th>';
+                  html += '<th>An</th>';
+                  html += '<th>Ab</th>';
+                  html += '</tr>';
                   for(let i=0;i<data.length;i++) {
                     if(typeof data[i].delegationId == 'undefined') continue;
                     if(typeof data[i].delegated == 'undefined') continue;
