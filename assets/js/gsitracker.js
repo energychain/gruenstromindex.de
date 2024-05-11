@@ -493,8 +493,9 @@ const updateDid = async function (updateData) {
     let did = updateData.did;
     try {
       did = JSON.parse(did);
+      console.log("Update DID");
       safeSendP2P(did.eventId, JSON.stringify(did),"updateDID");
-    } catch(e) {}
+    } catch(e) {console.log("ERR DID Update",e)}
     if(typeof did.err !== 'undefined') {
       console.log("updateDid cancelled ", did.err);
       return
