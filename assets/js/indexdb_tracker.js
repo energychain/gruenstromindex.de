@@ -68,7 +68,7 @@ function getByEventID(db, eventId, callback) {
 }
 
 function updateByEventID(db, eId, data, callback) {
-  if($) {
+  if(typeof $ !== 'undefined') {  // Might be in case of call by service worker!
     if($('#modalAlert').hasClass('show')) {
       setTimeout(function() {
         updateByEventID(db, eId, data, callback);
