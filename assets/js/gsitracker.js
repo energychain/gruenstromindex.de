@@ -768,6 +768,32 @@ $(document).ready(function () {
       console.log("Might Reload?");
     })
   });
+  $('#existingShares').on('click',function() {
+        const eventId = $('#modalShare').attr('data');
+        connectDB((db) => {
+          getByEventID(db, $('#modalShare').attr('data'), async (data) => {
+              const url = 'https://api.corrently.io/v2.0/scope2/eventShares';
+              let startData = {
+                eventId: $('#modalShare').attr('data'),
+                did: JSON.parse(data.did),
+                iat: Math.round(new Date().getTime() / 1000)
+              };
+    
+              fetch(url, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(await signJSON(startData))
+              })
+                .then(response => response.json())
+                .then(data => {
+                  console.log("Our Shares", data);
+                  $('#shareModalBody').hide();
+                });
+              });
+          });
+  });
   $('#btnManagedCam').on('click', function (e) {
     $('#managedReader').show();
     function onScanSuccess(decodedText, decodedResult) {
