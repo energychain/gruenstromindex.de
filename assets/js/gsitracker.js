@@ -643,6 +643,12 @@ $(document).ready(function () {
     let totalCO2 = 0;
 
     for (let i = 0; i < entries.length; i++) {
+      if(typeof entries[i].err !== 'undefined') {
+        $('#modalAlert').attr("data", entries[i].eventId);
+        $('#managedAlert').html("Fehlende Datenbereitstellung für "+entries[i].eventId);
+        $('#modalAlert').modal('show');
+        continue;
+      }
       try {
         const did = JSON.parse(entries[i].did);
         if (entries[i].type === "consumption") {
