@@ -29,6 +29,7 @@ let updateTimer = null;
 
 
 const trackerRowHTML = function (tracker, fromDelegation) {
+  console.log('tracker',tracker);
   let delegation = false;
   let disableManual = '';
   let delegationId = '';
@@ -463,7 +464,6 @@ const validateDelegation = async function (delegationId, delegationCb) {
         if(typeof data == 'undefined') { console.log("No Data");return; }
         if(typeof db == 'undefined') { console.log("No DB");return; }
         data.did = JSON.stringify(data);
-        console.log('ERR',data.err);
         data.reading = "[delegation]";
         data.consumption = delegationId;
         data.emission = delegationId;
