@@ -34,7 +34,7 @@ function connectDB(callback) {
 
 
 function addData(db,data, callback) {
-  
+  if(typeof data.err !== 'undefined') callback({err:data.err});
   const transaction = db.transaction(storeName, "readwrite");
   const objectStore = transaction.objectStore(storeName);
   try {
