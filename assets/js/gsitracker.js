@@ -493,9 +493,7 @@ const updateDid = async function (updateData) {
     let did = updateData.did;
     try {
       did = JSON.parse(did);
-      console.log("Update DID");
-      safeSendP2P(did.eventId, JSON.stringify(did),"updateDID");
-    } catch(e) {console.log("ERR DID Update",e)}
+    } catch(e) {}
     if(typeof did.err !== 'undefined') {
       console.log("updateDid cancelled ", did.err);
       return
@@ -533,7 +531,7 @@ const updateDid = async function (updateData) {
           $('#trackerRow' + data.eventId).replaceWith(trackerRowHTML(data));
           handleReadingButtonEvents();
         });
-
+        safeSendP2P(data.eventId, data2,"updateDID");
         const consumptionEvent = new CustomEvent('mqtt-publish', { detail: JSON.stringify({ topic: "tracker/" + data.eventId + "/consumption", message: "" + data.consumption }) });
         document.dispatchEvent(consumptionEvent);
 
