@@ -740,11 +740,21 @@ $(document).ready(function () {
   });
   $('#removeAlert').on('click',function(e) {
     connectDB((db) => {
-      deleteByID(db, $('#modalAlert').attr("data"), (dx) => { 
-        setTimeout(function () {
-          location.reload()
-        }, 100);
-      });
+      if(typeof reqUpdates[$('#modalAlert').attr("data")] !== 'undefined') {
+        deleteByID(db, reqUpdates[$('#modalAlert').attr("data")], (dx) => { 
+          deleteByID(db, $('#modalAlert').attr("data"), (dx) => { 
+            setTimeout(function () {
+              location.reload()
+            }, 100);
+          });
+        });
+      } else {
+        deleteByID(db, $('#modalAlert').attr("data"), (dx) => { 
+          setTimeout(function () {
+            location.reload()
+          }, 100);
+        });
+      }
     });
   });
   $('#frmJWTValidate').on('submit', function (e) {
