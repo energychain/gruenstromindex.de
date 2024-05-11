@@ -29,7 +29,7 @@ let updateTimer = null;
 
 
 const trackerRowHTML = function (tracker, fromDelegation) {
-  console.log('tracker',tracker);
+  if(typeof tracker.err !== 'undefined') return '';
   let delegation = false;
   let disableManual = '';
   let delegationId = '';
