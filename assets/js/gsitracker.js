@@ -793,8 +793,8 @@ $(document).ready(function () {
                   html += '<table class="table table-condensed">';
                   for(let i=0;i<data.length;i++) {
                     html += '<tr>';
-                    html += '<td> <abbr class="text-primary" title="' + data[i].delegationId + '>' + data[i].delegationId.substring(0, 6) + '...</abbr></td>';
-                    html += '<td> <abbr class="text-primary" title="' + data[i].delegated + '>' + data[i].delegated.substring(0, 6) + '...</abbr></td>';
+                    html += '<td><abbr class="text-primary" title="' + data[i].delegationId + '">' + data[i].delegationId.substring(0, 6) + '...</abbr></td>';
+                    html += '<td> <abbr class="text-primary" title="' + data[i].delegated + '">' + data[i].delegated.substring(0, 6) + '...</abbr></td>';
                     html += '<td>' + new Date(data[i].iat*1000).toLocaleString() + '</td>';
                     html += '</tr>';
                   }
