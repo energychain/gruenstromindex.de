@@ -792,6 +792,8 @@ $(document).ready(function () {
                   let html = '';
                   html += '<table class="table table-condensed">';
                   for(let i=0;i<data.length;i++) {
+                    if(typeof data[i].delegationId == 'undefined') continue;
+                    if(typeof data[i].delegated == 'undefined') continue;
                     html += '<tr>';
                     html += '<td><abbr class="text-primary" title="' + data[i].delegationId + '">' + data[i].delegationId.substring(0, 6) + '...</abbr></td>';
                     html += '<td> <abbr class="text-primary" title="' + data[i].delegated + '">' + data[i].delegated.substring(0, 6) + '...</abbr></td>';
