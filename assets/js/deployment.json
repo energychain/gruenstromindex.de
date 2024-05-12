@@ -2,7 +2,9 @@
     "RPC": "https://rpc.tydids.com/",
     "account": {
         "co2SavingTKN":"0xb5D2F7cE2ff075734D412c79a4ac225157b9083D",
-        "co2EmissionTKN":"0xB7e397410CA9Afd05AD50d5F21319E5D646Ff276"
+        "co2EmissionTKN":"0xB7e397410CA9Afd05AD50d5F21319E5D646Ff276",
+        "consumptionTKN":"0xD2b8129EA40Eb6680fdB99997Cb1D8B531e13246",
+        "generationTKN":"0xC0706915d3c44de42bB9246aBD04309e1C218235"
      },
     "ABI":[
         {

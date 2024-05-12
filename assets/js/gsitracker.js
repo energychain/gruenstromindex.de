@@ -27,7 +27,27 @@ const updater = async function() {
 }
 let updateTimer = null;
 
+const securitization = async function() {
 
+  const url = 'https://api.corrently.io/v2.0/scope2/eventSecuritization';
+  let startData = {
+    jwt: $('#presentJWTContent').val(),
+    iat: Math.round(new Date().getTime() / 1000)
+  };
+
+  fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(await signJSON(startData))
+  })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Securization Result",data);
+  })  
+  
+}
 const trackerRowHTML = function (tracker, fromDelegation) {
   if(typeof tracker.err !== 'undefined') return '';
   let delegation = false;
@@ -175,7 +195,12 @@ const qrVerify = function () {
     });
 }
 const renderDID = function (data2) {
-
+  $('#btnSecurization').attr('disabled','disabled');
+  if(data2.json.entity == window.wallet.address) {
+    $('#btnSecurization').removeAttr('disabled');
+  } else {
+    $('#btnSecurization').attr('disabled','disabled');
+  }
   $('#qrcode').html('');
   $('#presentJWTContent').val(data2.jwt);
   $('#presentJSON').val(JSON.stringify(data2.json, undefined, 4));
@@ -204,31 +229,19 @@ const renderDID = function (data2) {
     colorLight: "#ffffff",
     correctLevel: QRCode.CorrectLevel.M
   });
-  // Hook to test Mint
-  
-  const testMint = async function() {
-    console.log("in Test Mint");
-    const url = 'https://api.corrently.io/v2.0/scope2/eventSecuritization';
-    let startData = {
-      jwt: data2.jwt,
-      iat: Math.round(new Date().getTime() / 1000)
-    };
-  
-    fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(await signJSON(startData))
-    })
-      .then(response => response.json())
-      .then(data => {
-        $('#shareModalBody').hide();
-        $('#shareWithId').show();
-    });
-  }
-  
- testMint();
+  // Problem: Wir wissen nicht, wieviel vorher .... vielleicht sollten wir dies über den Securation Call abrufen?
+  $.getJSON("https://app.gruenstromindex.de/assets/js/deployment.json",async function(deployment) {
+    let html = '';
+    html += '<table class="table table-condensed">';
+    const contractEmission = new ethers.Contract(deployment.account.co2EmissionTKN, deployment.ABI, new ethers.providers.JsonRpcProvider(deployment.RPC));
+    const co2emission = (await contractEmission.balanceOf(data2.json.jti)).toString() * 1 ;
+    const contractSaving = new ethers.Contract(deployment.account.co2SavingTKN, deployment.ABI, new ethers.providers.JsonRpcProvider(deployment.RPC));
+    const co2saving = (await contractSaving.balanceOf(data2.json.jti)).toString() * 1 ;
+    html += '<tr><td>CO<sub>2</sub> Emission</td><td>' + (co2emission / 1000).toFixed(3).replace('.', ',') + ' kg</td></tr>';
+    html += '<tr><td>CO<sub>2</sub> Einsparung</td><td>' + (co2saving / 1000).toFixed(3).replace('.', ',') + ' kg</td></tr>';
+    html += '</table>';
+    $('#secTable').html(html);
+  })
 
   window.localStorage.setItem('lastResolvedJWT', JSON.stringify(data2));
   updateLastResolved();
@@ -394,6 +407,10 @@ const handleReadingButtonEvents = function () {
   $('.btnPresent').off();
   $('.btnPresent').on('click', function (e) {
     $('#modalPresentation').modal('show');
+    $('#presentText').html('');
+    $('#presentJSON').val('');
+    $('#presentJWTContent').val('');
+    $('#secTable').html('');
     connectDB((db) => {
       getByEventID(db, $(e.currentTarget).attr("data-eventId"), async (data) => {
         let vpdata = {
@@ -918,5 +935,11 @@ $(document).ready(function () {
       { fps: 10, qrbox: { width: 320, height: 200 } },
           /* verbose= */ false);
     html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+  });
+
+  $('#btnSecurization').attr('disabled','disabled');
+  $('#btnSecurization').on('click',function(e) {
+    $('#btnSecurization').attr('disabled','disabled');
+    securitization();
   });
 });
