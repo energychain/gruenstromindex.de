@@ -407,7 +407,7 @@ const handleReadingButtonEvents = function () {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(await signJSON(vp))
+          body: JSON.stringify(vp)
         })
           .then(response => response.json())
           .then(data2 => {
