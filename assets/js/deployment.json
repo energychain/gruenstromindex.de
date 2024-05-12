@@ -1,6 +1,8 @@
 {
     "RPC": "https://rpc.tydids.com/",
-    "co2SavingTKN":"0xb5D2F7cE2ff075734D412c79a4ac225157b9083D",
+    "account": {
+        "co2SavingTKN":"0xb5D2F7cE2ff075734D412c79a4ac225157b9083D"
+     },
     "ABI":[
         {
             "inputs": [
