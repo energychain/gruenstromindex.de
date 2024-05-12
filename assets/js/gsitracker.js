@@ -204,6 +204,31 @@ const renderDID = function (data2) {
     colorLight: "#ffffff",
     correctLevel: QRCode.CorrectLevel.M
   });
+  // Hook to test Mint
+  
+  const testMint = async function() {
+    console.log("in Test Mint");
+    const url = 'https://api.corrently.io/v2.0/scope2/eventSecuritization';
+    let startData = {
+      jwt: data2.jwt,
+      iat: Math.round(new Date().getTime() / 1000)
+    };
+  
+    fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(await signJSON(startData))
+    })
+      .then(response => response.json())
+      .then(data => {
+        $('#shareModalBody').hide();
+        $('#shareWithId').show();
+    });
+  }
+  
+ testMint();
 
   window.localStorage.setItem('lastResolvedJWT', JSON.stringify(data2));
   updateLastResolved();
