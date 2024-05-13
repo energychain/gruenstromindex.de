@@ -37,16 +37,23 @@ $(document).ready(function(){
             return html;
         }
         const renderTable = async function() {
-            let html = '';
-            html += '<table class="table table-condensed">';
-            html += '<thead>';
-            html += '<tr><th>Tracker</th><th>Account</th><th>Verbrauch</th><th>Erzeugung</th><th>CO<sub>2</sub>-Emission</th><th>CO<sub>2</sub>-Einsparung</th></tr>';
-            html += '</thead>';
-            html += '<tbody>';
-            html += await renderRow(window.wallet.address,'Meine Wallet');
-            html += '</tbody>';
-            html += '</table>';
-            $('#walletTable').html(html);
+            connectDB((db) => {
+                getAllEntries(db, async (data) => {
+                    let html = '';
+                    html += '<table class="table table-condensed">';
+                    html += '<thead>';
+                    html += '<tr><th>Bezeichnung</th><th>ID</th><th>Stromnutzung</th><th>Erzeugung</th><th>CO<sub>2</sub>-Emission</th><th>CO<sub>2</sub>-Einsparung</th></tr>';
+                    html += '</thead>';
+                    html += '<tbody>';
+                    html += await renderRow(window.wallet.address,'Meine Wallet');
+                    for(let i=0;i<data.length;i++) {
+                        html += await renderRow(data[i].eventId,"Tracker "+data[i].name);
+                    }
+                    html += '</tbody>';
+                    html += '</table>';
+                    $('#walletTable').html(html);
+                });
+            });
         }
         renderTable();
     });
