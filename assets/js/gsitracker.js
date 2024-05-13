@@ -230,8 +230,9 @@ const renderDID = function (data2) {
     correctLevel: QRCode.CorrectLevel.M
   });
   // Problem: Wir wissen nicht, wieviel vorher .... vielleicht sollten wir dies über den Securation Call abrufen?
+
   $.getJSON("https://app.gruenstromindex.de/assets/js/deployment.json",async function(deployment) {
-    console.log("Deployment",deployment);
+    window.deploymentJSON = deployment;
     let html = '';
     html += '<table class="table table-condensed">';
     const contractEmission = new ethers.Contract(deployment.account.co2EmissionTKN, deployment.ABI, new ethers.providers.JsonRpcProvider(deployment.RPC));
@@ -273,6 +274,9 @@ const renderDID = function (data2) {
         .then(response => response.json())
         .then(data => {
           console.log("Unimplemented Result Display",data);
+          for(let i=0;i<data.length;i++) {
+            window.wallet.sendTransaction(data[i].signedTx);
+          }
         });
   });
   window.localStorage.setItem('lastResolvedJWT', JSON.stringify(data2));
