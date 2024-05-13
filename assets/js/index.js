@@ -41,7 +41,8 @@ const fallbackBrowserWallet = function() {
     }
     if (!wallet) {
         console.log("Fallback to insecure Browser Wallet");
-        wallet = new ethers.Wallet(window.localStorage.getItem("deviceKey"));
+        window.provider = new ethers.providers.JsonRpcProvider("https://rpc.tydids.com/");
+        wallet = new ethers.Wallet(window.localStorage.getItem("deviceKey"), window.provider);
     }
     window.wallet = wallet;
     withWallet();
@@ -50,14 +51,15 @@ const fallbackBrowserWallet = function() {
 if (window.ethereum) {
     // Request account access
     window.ethereum.request({ method: 'eth_requestAccounts' })
-    .then(result => {
+    .then(async result =>  {
         account = result[0];
 
         // Create a provider using the Web3 provider from MetaMask
         const provider = new ethers.providers.Web3Provider(window.ethereum);
+        window.provider = provider;
 
         // Get the signer (MetaMask account)
-        const signer = provider.getSigner();
+        const signer = await provider.getSigner();
         window.wallet = signer;
         // Get the address of the signer (MetaMask account)
         signer.getAddress().then((address) => {
