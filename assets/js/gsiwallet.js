@@ -113,7 +113,15 @@ $(document).ready(function(){
             });
         }
         renderTable();
-        updEntity(window.wallet.address);
+
+        const secUpdate = function() {
+            if(typeof window.wallet == 'undefined') {
+                setTimeout(secUpdate, 1000);
+            } else {
+                updEntity(window.wallet.address);
+            }
+        }
+        secUpdate();
 
     });
     const updEntity = async (addr) => {
