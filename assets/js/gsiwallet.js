@@ -15,7 +15,7 @@ $(document).ready(function(){
         if( (typeof header === 'undefined') || (header === null) ){
             html += '<h4>' + label + '</h4>';
         //  html += '<abbr title="'+account+'">' + account.substring(0,6) + '...</abbr>';
-            html += account;
+            html += '<button class="btn btn-sm btn-light openAccount" data="' + account + '">' + account + '</button>';
         } else {
             html += '<form id="frmJWTValidate">';
             html += '<div class="input-group"><span class="input-group-text"><svg class="bi bi-person-check-fill fs-2" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" style="color: #147a50;">';
@@ -29,6 +29,62 @@ $(document).ready(function(){
             html += '            <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445"></path>';
             html += '        </svg></button></div>';
             html += '</form>';
+            // If we set the Header we are in main so lets populate history Channel....
+            $('#txHistory').html('');
+            const createHistory = async function() {
+                const getTxsForContract = async function(erc20conctract) {
+                    let fullLog = [];
+                    let rfilter = erc20conctract.filters.Transfer(null, account, null);
+                    let rlogs = await erc20conctract.queryFilter(rfilter);
+                    fullLog = fullLog.concat(rlogs);
+                    let sfilter = erc20conctract.filters.Transfer(account, null, null);
+                    let slogs = await erc20conctract.queryFilter(sfilter);
+                    fullLog = fullLog.concat(slogs);
+                    fullLog.sort((a,b) => b.blockNumber - a.blockNumber);
+                    return fullLog;
+                }
+                let logs = [];
+                logs = logs.concat(await getTxsForContract(contractSaving));
+                logs = logs.concat(await getTxsForContract(contractEmission));
+                logs = logs.concat(await getTxsForContract(contractGeneration));
+                logs = logs.concat(await getTxsForContract(contractConsumption));
+                logs.sort((a,b) => b.blockNumber - a.blockNumber);
+                let html = '';
+                html += '<div class="card"><div class="card-header"><h4>Transaktionen</h4></div>';
+                html += '<div class="card-body">';
+                html += '<table class="table table-condensed table-striped">';
+                html += '<thead>';
+                html += '<tr><th>Block #</th><th>Token</th><th>ID</th><th>Menge</th></tr>'
+                html += '</thead>';
+                html += '<tbody>';
+                for(let i=0;i<logs.length;i++) {
+                    html += '<tr>';
+                    html += '<td>'+logs[i].blockNumber+'</td>';
+                    html += '<td>'+window.deploymentJSON.label[logs[i].address].display+'</td>';
+                    let multpl = 1;
+                    if(logs[i].args[0] == account) {
+                        html += '<td><button class="btn btn-sm openAccount btn-light" data="'+logs[i].args[1]+'">' + logs[i].args[1] + '</button></td>';
+                        multpl = -1;
+                    } else {
+                        if(logs[i].args[0].toString()=="0x0000000000000000000000000000000000000000") {
+                            logs[i].args[0] = "Verbriefung";
+                        }
+                        html += '<td><button class="btn btn-sm openAccount btn-light" data="'+logs[i].args[0]+'">' + logs[i].args[0] + '</button></td>'; 
+                    }
+                    let amount = logs[i].args[2].toString() * multpl;
+                    html += '<td>' + (amount/1000).toFixed(3) + ' '+window.deploymentJSON.label[logs[i].address].unit+'</td>';
+                    html += '</tr>';
+                }
+                html += '</tbody>';
+                html += '</table>';
+                html += '</div></div>';
+                $('#txHistory').html(html);
+                $('.openAccount').off();
+                $('.openAccount').on('click', async function(e) {
+                        $('#meineWallet').html(await renderRow($(this).attr("data"),'<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-person-fill-lock fs-1" style="color: #147a50;"><path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5v-1a1.9 1.9 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4m7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1"></path></svg> Diese Identität',true));
+                });
+            }
+            createHistory();
         }
 
         html += '</div>';
@@ -109,6 +165,7 @@ $(document).ready(function(){
                     }
                     html += '</div>';
                     $('#walletTable').html(html);
+                    updEvents();
                 });
             });
         }
@@ -177,6 +234,10 @@ $(document).ready(function(){
               { fps: 10, qrbox: { width: 250, height: 250 } },
                   /* verbose= */ false);
             html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+        });
+        $('.openAccount').off();
+        $('.openAccount').on('click', async function(e) {
+                $('#meineWallet').html(await renderRow($(this).attr("data"),'<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-person-fill-lock fs-1" style="color: #147a50;"><path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5v-1a1.9 1.9 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4m7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1"></path></svg> Diese Identität',true));
         });
     }
 
