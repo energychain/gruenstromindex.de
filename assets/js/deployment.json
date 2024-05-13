@@ -1,10 +1,10 @@
 {
     "RPC": "https://rpc.tydids.com/",
     "account": {
-        "co2SavingTKN":"0xb5D2F7cE2ff075734D412c79a4ac225157b9083D",
-        "co2EmissionTKN":"0xB7e397410CA9Afd05AD50d5F21319E5D646Ff276",
-        "consumptionTKN":"0xD2b8129EA40Eb6680fdB99997Cb1D8B531e13246",
-        "generationTKN":"0xC0706915d3c44de42bB9246aBD04309e1C218235"
+        "co2SavingTKN":"0x2bBaF7dF9b415D10f49035213aAF17Af20696B01",
+        "co2EmissionTKN":"0xc7715266259f69F7E9b9a71D61eD118fB1534793",
+        "consumptionTKN":"0xc7e631CcFD488502409C72905BEbE1DF07B3c847",
+        "generationTKN":"0xe64786c237f6DC006024215ac65F451edC979DC9"
      },
     "ABI":[
         {
