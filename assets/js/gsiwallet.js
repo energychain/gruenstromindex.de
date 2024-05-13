@@ -104,7 +104,7 @@ $(document).ready(function(){
                     let html = '<div class="row">';
                     for(let i=0;i<data.length;i++) {
                         html += '<div class="col-6">';
-                        html += await renderRow(data[i].eventId,"Tracker "+data[i].name);
+                        html += await renderRow(data[i].eventId,""+data[i].name);
                         html += '</div>';
                     }
                     html += '</div>';
