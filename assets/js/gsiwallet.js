@@ -9,7 +9,7 @@ $(document).ready(function(){
         const generation = (await contractGeneration.balanceOf(account)).toString() * 1 ;
         const contractConsumption = new ethers.Contract(deployment.account.consumptionTKN, deployment.ABI, new ethers.providers.JsonRpcProvider(deployment.RPC));
         const consumption = (await contractConsumption.balanceOf(account)).toString() * 1 ;
-
+        
         let html = '<div class="card" style="margin: 10px;">';
         html += '<div class="card-header">';
         if( (typeof header === 'undefined') || (header === null) ){

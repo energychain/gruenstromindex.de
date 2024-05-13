@@ -7,10 +7,10 @@
         "generationTKN":"0x5087aABB63a370f5D1eA2D7ff8D21fD853854ed6"
      },
      "label": {
-        "0xAac4402b3cd086E758a4Dfd121E167cAa61A81a9": { "display": "CO2 Einsparung", "unit":"kg", "div":10000 },
-        "0x1fedd7D6122F40987afcA850f63319D80843336F": { "display": "CO2 Emission", "unit":"kg", "div":10000 },
-        "0xaBa41f50a9B3b48D2DB298D559eCfa6C9699646A": { "display": "Stromnutzung", "unit":"kWh", "div":10000 },
-        "0x5087aABB63a370f5D1eA2D7ff8D21fD853854ed6": { "display": "Stromerzeugung", "unit":"kWh", "div":10000 }
+        "0xAac4402b3cd086E758a4Dfd121E167cAa61A81a9": { "display": "CO2 Einsparung", "unit":"kg", "div":1000 },
+        "0x1fedd7D6122F40987afcA850f63319D80843336F": { "display": "CO2 Emission", "unit":"kg", "div":1000 },
+        "0xaBa41f50a9B3b48D2DB298D559eCfa6C9699646A": { "display": "Stromnutzung", "unit":"kWh", "div":1000 },
+        "0x5087aABB63a370f5D1eA2D7ff8D21fD853854ed6": { "display": "Stromerzeugung", "unit":"kWh", "div":1000 }
      },
     "ABI":[
         {
