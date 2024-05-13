@@ -249,7 +249,7 @@ const renderDID = function (data2) {
           openSaving = data2.json.emission;
         }
         html += '<table class="table table-condensed">';
-        html += '<tr><th>&nbsp</th><th>Nachgewiesen (Tracker/NFT)</th><th>Verbrieft</th><th>Nicht Ausbezahlt</th></tr>';
+        html += '<tr><th>&nbsp</th><th>Nachgewiesen (Tracker/NFT)</th><th>Nicht Verbrieft</th><th>Nicht Ausbezahlt</th></tr>';
         const contractEmission = new ethers.Contract(deployment.account.co2EmissionTKN, deployment.ABI, new ethers.providers.JsonRpcProvider(deployment.RPC));
         const co2emission = (await contractEmission.balanceOf(data2.json.jti)).toString() * 1 ;
         const contractSaving = new ethers.Contract(deployment.account.co2SavingTKN, deployment.ABI, new ethers.providers.JsonRpcProvider(deployment.RPC));
@@ -260,34 +260,55 @@ const renderDID = function (data2) {
         const consumption = (await contractConsumption.balanceOf(data2.json.jti)).toString() * 1 ;
         let reqSecu = false;
         let classHighlight='';
+        let classPay='';
         if(Math.round(openConsumption)-1 > tokens[deployment.account.consumptionTKN]) {
           reqSecu = true;
           classHighlight='bg-success';
         } else {
           classHighlight='';
         }
-        html += '<tr><td>Stromnutzung</td><td>'+(openConsumption/1000).toFixed(3).replace('.', ',')+' kWh</td><td class="'+classHighlight+'">'+(tokens[deployment.account.consumptionTKN]/1000).toFixed(3).replace('.',',')+' kWh</td><td>' + (consumption / 1000).toFixed(3).replace('.', ',') + ' kWh</td></tr>';
+        if(consumption > 0) {
+          classPay='bg-warning';
+        } else {
+          classPay='';
+        }
+        html += '<tr><td>Stromnutzung</td><td>'+(openConsumption/1000).toFixed(3).replace('.', ',')+' kWh</td><td class="'+classHighlight+'">'+(openConsumption/1000 - tokens[deployment.account.consumptionTKN]/1000).toFixed(3).replace('.',',')+' kWh</td><td  class="' + classPay + '">' + (consumption / 1000).toFixed(3).replace('.', ',') + ' kWh</td></tr>';
         if(Math.round(openEmission)-1 > tokens[deployment.account.co2EmissionTKN]) {
           reqSecu = true;
           classHighlight='bg-success';
         } else {
           classHighlight='';
         }
-        html += '<tr><td>&nbsp;mit CO<sub>2</sub> Emission</td><td>'+(openEmission/1000).toFixed(3).replace('.', ',')+' kg</td><td class="'+classHighlight+'">'+(tokens[deployment.account.co2EmissionTKN]/1000).toFixed(3).replace('.',',')+' kg</td><td>' + (co2emission / 1000).toFixed(3).replace('.', ',') + ' kg</td></tr>';
+        if(co2emission > 0) {
+          classPay='bg-warning';
+        } else {
+          classPay='';
+        }
+        html += '<tr><td>&nbsp;mit CO<sub>2</sub> Emission</td><td>'+(openEmission/1000).toFixed(3).replace('.', ',')+' kg</td><td class="'+classHighlight+'">'+(openEmission/1000 - tokens[deployment.account.co2EmissionTKN]/1000).toFixed(3).replace('.',',')+' kg</td><td  class="' + classPay + '">' + (co2emission / 1000).toFixed(3).replace('.', ',') + ' kg</td></tr>';
         if(Math.round(openGeneration)-1 > tokens[deployment.account.generationTKN]) {
           reqSecu = true;
           classHighlight='bg-success';
         } else {
           classHighlight='';
         }
-        html += '<tr><td>Stromerzeugung</td><td>'+(openGeneration/1000).toFixed(3).replace('.', ',')+' kWh</td><td class="'+classHighlight+'">'+(tokens[deployment.account.generationTKN]/1000).toFixed(3).replace('.',',')+' kWh</td><td>' + (generation / 1000).toFixed(3).replace('.', ',') + ' kWh</td></tr>';
+        if(generation > 0) {
+          classPay='bg-warning';
+        } else {
+          classPay='';
+        }
+        html += '<tr><td>Stromerzeugung</td><td>'+(openGeneration/1000).toFixed(3).replace('.', ',')+' kWh</td><td class="'+classHighlight+'">'+(openGeneration/1000 - tokens[deployment.account.generationTKN]/1000).toFixed(3).replace('.',',')+' kWh</td><td  class="' + classPay + '">' + (generation / 1000).toFixed(3).replace('.', ',') + ' kWh</td></tr>';
         if(Math.round(openSaving)-1 > tokens[deployment.account.co2SavingTKN]) {
           reqSecu = true;
           classHighlight='bg-success';
         } else {
           classHighlight='';
         }
-        html += '<tr><td>&nbsp;mit CO<sub>2</sub> Einsparung</td><td>'+(openSaving/1000).toFixed(3).replace('.', ',')+' kg</td><td class="'+classHighlight+'">'+(tokens[deployment.account.co2SavingTKN]/1000).toFixed(3).replace('.',',')+' kg</td><td>' + (co2saving / 1000).toFixed(3).replace('.', ',') + ' kg</td></tr>';
+        if(co2saving > 0) {
+          classPay='bg-warning';
+        } else {
+          classPay='';
+        }
+        html += '<tr><td>&nbsp;mit CO<sub>2</sub> Einsparung</td><td>'+(openSaving/1000).toFixed(3).replace('.', ',')+' kg</td><td class="'+classHighlight+'">'+(openSaving/1000 - tokens[deployment.account.co2SavingTKN]/1000).toFixed(3).replace('.',',')+' kg</td><td class="' + classPay + '">' + (co2saving / 1000).toFixed(3).replace('.', ',') + ' kg</td></tr>';
         html += '</table>';
         $('#secTable').html(html);
       });
