@@ -164,8 +164,8 @@ $(document).ready(function(){
     $('#executeContract').on('submit',async function(e) {
         e.preventDefault();
         const contract = new ethers.Contract($('#tokenKinds').val(), window.deploymentJSON.ABI, window.wallet);
-        const tx = await contract.transferFrom(window.wallet.address,$('#recipient').val(),1000 * $('#amount').val());
-//        const receipt = await tx.wait();
+        const tx = await contract.transfer($('#recipient').val(),1000 * $('#amount').val());
+        const receipt = await tx.wait();
         console.log(receipt);
     });
 });
