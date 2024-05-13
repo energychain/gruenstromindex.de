@@ -126,9 +126,17 @@ $(document).ready(function(){
     });
     const updEntity = async (addr) => {
         if((typeof addr === 'undefined')||(addr == null)) addr = $('#jwtInput').val();
-        console.log('Render',addr);
         $('#meineWallet').html(await renderRow(addr,'<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-person-fill-lock fs-1" style="color: #147a50;"><path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5v-1a1.9 1.9 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4m7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1"></path></svg> Diese Identität',true));
         updEvents();
+        $('#profileQR').html('');
+        var qrcode = new QRCode(document.getElementById("profileQR"), {
+            text: addr,
+            width: 400,
+            height: 400,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.M
+          });
     }
 
     const updEvents = () => {
