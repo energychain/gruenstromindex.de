@@ -231,6 +231,7 @@ const renderDID = function (data2) {
   });
   // Problem: Wir wissen nicht, wieviel vorher .... vielleicht sollten wir dies über den Securation Call abrufen?
   $.getJSON("https://app.gruenstromindex.de/assets/js/deployment.json",async function(deployment) {
+    console.log("Deployment",deployment);
     let html = '';
     html += '<table class="table table-condensed">';
     const contractEmission = new ethers.Contract(deployment.account.co2EmissionTKN, deployment.ABI, new ethers.providers.JsonRpcProvider(deployment.RPC));
@@ -242,13 +243,38 @@ const renderDID = function (data2) {
     const contractConsumption = new ethers.Contract(deployment.account.consumptionTKN, deployment.ABI, new ethers.providers.JsonRpcProvider(deployment.RPC));
     const consumption = (await contractConsumption.balanceOf(data2.json.jti)).toString() * 1 ;
     html += '<tr><td>Stromnutzung</td><td>' + (consumption / 1000).toFixed(3).replace('.', ',') + ' kWh</td></tr>';
+    html += '<tr><td>&nbsp;mit CO<sub>2</sub> Emission</td><td>' + (co2emission / 1000).toFixed(3).replace('.', ',') + ' kg</td></tr>';
     html += '<tr><td>Stromerzeugung</td><td>' + (generation / 1000).toFixed(3).replace('.', ',') + ' kWh</td></tr>';
-    html += '<tr><td>CO<sub>2</sub> Emission</td><td>' + (co2emission / 1000).toFixed(3).replace('.', ',') + ' kg</td></tr>';
-    html += '<tr><td>CO<sub>2</sub> Einsparung</td><td>' + (co2saving / 1000).toFixed(3).replace('.', ',') + ' kg</td></tr>';
+    html += '<tr><td>&nbsp;mit CO<sub>2</sub> Einsparung</td><td>' + (co2saving / 1000).toFixed(3).replace('.', ',') + ' kg</td></tr>';
     html += '</table>';
     $('#secTable').html(html);
+    
   })
+  console.log("traTo",data2.json.entity);
+  $('#transferTKNTo').val(data2.json.entity);
+  $('#formTransferTKN').off();
+  $('#formTransferTKN').on('submit',async function(e) {
+      e.preventDefault();
+      console.log("Not implemented!");
+      const url = 'https://api.corrently.io/v2.0/scope2/eventCashout';
 
+      let startData = {
+        jwt: $('#presentJWTContent').val(),
+        iat: new Date().getTime()
+      };
+
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(await signJSON(startData))
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log("Unimplemented Result Display",data);
+        });
+  });
   window.localStorage.setItem('lastResolvedJWT', JSON.stringify(data2));
   updateLastResolved();
 }
