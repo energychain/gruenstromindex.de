@@ -8,6 +8,8 @@ const withWallet = function(fn) {
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.M
       });
+      $('img').addClass('img-fluid');
+      $('canvas').addClass('img-fluid');
       $('#showAddress').val(window.wallet.address);
       if(location.protocol == "http:") { 
         console.log("No socket support");
