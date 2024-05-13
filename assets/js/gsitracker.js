@@ -45,6 +45,8 @@ const securitization = async function() {
     .then(response => response.json())
     .then(data => {
         console.log("Securization Result",data);
+        $('#jwtInput').val($('#presentJWTContent').val());
+        qrVerify();
   })  
   
 }
@@ -232,26 +234,65 @@ const renderDID = function (data2) {
   // Problem: Wir wissen nicht, wieviel vorher .... vielleicht sollten wir dies über den Securation Call abrufen?
 
   $.getJSON("https://app.gruenstromindex.de/assets/js/deployment.json",async function(deployment) {
-    window.deploymentJSON = deployment;
-    let html = '';
-    html += '<table class="table table-condensed">';
-    const contractEmission = new ethers.Contract(deployment.account.co2EmissionTKN, deployment.ABI, new ethers.providers.JsonRpcProvider(deployment.RPC));
-    const co2emission = (await contractEmission.balanceOf(data2.json.jti)).toString() * 1 ;
-    const contractSaving = new ethers.Contract(deployment.account.co2SavingTKN, deployment.ABI, new ethers.providers.JsonRpcProvider(deployment.RPC));
-    const co2saving = (await contractSaving.balanceOf(data2.json.jti)).toString() * 1 ;
-    const contractGeneration = new ethers.Contract(deployment.account.generationTKN, deployment.ABI, new ethers.providers.JsonRpcProvider(deployment.RPC));
-    const generation = (await contractGeneration.balanceOf(data2.json.jti)).toString() * 1 ;
-    const contractConsumption = new ethers.Contract(deployment.account.consumptionTKN, deployment.ABI, new ethers.providers.JsonRpcProvider(deployment.RPC));
-    const consumption = (await contractConsumption.balanceOf(data2.json.jti)).toString() * 1 ;
-    html += '<tr><td>Stromnutzung</td><td>' + (consumption / 1000).toFixed(3).replace('.', ',') + ' kWh</td></tr>';
-    html += '<tr><td>&nbsp;mit CO<sub>2</sub> Emission</td><td>' + (co2emission / 1000).toFixed(3).replace('.', ',') + ' kg</td></tr>';
-    html += '<tr><td>Stromerzeugung</td><td>' + (generation / 1000).toFixed(3).replace('.', ',') + ' kWh</td></tr>';
-    html += '<tr><td>&nbsp;mit CO<sub>2</sub> Einsparung</td><td>' + (co2saving / 1000).toFixed(3).replace('.', ',') + ' kg</td></tr>';
-    html += '</table>';
-    $('#secTable').html(html);
-    
+    $.getJSON("https://api.corrently.io/v2.0/scope2/eventTokens?eventId=" + data2.json.jti,async function(tokens) { 
+        window.deploymentJSON = deployment;
+        let html = '';
+        let openConsumption = 0;
+        let openEmission = 0;
+        let openGeneration = 0;
+        let openSaving = 0;
+        if(data2.json.type  == 'consumption') {
+            openConsumption = data2.json.consumption;
+            openEmission = data2.json.emission;
+        } else {
+          openGeneration = data2.json.consumption;
+          openSaving = data2.json.emission;
+        }
+        html += '<table class="table table-condensed">';
+        html += '<tr><th>&nbsp</th><th>Nachgewiesen (Tracker/NFT)</th><th>Verbrieft</th><th>Nicht Ausbezahlt</th></tr>';
+        const contractEmission = new ethers.Contract(deployment.account.co2EmissionTKN, deployment.ABI, new ethers.providers.JsonRpcProvider(deployment.RPC));
+        const co2emission = (await contractEmission.balanceOf(data2.json.jti)).toString() * 1 ;
+        const contractSaving = new ethers.Contract(deployment.account.co2SavingTKN, deployment.ABI, new ethers.providers.JsonRpcProvider(deployment.RPC));
+        const co2saving = (await contractSaving.balanceOf(data2.json.jti)).toString() * 1 ;
+        const contractGeneration = new ethers.Contract(deployment.account.generationTKN, deployment.ABI, new ethers.providers.JsonRpcProvider(deployment.RPC));
+        const generation = (await contractGeneration.balanceOf(data2.json.jti)).toString() * 1 ;
+        const contractConsumption = new ethers.Contract(deployment.account.consumptionTKN, deployment.ABI, new ethers.providers.JsonRpcProvider(deployment.RPC));
+        const consumption = (await contractConsumption.balanceOf(data2.json.jti)).toString() * 1 ;
+        let reqSecu = false;
+        let classHighlight='';
+        if(Math.round(openConsumption)-1 > tokens[deployment.account.consumptionTKN]) {
+          reqSecu = true;
+          classHighlight='bg-success';
+        } else {
+          classHighlight='';
+        }
+        html += '<tr><td>Stromnutzung</td><td>'+(openConsumption/1000).toFixed(3).replace('.', ',')+' kWh</td><td class="'+classHighlight+'">'+(tokens[deployment.account.consumptionTKN]/1000).toFixed(3).replace('.',',')+' kWh</td><td>' + (consumption / 1000).toFixed(3).replace('.', ',') + ' kWh</td></tr>';
+        if(Math.round(openEmission)-1 > tokens[deployment.account.co2EmissionTKN]) {
+          reqSecu = true;
+          classHighlight='bg-success';
+        } else {
+          classHighlight='';
+        }
+        html += '<tr><td>&nbsp;mit CO<sub>2</sub> Emission</td><td>'+(openEmission/1000).toFixed(3).replace('.', ',')+' kg</td><td class="'+classHighlight+'">'+(tokens[deployment.account.co2EmissionTKN]/1000).toFixed(3).replace('.',',')+' kg</td><td>' + (co2emission / 1000).toFixed(3).replace('.', ',') + ' kg</td></tr>';
+        if(Math.round(openGeneration)-1 > tokens[deployment.account.generationTKN]) {
+          reqSecu = true;
+          classHighlight='bg-success';
+        } else {
+          classHighlight='';
+        }
+        html += '<tr><td>Stromerzeugung</td><td>'+(openGeneration/1000).toFixed(3).replace('.', ',')+' kWh</td><td class="'+classHighlight+'">'+(tokens[deployment.account.generationTKN]/1000).toFixed(3).replace('.',',')+' kWh</td><td>' + (generation / 1000).toFixed(3).replace('.', ',') + ' kWh</td></tr>';
+        if(Math.round(openSaving)-1 > tokens[deployment.account.co2SavingTKN]) {
+          reqSecu = true;
+          classHighlight='bg-success';
+        } else {
+          classHighlight='';
+        }
+        html += '<tr><td>&nbsp;mit CO<sub>2</sub> Einsparung</td><td>'+(openSaving/1000).toFixed(3).replace('.', ',')+' kg</td><td class="'+classHighlight+'">'+(tokens[deployment.account.co2SavingTKN]/1000).toFixed(3).replace('.',',')+' kg</td><td>' + (co2saving / 1000).toFixed(3).replace('.', ',') + ' kg</td></tr>';
+        html += '</table>';
+        $('#secTable').html(html);
+      });
   })
-  console.log("traTo",data2.json.entity);
+
   $('#transferTKNTo').val(data2.json.entity);
   $('#formTransferTKN').off();
   $('#formTransferTKN').on('submit',async function(e) {
@@ -275,8 +316,11 @@ const renderDID = function (data2) {
         .then(data => {
           console.log("Unimplemented Result Display",data);
           for(let i=0;i<data.length;i++) {
-            window.wallet.sendTransaction(data[i].signedTx);
+            if(typeof data[i].signedTx !== 'undefined') {
+              window.wallet.sendTransaction(data[i].signedTx);
+            }
           }
+          renderDID(data2);
         });
   });
   window.localStorage.setItem('lastResolvedJWT', JSON.stringify(data2));
