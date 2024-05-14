@@ -218,15 +218,16 @@ const renderDID = function (data2) {
     text += " " + type + " in " + data2.json.country + "-" + data2.json.zip + " unter der ID <abbr class='text-primary' title='" + data2.json.sub + "'>" + data2.json.sub.substring(0, 6) + "...</abbr> von " + (data2.json.consumption / 1000) + "kWh bei einer Emission von " + (multpl * data2.json.emission / 1000).toFixed(3).replace('.', ',') + "kgCO<sub></sub> ";
     text += "für den Zeitraum von " + new Date(data2.json.start * 1000).toLocaleString() + " bis " + new Date(data2.json.end * 1000).toLocaleString();
     text += " am " + new Date(data2.json.iat * 1000).toLocaleString() + " von der ID <abbr class='text-primary' title='Notary:" + data2.json.notary + "'>" + data2.json.notary.substring(0, 6) + "...</abbr>  bestätigt ";
-    text += " mit der digitalen Signatur <abbr class='text-primary' title='" + data2.json.sig + "'>" + data2.json.sig.substring(0, 6) + "...</abbr>  </blockquote."
+    text += " mit der digitalen Signatur <abbr class='text-primary' title='" + data2.json.sig + "'>" + data2.json.sig.substring(0, 6) + "...</abbr>";
     if(data2.json.mpo == "0x0") {
       text += " Die Energiemessung erfolgte durch den Inhaber.";
     } else {
       text += " Die Energiemessung erfolgte durch den Messstellenbetreiber mit Kennung <abbr class='text-primary' title='" + data2.json.mpo + "'>"+data2.json.mpo.substring(0,6)+"</abbr>.";
     }
+    text += "</blockquote>.";
     text += "<br/><hr style='margin-top:15px;'><p class='text-muted'>" + data2.json.did + "</p>";
     
-  } catch (e) { }
+  } catch (e) { console.log(e);}
 
   $('#presentText').html(text);
   var qrcode = new QRCode(document.getElementById("qrcode"), {
