@@ -138,7 +138,7 @@ $(document).ready(function(){
            kinds += '<option value="'+key+'">'+value.display+'</option>';
         }
         $('#tokenKinds').html(kinds);
-
+        $('#sendTokenAccount').html($('#tokenKinds').val());
         function getAllEntries(db, callback) {
             const transaction = db.transaction(storeName, "readonly");
             const objectStore = transaction.objectStore(storeName);
@@ -265,9 +265,16 @@ $(document).ready(function(){
    
     $('#executeContract').on('submit',async function(e) {
         e.preventDefault();
+        $('#runTransferBtn').attr('disabled','disabled');
         const contract = new ethers.Contract($('#tokenKinds').val(), window.deploymentJSON.ABI, window.wallet);
-        const tx = await contract.transfer($('#recipient').val(),1000 * $('#amount').val());
+        const tx = await contract.transfer($('#recipient').val(),100 * $('#amount').val());
         const receipt = await tx.wait();
         console.log(receipt);
+        $('#amount').val(0);
+        $('#recipient').val('');
+        $('#runTransferBtn').removeAttr('disabled');
     });
+    $('#tokenKinds').on('change',async function(e) {
+        $('#sendTokenAccount').html($('#tokenKinds').val());
+    })
 });
