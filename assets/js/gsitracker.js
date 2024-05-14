@@ -219,7 +219,13 @@ const renderDID = function (data2) {
     text += "für den Zeitraum von " + new Date(data2.json.start * 1000).toLocaleString() + " bis " + new Date(data2.json.end * 1000).toLocaleString();
     text += " am " + new Date(data2.json.iat * 1000).toLocaleString() + " von der ID <abbr class='text-primary' title='Notary:" + data2.json.notary + "'>" + data2.json.notary.substring(0, 6) + "...</abbr>  bestätigt ";
     text += " mit der digitalen Signatur <abbr class='text-primary' title='" + data2.json.sig + "'>" + data2.json.sig.substring(0, 6) + "...</abbr>  </blockquote."
+    if(data2.json.mpo == "0x0") {
+      text += " Die Energiemessung erfolgte durch den Inhaber.";
+    } else {
+      text += " Die Energiemessung erfolgte durch den Messstellenbetreiber mit Kennung <abbr class='text-primary' title='" + data2.json.mpo + "'>"+data2.json.mpo.substring(0,6)+"</abbr>.";
+    }
     text += "<br/><hr style='margin-top:15px;'><p class='text-muted'>" + data2.json.did + "</p>";
+    
   } catch (e) { }
 
   $('#presentText').html(text);
