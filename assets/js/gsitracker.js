@@ -222,7 +222,7 @@ const renderDID = function (data2) {
     if(data2.json.mpo == "0x0") {
       text += " Die Energiemessung erfolgte durch den Inhaber.";
     } else {
-      text += " Die Energiemessung erfolgte durch den Messstellenbetreiber mit Kennung <abbr class='text-primary' title='" + data2.json.mpo + "'>"+data2.json.mpo.substring(0,6)+"</abbr>.";
+      text += " Die Energiemessung erfolgte durch den Messstellenbetreiber mit Kennung <abbr class='text-primary' title='" + data2.json.mpo + "'>"+data2.json.mpo.substring(0,6)+"...</abbr>.";
     }
     text += "</blockquote>.";
     text += "<br/><hr style='margin-top:15px;'><p class='text-muted'>" + data2.json.did + "</p>";
