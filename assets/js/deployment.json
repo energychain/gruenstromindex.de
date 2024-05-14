@@ -12,6 +12,78 @@
         "0xaBa41f50a9B3b48D2DB298D559eCfa6C9699646A": { "display": "Stromnutzung", "unit":"kWh", "div":1000 },
         "0x5087aABB63a370f5D1eA2D7ff8D21fD853854ed6": { "display": "Stromerzeugung", "unit":"kWh", "div":1000 }
      },
+     "mpo": {
+        "registry": "0x82a6c9468C45b8c50293456dcC14495682428D34",
+        "ABI":[
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "_id",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "bool",
+                        "name": "_confirmed",
+                        "type": "bool"
+                    }
+                ],
+                "name": "register",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": false,
+                        "internalType": "address",
+                        "name": "_manager",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": false,
+                        "internalType": "address",
+                        "name": "_tracker",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": false,
+                        "internalType": "bool",
+                        "name": "_confirmed",
+                        "type": "bool"
+                    }
+                ],
+                "name": "registration",
+                "type": "event"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "name": "registeredTrackers",
+                "outputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ]
+     },
     "ABI":[
         {
             "inputs": [

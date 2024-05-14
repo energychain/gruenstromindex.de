@@ -103,9 +103,9 @@ $(document).ready(function() {
             points.sort((a,b) => a.y - b.y);
             for(let i=0;i<points.length;i++) {
                 let bgcolor = "#909090";
-                let reco = "Verbrauch schlecht";
-                if(i > points.length/3) { bgcolor = "#e6b41e"; reco="Verbrauch mittel"; }
-                if(i > points.length*(2/3))  { bgcolor = "#147a50"; reco="Verbrauch gut"; }
+                let reco = "Stromnutzung schlecht";
+                if(i > points.length/3) { bgcolor = "#e6b41e"; reco="Stromnutzung mittel"; }
+                if(i > points.length*(2/3))  { bgcolor = "#147a50"; reco="Stromnutzung gut"; }
                 points[i].backgroundColor = bgcolor;
                 points[i].reco = reco;
             }
