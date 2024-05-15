@@ -1,16 +1,16 @@
 {
     "RPC": "https://rpc.tydids.com/",
     "account": {
-        "co2SavingTKN":"0xF3193cDe2d83B80563A6BB22D63bfE138dA9D923",
-        "co2EmissionTKN":"0x83c8Af75d8dF8E14074d4659e431Ddb14C66B1D8",
-        "consumptionTKN":"0x9088f62C004a261f132eB4611e13111ce59DA3E7",
-        "generationTKN":"0x7655F132921652A6847a7bFf42a273Fa089834d5"
+        "co2SavingTKN":"0x82532581c2b2F0243E16E9b4fF664DeCA7E8287F",
+        "co2EmissionTKN":"0x8839c0d347d9Af2cd6bb28d5627dBd68171349AA",
+        "consumptionTKN":"0x6d8c9781b8cEEE928b29DB024116fc27BDB9Ae7e",
+        "generationTKN":"0x8EE6ddb763892D9fd79015C3cDADC0215adf1043"
      },
      "label": {
-        "0xF3193cDe2d83B80563A6BB22D63bfE138dA9D923": { "display": "CO2 Einsparung", "unit":"kg", "div":1000 },
-        "0x83c8Af75d8dF8E14074d4659e431Ddb14C66B1D8": { "display": "CO2 Emission", "unit":"kg", "div":1000 },
-        "0x9088f62C004a261f132eB4611e13111ce59DA3E7": { "display": "Stromnutzung", "unit":"kWh", "div":1000 },
-        "0x7655F132921652A6847a7bFf42a273Fa089834d5": { "display": "Stromerzeugung", "unit":"kWh", "div":1000 }
+        "0x82532581c2b2F0243E16E9b4fF664DeCA7E8287F": { "display": "CO2 Einsparung", "unit":"kg", "div":1000 },
+        "0x8839c0d347d9Af2cd6bb28d5627dBd68171349AA": { "display": "CO2 Emission", "unit":"kg", "div":1000 },
+        "0x6d8c9781b8cEEE928b29DB024116fc27BDB9Ae7e": { "display": "Stromnutzung", "unit":"kWh", "div":1000 },
+        "0x8EE6ddb763892D9fd79015C3cDADC0215adf1043": { "display": "Stromerzeugung", "unit":"kWh", "div":1000 }
      },
      "mpo": {
         "registry": "0x82a6c9468C45b8c50293456dcC14495682428D34",
@@ -85,7 +85,7 @@
         ]
      },
      "HKNfactory":{
-        "account":"0x90712C6aDF726aa3fdfFCF88f421BE63a6D456F7",
+        "account":"0x70a441Fa1Ec0684f03f107dbe5C7999a8796bdE2",
         "ABI":[
             {
                 "inputs": [
