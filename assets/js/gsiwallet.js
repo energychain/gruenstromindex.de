@@ -266,6 +266,8 @@ $(document).ready(function(){
     $('#executeContract').on('submit',async function(e) {
         e.preventDefault();
         $('#runTransferBtn').attr('disabled','disabled');
+        const orgHhtml = $('#executeContract').html();
+        $('#executeContract').html('<div class="spinner-border" role="status"><span class="sr-only">warten...</span></div>');
         const contract = new ethers.Contract($('#tokenKinds').val(), window.deploymentJSON.ABI, window.wallet);
         const tx = await contract.transfer($('#recipient').val(),100 * $('#amount').val());
         const receipt = await tx.wait();
@@ -273,6 +275,7 @@ $(document).ready(function(){
         $('#amount').val(0);
         $('#recipient').val('');
         $('#runTransferBtn').removeAttr('disabled');
+        $('#executeContract').html(orgHhtml);
     });
     $('#tokenKinds').on('change',async function(e) {
         $('#sendTokenAccount').html($('#tokenKinds').val());

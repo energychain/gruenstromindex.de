@@ -28,6 +28,8 @@ const updater = async function() {
 let updateTimer = null;
 
 const securitization = async function() {
+  const orgHTML = $('#btnSecurization').html();
+  $('#btnSecurization').html('<div class="spinner-border" role="status"><span class="sr-only">warten...</span></div>');
 
   const url = 'https://api.corrently.io/v2.0/scope2/eventSecuritization';
   let startData = {
@@ -47,6 +49,7 @@ const securitization = async function() {
         console.log("Securization Result",data);
         $('#jwtInput').val($('#presentJWTContent').val());
         qrVerify();
+        ('#btnSecurization').html(orgHTML);
   })  
   
 }
