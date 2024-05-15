@@ -327,8 +327,10 @@ const renderDID = function (data2) {
   $('#transferTKNTo').val(data2.json.entity);
   $('#formTransferTKN').off();
   $('#formTransferTKN').on('submit',async function(e) {
+       const orgHTML = $('#btnTransferOwner').html();
+       $('#btnTransferOwner').attr('disabled','disabled');
+       $('#btnTransferOwner').html('<div class="spinner-border" role="status"><span class="sr-only">warten...</span></div>');
       e.preventDefault();
-      console.log("Not implemented!");
       const url = 'https://api.corrently.io/v2.0/scope2/eventCashout';
 
       let startData = {
@@ -345,12 +347,14 @@ const renderDID = function (data2) {
       })
         .then(response => response.json())
         .then(data => {
-          console.log("Unimplemented Result Display",data);
+          console.log("TX Result",data);
           for(let i=0;i<data.length;i++) {
             if(typeof data[i].signedTx !== 'undefined') {
               window.wallet.sendTransaction(data[i].signedTx);
             }
           }
+          $('#btnTransferOwner').html(orgHTML);
+          $('#btnTransferOwner').removeAttr('disabled');
           renderDID(data2);
         });
   });
