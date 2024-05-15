@@ -49,7 +49,7 @@ const securitization = async function() {
         console.log("Securization Result",data);
         $('#jwtInput').val($('#presentJWTContent').val());
         qrVerify();
-        ('#btnSecurization').html(orgHTML);
+        $('#btnSecurization').html(orgHTML);
   })  
   
 }
