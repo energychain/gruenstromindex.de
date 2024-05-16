@@ -10,7 +10,7 @@ $(document).ready(function(){
         const contractConsumption = new ethers.Contract(deployment.account.consumptionTKN, deployment.ABI, new ethers.providers.JsonRpcProvider(deployment.RPC));
         const consumption = (await contractConsumption.balanceOf(account)).toString() * 1 ;
         
-        let html = '<div class="card" style="margin: 10px;">';
+        let html = '<div style="margin-bottom:15px;padding:10px;" class="h-100"><div class="card h-100" style="">';
         html += '<div class="card-header">';
         if( (typeof header === 'undefined') || (header === null) ){
             html += '<h4>' + label + '</h4>';
@@ -72,7 +72,7 @@ $(document).ready(function(){
                         html += '<td><button class="btn btn-sm openAccount btn-light" data="'+logs[i].args[0]+'">' + logs[i].args[0] + '</button></td>'; 
                     }
                     let amount = logs[i].args[2].toString() * multpl;
-                    html += '<td>' + (amount/1000).toFixed(3) + ' '+window.deploymentJSON.label[logs[i].address].unit+'</td>';
+                    html += '<td align="right">' + (amount/1000).toFixed(3).replace('.',',') + ' '+window.deploymentJSON.label[logs[i].address].unit+'</td>';
                     html += '</tr>';
                 }
                 html += '</tbody>';
@@ -88,29 +88,61 @@ $(document).ready(function(){
         }
 
         html += '</div>';
+
+        let ehtml = '';
+        let hkns = window.localStorage.getItem("hkns");
+        let viaHKN = {};
+
+        if((typeof hkns !== 'undefined') && (hkns !== null)) {
+                hkns = JSON.parse(hkns);    
+                let eventHKNS = [];
+                for(let j=0;j<hkns.length;j++) {
+                    if(hkns[j].eventId == account) eventHKNS.push(hkns[j]);
+                }
+                eventHKNS = eventHKNS.sort((a,b) => b.iat - a.iat);
+                if(eventHKNS.length > 0) {
+                    ehtml += '<h5>Einzelnachweise (eigene Brieftasche)</h5><table class="table table-condensed">';
+                    for(let i=0;i<eventHKNS.length;i++) {
+                        if(typeof viaHKN[eventHKNS[i].contract] == 'undefined') viaHKN[eventHKNS[i].contract] = 0;
+                        viaHKN[eventHKNS[i].contract] += 1 * eventHKNS[i].amount;
+                        ehtml += '<tr><td>'+eventHKNS[i].block+'</td>';
+                        ehtml += '<td>'+new Date(eventHKNS[i].iat * 1000).toLocaleString()+'</td>';
+                        ehtml += '<td>'+deployment.label[eventHKNS[i].contract].display+'</td>';
+                        ehtml += '<td align="right">'+(eventHKNS[i].amount/1000).toFixed(3).replace('.', ',')+deployment.label[eventHKNS[i].contract].unit+'</td>';
+                        ehtml += '</tr>';
+                    }
+                    ehtml += '</table>';
+                }
+        }
+
         html += '<div class="card-body">';
             html += '<div class="row">';
                     html += '<div class="col-6" style="padding-bottom:15px">';
+                        if(typeof viaHKN[deployment.account.consumptionTKN] == 'undefined') viaHKN[deployment.account.consumptionTKN] = 0;
                         html += '<h5>'+deployment.label[deployment.account.consumptionTKN].display +'</h5>';
-                        html +=  (Math.round(consumption)/ deployment.label[deployment.account.consumptionTKN].div).toFixed(3).replace('.', ',');
+                        html +=  (Math.round(consumption + viaHKN[deployment.account.consumptionTKN])/ deployment.label[deployment.account.consumptionTKN].div).toFixed(3).replace('.', ',');
                         html +=  '<span class="text-muted">'+deployment.label[deployment.account.consumptionTKN].unit+'</span>';
                     html += '</div>';
                 html += '<div class="col-6" style="padding-bottom:15px">';
+                    if(typeof viaHKN[deployment.account.co2EmissionTKN] == 'undefined') viaHKN[deployment.account.co2EmissionTKN] = 0;
                     html += '<h5>'+deployment.label[deployment.account.co2EmissionTKN].display +'</h5>';
-                    html +=  (Math.round(co2emission)/ deployment.label[deployment.account.co2EmissionTKN].div).toFixed(3).replace('.', ',');
+                    html +=  (Math.round(co2emission + viaHKN[deployment.account.co2EmissionTKN])/ deployment.label[deployment.account.co2EmissionTKN].div).toFixed(3).replace('.', ',');
                     html +=  '<span class="text-muted">'+deployment.label[deployment.account.co2EmissionTKN].unit+'</span>';
                 html += '</div>';
                 html += '<div class="col-6" style="padding-bottom:15px">';
+                     if(typeof viaHKN[deployment.account.generationTKN] == 'undefined') viaHKN[deployment.account.generationTKN] = 0;
                     html += '<h5>'+deployment.label[deployment.account.generationTKN].display +'</h5>';
-                    html +=  (Math.round(generation)/ deployment.label[deployment.account.generationTKN].div).toFixed(3).replace('.', ',');
+                    html +=  (Math.round(generation  + viaHKN[deployment.account.generationTKN])/ deployment.label[deployment.account.generationTKN].div).toFixed(3).replace('.', ',');
                     html +=  '<span class="text-muted">'+deployment.label[deployment.account.generationTKN].unit+'</span>';
                 html += '</div>';
                 html += '<div class="col-6" style="padding-bottom:15px">';
+                    if(typeof viaHKN[deployment.account.co2SavingTKN] == 'undefined') viaHKN[deployment.account.co2SavingTKN] = 0;
                     html += '<h5>'+deployment.label[deployment.account.co2SavingTKN].display +'</h5>';
-                    html +=  (Math.round(co2saving)/ deployment.label[deployment.account.co2SavingTKN].div).toFixed(3).replace('.', ',');
+                    html +=  (Math.round(co2saving  + viaHKN[deployment.account.co2SavingTKN])/ deployment.label[deployment.account.co2SavingTKN].div).toFixed(3).replace('.', ',');
                     html +=  '<span class="text-muted">'+deployment.label[deployment.account.co2SavingTKN].unit+'</span>';
                 html += '</div>';
             html += '</div>';
+            html += ehtml;
         html += '</div>';
         html += '<div class="card-footer">';
             html += '<div class="row">';
@@ -128,6 +160,7 @@ $(document).ready(function(){
         html += '</div>';
 
         html += '</div>';
+        html += '</div>'; // encapsulated DIV
         return html;
     }
 
