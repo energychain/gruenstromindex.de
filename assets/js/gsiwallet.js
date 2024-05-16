@@ -174,6 +174,10 @@ $(document).ready(function(){
            kinds += '<option value="'+key+'">'+value.display+'</option>';
         }
         $('#tokenKinds').html(kinds);
+        kinds += '<option disabled>Fiat € - EUR</option>';
+        kinds += '<option disabled>Fiat $ - USD</option>';
+        kinds += '<option disabled>Crypto - ETH</option>';
+        kinds += '<option disabled>Crypto - SOL</option>';
         $('#tknTypes').html(kinds);
         $('#sendTokenAccount').html($('#tokenKinds').val());
         function getAllEntries(db, callback) {
@@ -295,7 +299,7 @@ $(document).ready(function(){
                 console.log(youget);
                 let txt = "";
                 txt += "Bei vollständigem Verkauf von "+(hkns[$('#modalHKN').attr('data-idx')].amount/1000).toFixed(3).replace('.',',')+""+deployment.label[hkns[$('#modalHKN').attr('data-idx')].contract].unit;
-                txt += " "+deployment.label[hkns[$('#modalHKN').attr('data-idx')].contract].display+" werden "+(youget/1000).toFixed(3).replace('.',',');
+                txt += " "+deployment.label[hkns[$('#modalHKN').attr('data-idx')].contract].display+" aus diesem Nachweis, werden "+(youget/1000).toFixed(3).replace('.',',');
                 txt += deployment.label[$('#tknTypes').val()].unit + " ";
                 txt += deployment.label[$('#tknTypes').val()].display + " ";
                 txt += "gutgeschrieben.";
