@@ -250,8 +250,27 @@ $(document).ready(function(){
 
         const doChecks = async () => {
             const runner = checkrunners.pop();
-            
+            const hkn = new ethers.Contract(runner.hkn, deployment.HKN.ABI, new ethers.providers.JsonRpcProvider(deployment.RPC));
+            const owner = (await hkn.owner());
+            let ihtml = '';
+            if(owner == window.wallet.address) {              
+                ihtml += '<svg class="bi bi-person-check-fill" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="#147a50" viewBox="0 0 16 16">';
+                ihtml += '<path fill-rule="evenodd" d="M15.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"></path>';
+                ihtml += '<path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"></path>';
+                ihtml += '</svg>';
+            } else {
+                ihtml += '<svg class="bi bi-person-fill-x" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="#e6b41e" viewBox="0 0 16 16">';
+                ihtml += '<path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.544-3.393C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4"></path>';
+                ihtml += '<path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m-.646-4.854.646.647.646-.647a.5.5 0 0 1 .708.708l-.647.646.647.646a.5.5 0 0 1-.708.708l-.646-.647-.646.647a.5.5 0 0 1-.708-.708l.647-.646-.647-.646a.5.5 0 0 1 .708-.708"></path>';
+                ihtml += '</svg>';
+            }
+            $('#status_'+runner.hkn).html(ihtml);
+            console.log('Owner is',owner);
+            if(checkrunners.length > 0) {
+                setTimeout(doChecks, 1000);
+            }
         }
+        doChecks();
     });
     const updEntity = async (addr) => {
         $('#runTransferBtn').attr('disabled','disabled');
