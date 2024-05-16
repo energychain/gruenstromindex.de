@@ -10,7 +10,7 @@ $(document).ready(function(){
         const contractConsumption = new ethers.Contract(deployment.account.consumptionTKN, deployment.ABI, new ethers.providers.JsonRpcProvider(deployment.RPC));
         const consumption = (await contractConsumption.balanceOf(account)).toString() * 1 ;
         
-        let html = '<div style="margin-bottom:15px;padding:10px;" class="h-100"><div class="card h-100" style="">';
+        let html = '<div style="margin-bottom:15px;padding:10px;" class="h-100"><div class="card h-100" style="" id="card_' + account + '">';
         html += '<div class="card-header">';
         if( (typeof header === 'undefined') || (header === null) ){
             html += '<h4>' + label + '</h4>';
@@ -114,6 +114,8 @@ $(document).ready(function(){
                     }
                     ehtml += '</table>';
                 }
+
+
         }
 
         html += '<div class="card-body">';
@@ -172,6 +174,7 @@ $(document).ready(function(){
            kinds += '<option value="'+key+'">'+value.display+'</option>';
         }
         $('#tokenKinds').html(kinds);
+        $('#tknTypes').html(kinds);
         $('#sendTokenAccount').html($('#tokenKinds').val());
         function getAllEntries(db, callback) {
             const transaction = db.transaction(storeName, "readonly");
@@ -218,7 +221,7 @@ $(document).ready(function(){
         let ehtml = '<div class="card"><div class="card-body">'; 
         ehtml += '<table class="table table-condensed table-striped">';
         ehtml += '<thead>';
-        ehtml += '<tr><th>&nbsp;</th><th>Kennung</th><th>Datum</th><th>Quelle</th><th>Art</th><th>Wert</th><th>Valutiert</th></tr>';
+        ehtml += '<tr><th>&nbsp;</th><th>Kennung</th><th>Datum</th><th>Quelle</th><th>Art</th><th>Wert</th><th>Gewandelt</th></tr>';
         ehtml += '</thead>';
         ehtml += '<tbody>';
         checkrunners = [];
@@ -235,10 +238,18 @@ $(document).ready(function(){
                 ehtml += '</svg></td>';
                 ehtml += '<td><abbr title="'+hkns[j].hkn+'">'+hkns[j].hkn.substring(0,6)+'...</abbr></td>';
                 ehtml += '<td>'+new Date(hkns[j].iat * 1000).toLocaleString()+'</td>';
-                ehtml += '<td><abbr title="'+hkns[j].eventId+'">'+hkns[j].eventId.substring(0,6)+'...</abbr></td>';
+                ehtml += '<td><a href="#card_'+hkns[j].eventId+'"><abbr title="'+hkns[j].eventId+'">'+hkns[j].eventId.substring(0,6)+'...</abbr></a></td>';
                 ehtml += '<td>'+deployment.label[hkns[j].contract].display+'</td>';
                 ehtml += '<td align="right">'+(hkns[j].amount/1000).toFixed(3).replace('.', ',')+''+deployment.label[hkns[j].contract].unit+'</td>';
                 ehtml += '<td align="right"><span id="settled_'+hkns[j].hkn+'">-</span>'+deployment.label[hkns[j].contract].unit+'</td>';
+                ehtml += '<td><button class="btn btn-primary btn-sm btnValuta" style="background-color:#147a50;" data="'+hkns[j].hkn+'" data-idx="'+j+'">';
+                ehtml += '<svg class="bi bi-cash-coin" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">';
+                ehtml += '<path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8m5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0"></path>';
+                ehtml += '<path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.936-1.09-1.1l-.296-.07v-1.2c.376.043.614.248.671.532h.658c-.047-.575-.54-1.024-1.329-1.073V8.5h-.375v.45c-.747.073-1.255.522-1.255 1.158 0 .562.378.92 1.007 1.066l.248.061v1.272c-.384-.058-.639-.27-.696-.563h-.668zm1.36-1.354c-.369-.085-.569-.26-.569-.522 0-.294.216-.514.572-.578v1.1h-.003zm.432.746c.449.104.655.272.655.569 0 .339-.257.571-.709.614v-1.195l.054.012z"></path>';
+                ehtml += '<path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083c.058-.344.145-.678.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1z"></path>';
+                ehtml += '<path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 5.982 5.982 0 0 1 3.13-1.567z"></path>';
+                ehtml += '</svg>';
+                ehtml += '</button></td>';
                 ehtml += '</tr>';
                 checkrunners.push(hkns[j]);
             }
@@ -277,6 +288,44 @@ $(document).ready(function(){
             }
         }
         doChecks();
+        $('.btnValuta').off();
+        $('.btnValuta').on('click', function (e) {
+            const calculateRevenue = function() {
+                let youget = (hkns[$('#modalHKN').attr('data-idx')].amount * $('#faktor').val());
+                console.log(youget);
+                let txt = "";
+                txt += "Bei vollständigem Verkauf von "+(hkns[$('#modalHKN').attr('data-idx')].amount/1000).toFixed(3).replace('.',',')+""+deployment.label[hkns[$('#modalHKN').attr('data-idx')].contract].unit;
+                txt += " "+deployment.label[hkns[$('#modalHKN').attr('data-idx')].contract].display+" werden "+(youget/1000).toFixed(3).replace('.',',');
+                txt += deployment.label[$('#tknTypes').val()].unit + " ";
+                txt += deployment.label[$('#tknTypes').val()].display + " ";
+                txt += "gutgeschrieben.";
+                $('#hlpKurs').html(txt);
+                $('#targetUnit').html(deployment.label[$('#tknTypes').val()].unit);
+            }
+            $('#modalHKN').modal('show');
+            $('#modalHKN').attr('data',$(this).attr('data'));
+            $('#modalHKN').attr('data-idx',$(this).attr('data-idx'));
+            $('#sourceType').html(deployment.label[hkns[$(this).attr('data-idx')].contract].display);
+            $('#sourceUnit').html(deployment.label[hkns[$(this).attr('data-idx')].contract].unit);
+            $('#tknTypes').off();
+            $('#tknTypes').change(calculateRevenue);
+            $('#faktor').off();
+            $('#faktor').change(calculateRevenue);
+            $('#addOffer').off();
+            $('#addOffer').on('submit',async function(e) {
+                e.preventDefault();
+                $('#submitOffer').attr('disabled','disabled');
+                const erc20conctract = new ethers.Contract(hkns[$('#modalHKN').attr('data-idx')].contract,deployment.ABI,window.wallet);
+                // Update Allowance
+                const erc20tx = await erc20conctract.approve(hkns[ $('#modalHKN').attr('data-idx')].contract,hkns[$('#modalHKN').attr('data-idx')].amount);
+                const erc20receipt = await erc20tx.wait();
+                console.log('erc20tx',erc20receipt);
+
+                // Actual Offer Management comes here ...  
+
+            });
+            calculateRevenue();
+        });
     });
     const updEntity = async (addr) => {
         $('#runTransferBtn').attr('disabled','disabled');
