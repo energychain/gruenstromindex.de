@@ -54,7 +54,7 @@ $(document).ready(function(){
                 html += '<div class="card-body">';
                 html += '<table class="table table-condensed table-striped">';
                 html += '<thead>';
-                html += '<tr><th>Block #</th><th>Token</th><th>ID</th><th>Menge</th></tr>'
+                html += '<tr><th>Block #</th><th>Art</th><th>ID</th><th>Menge</th></tr>'
                 html += '</thead>';
                 html += '<tbody>';
                 for(let i=0;i<logs.length;i++) {
@@ -66,10 +66,11 @@ $(document).ready(function(){
                         html += '<td><button class="btn btn-sm openAccount btn-light" data="'+logs[i].args[1]+'">' + logs[i].args[1] + '</button></td>';
                         multpl = -1;
                     } else {
+                        let label = logs[i].args[0].toString();
                         if(logs[i].args[0].toString()=="0x0000000000000000000000000000000000000000") {
-                            logs[i].args[0] = "Verbriefung";
+                            label = "Verbriefung";
                         }
-                        html += '<td><button class="btn btn-sm openAccount btn-light" data="'+logs[i].args[0]+'">' + logs[i].args[0] + '</button></td>'; 
+                        html += '<td><button class="btn btn-sm openAccount btn-light" data="'+logs[i].args[0]+'">' + label + '</button></td>'; 
                     }
                     let amount = logs[i].args[2].toString() * multpl;
                     html += '<td align="right">' + (amount/1000).toFixed(3).replace('.',',') + ' '+window.deploymentJSON.label[logs[i].address].unit+'</td>';
@@ -101,8 +102,8 @@ $(document).ready(function(){
                 }
                 eventHKNS = eventHKNS.sort((a,b) => b.iat - a.iat);
                 if(eventHKNS.length > 0) {
-                    ehtml += '<h5>Einzelnachweise (eigene Brieftasche)</h5><table class="table table-condensed">';
-                    for(let i=0;i<eventHKNS.length;i++) {
+                    ehtml += '<h5>Letzte 5 Einzelnachweise (eigene Brieftasche)</h5><table class="table table-condensed">';
+                    for(let i=0;(i<eventHKNS.length) && (i<5);i++) {
                         if(typeof viaHKN[eventHKNS[i].contract] == 'undefined') viaHKN[eventHKNS[i].contract] = 0;
                         viaHKN[eventHKNS[i].contract] += 1 * eventHKNS[i].amount;
                         ehtml += '<tr><td>'+eventHKNS[i].block+'</td>';
@@ -213,6 +214,44 @@ $(document).ready(function(){
         }
         secUpdate();
 
+        let hkns = window.localStorage.getItem("hkns");
+        let ehtml = '<div class="card"><div class="card-body">'; 
+        ehtml += '<table class="table table-condensed table-striped">';
+        ehtml += '<thead>';
+        ehtml += '<tr><th>&nbsp;</th><th>Kennung</th><th>Datum</th><th>Quelle</th><th>Art</th><th>Wert</th></tr>';
+        ehtml += '</thead>';
+        ehtml += '<tbody>';
+        checkrunners = [];
+        if((typeof hkns !== 'undefined') && (hkns !== null)) {
+            hkns = JSON.parse(hkns);    
+            hkns = hkns.sort((a,b) => b.iat - a.iat);
+            let eventHKNS = [];
+          
+            for(let j=0;j<hkns.length;j++) {
+                ehtml += '<tr><td id="status_'+hkns[j].hkn+'">';
+                ehtml += '<svg class="bi bi-person-fill-exclamation" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">';
+                ehtml += '<path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.544-3.393C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4"></path>';
+                ehtml += '<path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m-3.5-2a.5.5 0 0 0-.5.5v1.5a.5.5 0 0 0 1 0V11a.5.5 0 0 0-.5-.5m0 4a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1"></path>';
+                ehtml += '</svg></td>';
+                ehtml += '<td><abbr title="'+hkns[j].hkn+'">'+hkns[j].hkn.substring(0,6)+'...</abbr></td>';
+                ehtml += '<td>'+new Date(hkns[j].iat * 1000).toLocaleString()+'</td>';
+                ehtml += '<td><abbr title="'+hkns[j].eventId+'">'+hkns[j].eventId.substring(0,6)+'...</abbr></td>';
+                ehtml += '<td>'+deployment.label[hkns[j].contract].display+'</td>';
+                ehtml += '<td align="right">'+(hkns[j].amount/1000).toFixed(3).replace('.', ',')+deployment.label[hkns[j].contract].unit+'</td>';
+                ehtml += '</tr>';
+                checkrunners.push(hkns[j]);
+            }
+        }
+        checkrunners.reverse();
+        ehtml += '</tbody>';
+        ehtml += '</table>';
+        ehtml += '</div></div>';
+        $('#hknsTable').html( ehtml );
+
+        const doChecks = async () => {
+            const runner = checkrunners.pop();
+            
+        }
     });
     const updEntity = async (addr) => {
         $('#runTransferBtn').attr('disabled','disabled');
@@ -313,4 +352,7 @@ $(document).ready(function(){
     $('#tokenKinds').on('change',async function(e) {
         $('#sendTokenAccount').html($('#tokenKinds').val());
     })
+
+
+    
 });
