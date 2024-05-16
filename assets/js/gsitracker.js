@@ -47,6 +47,16 @@ const securitization = async function() {
     .then(response => response.json())
     .then(data => {
         console.log("Securization Result",data);
+        for(let i=0;i<data.length;i++) {
+          if(typeof data[i].hkn !== 'undefined') {
+            if(window.localStorage.getItem('hkns') == 'undefined') {
+              window.localStorage.setItem('hkns',JSON.stringify([]));
+            }
+            let hkns = JSON.parse(window.localStorage.getItem('hkns'));
+            hkns.push(data[i]);
+            window.localStorage.setItem('hkns',JSON.stringify(hkns));
+          }
+        }
         $('#jwtInput').val($('#presentJWTContent').val());
         qrVerify();
         $('#btnSecurization').html(orgHTML);
@@ -325,39 +335,6 @@ const renderDID = function (data2) {
   })
 
   $('#transferTKNTo').val(data2.json.entity);
-  $('#formTransferTKN').off();
-  $('#formTransferTKN').on('submit',async function(e) {
-       const orgHTML = $('#btnTransferOwner').html();
-       $('#btnTransferOwner').attr('disabled','disabled');
-       $('#btnTransferOwner').html('<div class="spinner-border" role="status"><span class="sr-only">warten...</span></div>');
-      e.preventDefault();
-      const url = 'https://api.corrently.io/v2.0/scope2/eventCashout';
-
-      let startData = {
-        jwt: $('#presentJWTContent').val(),
-        iat: new Date().getTime()
-      };
-
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(await signJSON(startData))
-      })
-        .then(response => response.json())
-        .then(data => {
-          console.log("TX Result",data);
-          for(let i=0;i<data.length;i++) {
-            if(typeof data[i].signedTx !== 'undefined') {
-              window.wallet.sendTransaction(data[i].signedTx);
-            }
-          }
-          $('#btnTransferOwner').html(orgHTML);
-          $('#btnTransferOwner').removeAttr('disabled');
-          renderDID(data2);
-        });
-  });
   window.localStorage.setItem('lastResolvedJWT', JSON.stringify(data2));
   updateLastResolved();
 }

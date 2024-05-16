@@ -88,6 +88,11 @@
         "account":"0x70a441Fa1Ec0684f03f107dbe5C7999a8796bdE2",
         "ABI":[
             {
+                "inputs": [],
+                "stateMutability": "nonpayable",
+                "type": "constructor"
+            },
+            {
                 "inputs": [
                     {
                         "internalType": "address",
@@ -120,11 +125,6 @@
                 ],
                 "stateMutability": "nonpayable",
                 "type": "function"
-            },
-            {
-                "inputs": [],
-                "stateMutability": "nonpayable",
-                "type": "constructor"
             },
             {
                 "inputs": [
