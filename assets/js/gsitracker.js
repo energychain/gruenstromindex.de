@@ -36,7 +36,7 @@ const securitization = async function() {
     jwt: $('#presentJWTContent').val(),
     iat: Math.round(new Date().getTime() / 1000)
   };
-
+  $('#alertSecuri').html('');
   fetch(url, {
       method: 'POST',
       headers: {
@@ -47,16 +47,22 @@ const securitization = async function() {
     .then(response => response.json())
     .then(data => {
         console.log("Securization Result",data);
+        let cnt = 0;
+
         for(let i=0;i<data.length;i++) {
           if(typeof data[i].hkn !== 'undefined') {
-            if(window.localStorage.getItem('hkns') == 'undefined') {
+            if(typeof window.localStorage.getItem('hkns') == 'undefined') {
               window.localStorage.setItem('hkns',JSON.stringify([]));
             }
             let hkns = JSON.parse(window.localStorage.getItem('hkns'));
+            if(hkns == null) hkns = [];
             hkns.push(data[i]);
+            cnt++;
             window.localStorage.setItem('hkns',JSON.stringify(hkns));
           }
         }
+        $('#alertSecuri').html('Es wurden die Beträge aus '+cnt+' neuen Herkunfsnachweisen <a href="./wallet.html">gutgeschrieben</a>.</div>');
+        $('#alertSecuri').show();
         $('#jwtInput').val($('#presentJWTContent').val());
         qrVerify();
         $('#btnSecurization').html(orgHTML);
