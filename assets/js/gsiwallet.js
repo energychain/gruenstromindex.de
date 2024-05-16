@@ -218,7 +218,7 @@ $(document).ready(function(){
         let ehtml = '<div class="card"><div class="card-body">'; 
         ehtml += '<table class="table table-condensed table-striped">';
         ehtml += '<thead>';
-        ehtml += '<tr><th>&nbsp;</th><th>Kennung</th><th>Datum</th><th>Quelle</th><th>Art</th><th>Wert</th></tr>';
+        ehtml += '<tr><th>&nbsp;</th><th>Kennung</th><th>Datum</th><th>Quelle</th><th>Art</th><th>Wert</th><th>Valutiert</th></tr>';
         ehtml += '</thead>';
         ehtml += '<tbody>';
         checkrunners = [];
@@ -237,7 +237,8 @@ $(document).ready(function(){
                 ehtml += '<td>'+new Date(hkns[j].iat * 1000).toLocaleString()+'</td>';
                 ehtml += '<td><abbr title="'+hkns[j].eventId+'">'+hkns[j].eventId.substring(0,6)+'...</abbr></td>';
                 ehtml += '<td>'+deployment.label[hkns[j].contract].display+'</td>';
-                ehtml += '<td align="right">'+(hkns[j].amount/1000).toFixed(3).replace('.', ',')+deployment.label[hkns[j].contract].unit+'</td>';
+                ehtml += '<td align="right">'+(hkns[j].amount/1000).toFixed(3).replace('.', ',')+''+deployment.label[hkns[j].contract].unit+'</td>';
+                ehtml += '<td align="right"><span id="settled_'+hkns[j].hkn+'">-</span>'+deployment.label[hkns[j].contract].unit+'</td>';
                 ehtml += '</tr>';
                 checkrunners.push(hkns[j]);
             }
@@ -265,9 +266,14 @@ $(document).ready(function(){
                 ihtml += '</svg>';
             }
             $('#status_'+runner.hkn).html(ihtml);
+            const partials = new ethers.Contract(await hkn.partials(),deployment.ABI,new ethers.providers.JsonRpcProvider(deployment.RPC));
+            
+            const settled = ((await partials.balanceOf(runner.hkn)).toString() * 1);
+            
+            $('#settled_'+runner.hkn).html( ((runner.amount - settled)/1000).toFixed(3).replace('.',',') );
             console.log('Owner is',owner);
             if(checkrunners.length > 0) {
-                setTimeout(doChecks, 1000);
+                setTimeout(doChecks, 300);
             }
         }
         doChecks();
