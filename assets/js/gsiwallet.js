@@ -1,3 +1,5 @@
+window.hknask = {}
+
 $(document).ready(function(){
     const renderRow = async function(account,label,header) {
         const deployment = window.deploymentJSON;
@@ -246,7 +248,7 @@ $(document).ready(function(){
                 ehtml += '<td>'+deployment.label[hkns[j].contract].display+'</td>';
                 ehtml += '<td align="right">'+(hkns[j].amount/1000).toFixed(3).replace('.', ',')+''+deployment.label[hkns[j].contract].unit+'</td>';
                 ehtml += '<td align="right"><span id="settled_'+hkns[j].hkn+'">-</span>'+deployment.label[hkns[j].contract].unit+'</td>';
-                ehtml += '<td><button class="btn btn-primary btn-sm btnValuta" style="background-color:#147a50;" data="'+hkns[j].hkn+'" data-idx="'+j+'">';
+                ehtml += '<td><button class="btn btn-primary btn-sm btnValuta" id="ask'+hkns[j].hkn+'" style="background-color:#a0a0a0;" data="'+hkns[j].hkn+'" data-idx="'+j+'">';
                 ehtml += '<svg class="bi bi-cash-coin" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">';
                 ehtml += '<path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8m5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0"></path>';
                 ehtml += '<path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.936-1.09-1.1l-.296-.07v-1.2c.376.043.614.248.671.532h.658c-.047-.575-.54-1.024-1.329-1.073V8.5h-.375v.45c-.747.073-1.255.522-1.255 1.158 0 .562.378.92 1.007 1.066l.248.061v1.272c-.384-.058-.639-.27-.696-.563h-.668zm1.36-1.354c-.369-.085-.569-.26-.569-.522 0-.294.216-.514.572-.578v1.1h-.003zm.432.746c.449.104.655.272.655.569 0 .339-.257.571-.709.614v-1.195l.054.012z"></path>';
@@ -268,6 +270,9 @@ $(document).ready(function(){
             const runner = checkrunners.pop();
             const hkn = new ethers.Contract(runner.hkn, deployment.HKN.ABI, new ethers.providers.JsonRpcProvider(deployment.RPC));
             const owner = (await hkn.owner());
+
+            // Need to check if we are either the owner or have tokens
+
             let ihtml = '';
             if(owner == window.wallet.address) {              
                 ihtml += '<svg class="bi bi-person-check-fill" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="#147a50" viewBox="0 0 16 16">';
@@ -286,7 +291,29 @@ $(document).ready(function(){
             const settled = ((await partials.balanceOf(runner.hkn)).toString() * 1);
             
             $('#settled_'+runner.hkn).html( ((runner.amount - settled)/1000).toFixed(3).replace('.',',') );
-            console.log('Owner is',owner);
+            const url = 'https://api.corrently.io/v2.0/scope2/eventAsk';
+                let startData = {
+                    hkn: runner.hkn,
+                    iat:Math.round(new Date().getTime()/1000),
+                };
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(await signJSON(startData))
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        runner.ask = data;
+                        if(typeof data.err == 'undefined') {
+                            window.hknask[runner.hkn] = data;
+                            $('#ask'+runner.hkn).css('background-color','#147a50');
+                        } else {
+                            $('#ask'+runner.hkn).css('background-color','#e6b41e');
+                        }
+                });
+            
             if(checkrunners.length > 0) {
                 setTimeout(doChecks, 300);
             }
@@ -306,6 +333,10 @@ $(document).ready(function(){
                 $('#hlpKurs').html(txt);
                 $('#targetUnit').html(deployment.label[$('#tknTypes').val()].unit);
             }
+            if(typeof window.hknask[$(this).attr('data')] !== 'undefined') {
+                $('#faktor').val(window.hknask[$(this).attr('data')].targetAmount/1000);
+                $('#tknTypes').val(window.hknask[$(this).attr('data')].targetTkn);
+            }
             $('#modalHKN').modal('show');
             $('#modalHKN').attr('data',$(this).attr('data'));
             $('#modalHKN').attr('data-idx',$(this).attr('data-idx'));
@@ -316,6 +347,28 @@ $(document).ready(function(){
             $('#faktor').off();
             $('#faktor').change(calculateRevenue);
             $('#addOffer').off();
+            $('#deleteOffer').off();
+            $('#deleteOffer').on('click',async function(e) {
+                const url = 'https://api.corrently.io/v2.0/scope2/eventOffer';
+
+                let startData = {
+                    hkn: hkns[$('#modalHKN').attr('data-idx')].hkn,
+                    balance: 0,
+                    account: window.wallet.address,
+                    iat: Math.round(new Date().getTime()/1000)
+                };
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(await signJSON(startData))
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        location.reload();
+                   });
+            });
             $('#addOffer').on('submit',async function(e) {
                 e.preventDefault();
                 $('#submitOffer').attr('disabled','disabled');
@@ -324,9 +377,32 @@ $(document).ready(function(){
                 const erc20tx = await erc20conctract.approve(hkns[ $('#modalHKN').attr('data-idx')].contract,hkns[$('#modalHKN').attr('data-idx')].amount);
                 const erc20receipt = await erc20tx.wait();
                 console.log('erc20tx',erc20receipt);
+                const url = 'https://api.corrently.io/v2.0/scope2/eventOffer';
 
-                // Actual Offer Management comes here ...  
-
+                let startData = {
+                    hkn: hkns[$('#modalHKN').attr('data-idx')].hkn,
+                    sourceTkn: hkns[$('#modalHKN').attr('data-idx')].contract,
+                    issued:hkns[$('#modalHKN').attr('data-idx')].iat,
+                    iat:Math.round(new Date().getTime()/1000),
+                    targetTkn: $('#tknTypes').val(),
+                    targetAmount: Math.round($('#faktor').val() * 1000),
+                    balance: hkns[$('#modalHKN').attr('data-idx')].amount,
+                    account: window.wallet.address,
+                    allowance:erc20receipt,
+                    did:hkns[$('#modalHKN').attr('data-idx')].did
+                };
+                console.log("Offer Data",startData);
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(await signJSON(startData))
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        location.reload();
+                   });
             });
             calculateRevenue();
         });

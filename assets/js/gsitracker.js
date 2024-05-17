@@ -507,6 +507,7 @@ const handleReadingButtonEvents = function () {
     $('#modalPresentation').modal('show');
     $('#presentText').html('');
     $('#presentJSON').val('');
+    $('#alertSecuri').hide();
     $('#presentJWTContent').val('');
     $('#secTable').html('');
     connectDB((db) => {
