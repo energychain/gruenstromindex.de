@@ -323,7 +323,6 @@ $(document).ready(function(){
         $('.btnValuta').on('click', function (e) {
             const calculateRevenue = function() {
                 let youget = (hkns[$('#modalHKN').attr('data-idx')].amount * $('#faktor').val());
-                console.log(youget);
                 let txt = "";
                 txt += "Bei vollständigem Verkauf von "+(hkns[$('#modalHKN').attr('data-idx')].amount/1000).toFixed(3).replace('.',',')+""+deployment.label[hkns[$('#modalHKN').attr('data-idx')].contract].unit;
                 txt += " "+deployment.label[hkns[$('#modalHKN').attr('data-idx')].contract].display+" aus diesem Nachweis, werden "+(youget/1000).toFixed(3).replace('.',',');

@@ -347,11 +347,17 @@ $(document).ready(function() {
     if((typeof orte !== 'undefined') && (orte !== null)) {
         try {
             orte = JSON.parse(orte);
+            if(orte.length < 2) $('#n1ort').show(); 
             for(let i=0;i<orte.length;i++) {
                 renderGSI(orte[i]); 
             }       
             initialized = true;  
-        } catch(e) {console.log(e);}
+        } catch(e) {
+          console.log(e);
+          $('#n1ort').show();
+        }
+    } else {
+      $('#n1ort').show();
     } 
     if(!initialized) {
       $('#n1ort').show();
