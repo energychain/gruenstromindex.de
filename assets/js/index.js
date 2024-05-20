@@ -86,6 +86,8 @@ $(document).ready(function() {
     if(window.localStorage.getItem("doWallet") == "true") {
         $('.withWallet').show();
         $('#doWallet').attr('checked','checked');
+    } else {
+        $('.withWallet').hide();
     }
 
 
