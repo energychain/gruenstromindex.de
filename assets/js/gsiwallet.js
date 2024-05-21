@@ -173,7 +173,7 @@ $(document).ready(function(){
         window.deploymentJSON = deployment;
         let kinds = '';
         for (const [key, value] of Object.entries(deployment.label)) {
-           kinds += '<option value="'+key+'">'+value.display+'</option>';
+           kinds += '<option value="'+key+'" data-unit="'+value.unit+'">'+value.display+'</option>';
         }
         $('#tokenKinds').html(kinds);
         kinds += '<option disabled>Fiat € - EUR</option>';
@@ -335,6 +335,17 @@ $(document).ready(function(){
             if(typeof window.hknask[$(this).attr('data')] !== 'undefined') {
                 $('#faktor').val(window.hknask[$(this).attr('data')].targetAmount/1000);
                 $('#tknTypes').val(window.hknask[$(this).attr('data')].targetTkn);
+            }
+            let options = $('#tknTypes').children('option')
+            for(let i=0;i<options.length;i++) {
+                if(typeof $(options[i]).attr('data-unit') !== 'undefined') {
+                    if($(options[i]).attr('data-unit') !== deployment.label[hkns[$(this).attr('data-idx')].contract].unit) {
+                        $(options[i]).removeAttr('disabled');
+                    } else {
+                        $(options[i]).attr('disabled','disabled');
+                    }
+                }
+                 
             }
             $('#modalHKN').modal('show');
             $('#modalHKN').attr('data',$(this).attr('data'));
