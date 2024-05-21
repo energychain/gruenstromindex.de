@@ -1,12 +1,14 @@
 let wallet;
 const updateRates = function() {
     $.getJSON("https://api.corrently.io/v2.0/scope2/eventRates?account="+window.wallet.address,function(data) {
+       
         let iat = 0;
         let rates = {};
         for(let i=0;i<data.length;i++) {
             rates[data[i].type] = data[i].rate;
             if(data[i].iat > iat ) iat = data[i].iat;
         }
+        window.eventRates = rates;
         $('#rateAsk').html(Math.round(rates.ask));
         $('#rateBid').html(Math.round(rates.bid));
         let tradeInfo = 'Keine Handelsfreigabe vorhanden!';
@@ -14,6 +16,7 @@ const updateRates = function() {
             tradeInfo = '';
         }
         $('#rateUpdateTime').html(new Date(iat * 1000).toLocaleString()+" - "+tradeInfo);
+       
      });
 }
 const withWallet = function(fn) {

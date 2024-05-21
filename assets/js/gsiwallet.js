@@ -345,6 +345,11 @@ $(document).ready(function(){
                         $(options[i]).removeAttr('disabled');
                         $(options[i]).attr('selected','selected');
                         $('#tknTypes').val($(options[i]).attr('value'));
+                        let rate = window.eventRates[deployment.label[$(options[i]).attr('value')].type];
+                        if(deployment.label[hkns[$(this).attr('data-idx')].contract].unit == 'kg') {
+                            rate = (1/rate)*1000000;
+                        }
+                        $('#faktor').val(  Math.round(rate) / 1000);
                     } else {
                         $(options[i]).attr('disabled','disabled');
                         $(options[i]).removeAttr('selected');
@@ -358,7 +363,9 @@ $(document).ready(function(){
             $('#sourceType').html(deployment.label[hkns[$(this).attr('data-idx')].contract].display);
             $('#sourceUnit').html(deployment.label[hkns[$(this).attr('data-idx')].contract].unit);
             $('#tknTypes').off();
-            $('#tknTypes').change(calculateRevenue);
+            $('#tknTypes').change(function() {
+                calculateRevenue();
+            });
             $('#faktor').off();
             $('#faktor').change(calculateRevenue);
             $('#addOffer').off();
@@ -420,6 +427,7 @@ $(document).ready(function(){
                    });
             });
             calculateRevenue();
+            
         });
     });
     const updEntity = async (addr) => {
