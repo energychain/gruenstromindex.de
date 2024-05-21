@@ -16,7 +16,7 @@ const commitBackend = function(time,href) {
       })
       .then(response => response.json())
       .then(data => {
-           location.href=href;
+           location.href='/index_org.html';
       });
 }
 
