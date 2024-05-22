@@ -169,7 +169,7 @@ $(document).ready(function(){
         return html;
     }
 
-    $.getJSON("https://app.gruenstromindex.de/assets/js/deployment.json",async function(deployment) {
+    $.getJSON("https://gruenstromindex.de/assets/js/deployment.json",async function(deployment) {
         window.deploymentJSON = deployment;
         let kinds = '';
         for (const [key, value] of Object.entries(deployment.label)) {

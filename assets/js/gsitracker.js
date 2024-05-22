@@ -259,7 +259,7 @@ const renderDID = function (data2) {
   });
   // Problem: Wir wissen nicht, wieviel vorher .... vielleicht sollten wir dies über den Securation Call abrufen?
 
-  $.getJSON("https://app.gruenstromindex.de/assets/js/deployment.json",async function(deployment) {
+  $.getJSON("https://gruenstromindex.de/assets/js/deployment.json",async function(deployment) {
     $.getJSON("https://api.corrently.io/v2.0/scope2/eventTokens?eventId=" + data2.json.jti,async function(tokens) { 
         window.deploymentJSON = deployment;
         let html = '';
