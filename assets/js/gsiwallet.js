@@ -60,9 +60,13 @@ $(document).ready(function(){
                 html += '</thead>';
                 html += '<tbody>';
                 for(let i=0;i<logs.length;i++) {
+                    try {
                     html += '<tr>';
                     html += '<td>'+logs[i].blockNumber+'</td>';
-                    html += '<td>'+window.deploymentJSON.label[logs[i].address].display+'</td>';
+                //    html += '<td>'+window.deploymentJSON.label[logs[i].address].display+'</td>';
+                console.log(logs[i]);
+          
+                    html += '<td>-</td>';
                     let multpl = 1;
                     if(logs[i].args[0] == account) {
                         html += '<td><button class="btn btn-sm openAccount btn-light" data="'+logs[i].args[1]+'">' + logs[i].args[1] + '</button></td>';
@@ -77,6 +81,9 @@ $(document).ready(function(){
                     let amount = logs[i].args[2].toString() * multpl;
                     html += '<td align="right">' + (amount/1000).toFixed(3).replace('.',',') + ' '+window.deploymentJSON.label[logs[i].address].unit+'</td>';
                     html += '</tr>';
+                    } catch(e) {
+                        
+                    }
                 }
                 html += '</tbody>';
                 html += '</table>';
