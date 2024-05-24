@@ -1,10 +1,10 @@
 {
     "RPC": "https://rpc.tydids.com/",
     "account": {
-        "co2SavingTKN":"0x82532581c2b2F0243E16E9b4fF664DeCA7E8287F",
-        "co2EmissionTKN":"0x8839c0d347d9Af2cd6bb28d5627dBd68171349AA",
-        "consumptionTKN":"0x6d8c9781b8cEEE928b29DB024116fc27BDB9Ae7e",
-        "generationTKN":"0x8EE6ddb763892D9fd79015C3cDADC0215adf1043"
+        "co2SavingTKN":"0xd1E46f207f8735131716b737b468a966710EC98B",
+        "co2EmissionTKN":"0x2c6Df3AAb83258d266E74db730De2a6Fcd18D7aA",
+        "consumptionTKN":"0xF431220C82dcC8f5Af7CE023E92f272EDcacb27c",
+        "generationTKN":"0x3Ee3867A24C8B3dF98757715eD1b46156E89b753"
      },
      "label": {
         "0x82532581c2b2F0243E16E9b4fF664DeCA7E8287F": { "display": "CO2 Einsparung", "unit":"kg", "div":1000,"type":"bid" },
@@ -86,6 +86,10 @@
      },
      "HKNfactory":{
         "account":"0xCe438d6C372b7B9C7371621627c5d1ADD7824089",
+        "0xd1E46f207f8735131716b737b468a966710EC98B": "0x4DE4369e531763A24D3ddD6476F44f7a4e3cD024",
+        "0x2c6Df3AAb83258d266E74db730De2a6Fcd18D7aA": "0x1B5CF0e057077700aAc1650f9a5d1B6065A07e91",
+        "0xF431220C82dcC8f5Af7CE023E92f272EDcacb27c": "0x6377aF2fC8E3b274B409e6985D769c3fbFcFbb28",
+        "0x3Ee3867A24C8B3dF98757715eD1b46156E89b753": "0xD12f3c20Cc275C1bc0250D374fC92C07EaCdA5bB",
         "ABI":[
             {
                 "inputs": [
