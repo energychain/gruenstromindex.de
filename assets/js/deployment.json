@@ -933,6 +933,59 @@
             }
         ]
      },
+     "IPFSRegistry": {
+        "account":"0x1a036eeeA6a0de8aBBfAf9E391b4d0BF4d834620",
+        "ABI":[
+            {
+                "inputs": [],
+                "stateMutability": "nonpayable",
+                "type": "constructor"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": true,
+                        "internalType": "address",
+                        "name": "sender",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": true,
+                        "internalType": "address",
+                        "name": "did",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": false,
+                        "internalType": "string",
+                        "name": "hash",
+                        "type": "string"
+                    }
+                ],
+                "name": "Announce",
+                "type": "event"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "did",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "hash",
+                        "type": "string"
+                    }
+                ],
+                "name": "announce",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            }
+        ]
+     },
     "ABI":[
         {
             "inputs": [
