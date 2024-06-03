@@ -61,7 +61,7 @@ const securitization = async function() {
             window.localStorage.setItem('hkns',JSON.stringify(hkns));
           }
         }
-        $('#alertSecuri').html('Es wurden die Beträge aus '+cnt+' neuen Herkunfsnachweisen <a href="./wallet.html" class="btn btn-sm btn-dark">gutgeschrieben</a>.</div>');
+        $('#alertSecuri').html('Es wurden die Beträge aus '+cnt+' neuen GrünstromNachweisen™ <a href="https://id.gruenstromindex.de/?a='+window.wallet.address+'" class="btn btn-sm btn-dark" target="_blank">gutgeschrieben</a>.</div>');
         $('#alertSecuri').show();
         $('#jwtInput').val($('#presentJWTContent').val());
         qrVerify();
