@@ -1,19 +1,19 @@
 {
-    "RPC": "https://rpc.stromkonto.net/",
+    "RPC": "https://rpc.tydids.com/",
     "account": {
-        "co2SavingTKN":"0xf0D4F76638b78cFB7d1CfFcFa2C8D9496f1B5DE4",
-        "co2EmissionTKN":"0x5a61D4A2C1Ec9d4327d83717911ea2Dc82BDa393",
-        "consumptionTKN":"0xd00c7C615373443550CF3bc25b0Ea7505dB21841",
-        "generationTKN":"0xf99f216E163E11897249a0Fca5750e54Ff3D7413"
+        "co2SavingTKN":"0xd1E46f207f8735131716b737b468a966710EC98B",
+        "co2EmissionTKN":"0x2c6Df3AAb83258d266E74db730De2a6Fcd18D7aA",
+        "consumptionTKN":"0xF431220C82dcC8f5Af7CE023E92f272EDcacb27c",
+        "generationTKN":"0x3Ee3867A24C8B3dF98757715eD1b46156E89b753"
      },
      "label": {
-        "0xf0D4F76638b78cFB7d1CfFcFa2C8D9496f1B5DE4": { "display": "CO2 Einsparung", "unit":"kg", "div":1000,"type":"bid" },
-        "0x5a61D4A2C1Ec9d4327d83717911ea2Dc82BDa393": { "display": "CO2 Emission", "unit":"kg", "div":1000,"type":"ask" },
-        "0xd00c7C615373443550CF3bc25b0Ea7505dB21841": { "display": "Stromnutzung", "unit":"kWh", "div":1000,"type":"ask" },
-        "0xf99f216E163E11897249a0Fca5750e54Ff3D7413": { "display": "Stromerzeugung", "unit":"kWh", "div":1000,"type":"bid" }
+        "0xd1E46f207f8735131716b737b468a966710EC98B": { "display": "CO2 Einsparung", "unit":"kg", "div":1000,"type":"bid" },
+        "0x2c6Df3AAb83258d266E74db730De2a6Fcd18D7aA": { "display": "CO2 Emission", "unit":"kg", "div":1000,"type":"ask" },
+        "0xF431220C82dcC8f5Af7CE023E92f272EDcacb27c": { "display": "Stromnutzung", "unit":"kWh", "div":1000,"type":"ask" },
+        "0x3Ee3867A24C8B3dF98757715eD1b46156E89b753": { "display": "Stromerzeugung", "unit":"kWh", "div":1000,"type":"bid" }
      },
      "mpo": {
-        "registry": "0x86D1570f94856525848110c95c0F5FFA154b57E3",
+        "registry": "0x82a6c9468C45b8c50293456dcC14495682428D34",
         "ABI":[
             {
                 "inputs": [
@@ -86,10 +86,10 @@
      },
      "HKNfactory":{
         "account":"0xCe438d6C372b7B9C7371621627c5d1ADD7824089",
-        "0xf0D4F76638b78cFB7d1CfFcFa2C8D9496f1B5DE4": "0xFBe3428A58DAF225D84Ccf2a7A87892d53CC1b88",
-        "0x5a61D4A2C1Ec9d4327d83717911ea2Dc82BDa393": "0x3bFCf4Fe3b7D2E2fd079b5Dd546Aa30300D8fBE1",
-        "0xd00c7C615373443550CF3bc25b0Ea7505dB21841": "0x36AbF05ac533D9Bb2024A2fb00c9e3F52e4F6a50",
-        "0xf99f216E163E11897249a0Fca5750e54Ff3D7413": "0xe48a6Fb0049704148572cCE32F06C0ba85b11238",
+        "0xd1E46f207f8735131716b737b468a966710EC98B": "0x4DE4369e531763A24D3ddD6476F44f7a4e3cD024",
+        "0x2c6Df3AAb83258d266E74db730De2a6Fcd18D7aA": "0x1B5CF0e057077700aAc1650f9a5d1B6065A07e91",
+        "0xF431220C82dcC8f5Af7CE023E92f272EDcacb27c": "0x6377aF2fC8E3b274B409e6985D769c3fbFcFbb28",
+        "0x3Ee3867A24C8B3dF98757715eD1b46156E89b753": "0xD12f3c20Cc275C1bc0250D374fC92C07EaCdA5bB",
         "ABI":[
             {
                 "inputs": [
@@ -934,7 +934,7 @@
         ]
      },
      "IPFSRegistry": {
-        "account":"0xAD7df95e5d5a7812feC055184FF8A929Fb93D5E6",
+        "account":"0x1a036eeeA6a0de8aBBfAf9E391b4d0BF4d834620",
         "ABI":[
             {
                 "inputs": [],
