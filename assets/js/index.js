@@ -63,7 +63,7 @@ const fallbackBrowserWallet = function() {
     }
     if (!wallet) {
         console.log("Fallback to insecure Browser Wallet");
-        window.provider = new ethers.providers.JsonRpcProvider("https://rpc.tydids.com/");
+        window.provider = new ethers.providers.JsonRpcProvider("https://rpc.stromkonto.net/");
         wallet = new ethers.Wallet(window.localStorage.getItem("deviceKey"), window.provider);
     }
     window.wallet = wallet;
