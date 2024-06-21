@@ -97,6 +97,16 @@
                         "internalType": "address",
                         "name": "_ipfsRegistry",
                         "type": "address"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "_name",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "_symbol",
+                        "type": "string"
                     }
                 ],
                 "stateMutability": "nonpayable",
@@ -141,13 +151,13 @@
                 "anonymous": false,
                 "inputs": [
                     {
-                        "indexed": true,
+                        "indexed": false,
                         "internalType": "address",
                         "name": "_hkn",
                         "type": "address"
                     },
                     {
-                        "indexed": true,
+                        "indexed": false,
                         "internalType": "address",
                         "name": "_owner",
                         "type": "address"
@@ -159,7 +169,7 @@
                         "type": "uint256"
                     },
                     {
-                        "indexed": true,
+                        "indexed": false,
                         "internalType": "address",
                         "name": "_event",
                         "type": "address"
@@ -185,6 +195,31 @@
                     }
                 ],
                 "name": "OwnershipTransferred",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": false,
+                        "internalType": "address",
+                        "name": "_hkn",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": false,
+                        "internalType": "address",
+                        "name": "_holder",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": false,
+                        "internalType": "uint256",
+                        "name": "_acount",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "ShareHolderChange",
                 "type": "event"
             },
             {
@@ -312,6 +347,38 @@
                 "type": "function"
             },
             {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "name": "managedhkn",
+                "outputs": [
+                    {
+                        "internalType": "contract CoriHKN",
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "name",
+                "outputs": [
+                    {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
                 "inputs": [],
                 "name": "owner",
                 "outputs": [
@@ -333,6 +400,19 @@
             },
             {
                 "inputs": [],
+                "name": "symbol",
+                "outputs": [
+                    {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
                 "name": "token",
                 "outputs": [
                     {
@@ -342,6 +422,24 @@
                     }
                 ],
                 "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "_from",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "_to",
+                        "type": "address"
+                    }
+                ],
+                "name": "trackShareHolderChange",
+                "outputs": [],
+                "stateMutability": "nonpayable",
                 "type": "function"
             },
             {
