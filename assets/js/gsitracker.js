@@ -260,6 +260,38 @@ const renderDID = function (data2) {
   // Problem: Wir wissen nicht, wieviel vorher .... vielleicht sollten wir dies über den Securation Call abrufen?
 
   $.getJSON("https://gruenstromindex.de/assets/js/deployment.json",async function(deployment) {
+    if(window.ethereum) {
+      const addTkn = async function(tkn_address,tkn_symbol) {
+      try {
+        // 'wasAdded' is a boolean. Like any RPC method, an error can be thrown.
+        const wasAdded = await window.ethereum // Or window.ethereum if you don't support EIP-6963.
+          .request({
+            method: "wallet_watchAsset",
+            params: {
+              type: "ERC20",
+              options: {
+                address: tkn_address,
+                symbol: "CTK",
+                decimals: 0,
+                image: "http://placekitten.com/200/300",
+              },
+            },
+          });
+      
+        if (wasAdded) {
+          console.log("Token Added");
+        } else {
+          console.log("Your loss!");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    addTkn(deployment.account.co2EmissionTKN,"co2+");
+    addTkn(deployment.account.co2SavingTKN,"co2-");
+    addTkn(deployment.account.consumptionTKN,"kwh+");
+    addTkn(deployment.account.generationTKN,"kwh-");
+    }
     $.getJSON("https://api.corrently.io/v2.0/scope2/eventTokens?eventId=" + data2.json.jti,async function(tokens) { 
         window.deploymentJSON = deployment;
         let html = '';

@@ -79,7 +79,41 @@ if (window.ethereum) {
         // Create a provider using the Web3 provider from MetaMask
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         window.provider = provider;
-
+        try {
+            await window.ethereum // Or window.ethereum if you don't support EIP-6963.
+              .request({
+                method: "wallet_switchEthereumChain",
+                params: [{ chainId: "0x141FD98" }],
+              });
+          } catch (switchError) {
+            console.log("Switch Error",switchError);
+            // This error code indicates that the chain has not been added to MetaMask.
+            if (switchError.code === 4902) {
+              try {
+                await window.ethereum // Or window.ethereum if you don't support EIP-6963.
+                  .request({
+                    method: "wallet_addEthereumChain",
+                    params: [
+                      {
+                        chainId: "0x141FD98",
+                        chainName: "Corrently",
+                        rpcUrls: ["https://rpc.stromkonto.net/"],
+                        nativeCurrency: {
+                            decimals: 18,                        
+                            name: "Corrently GrünstromNachweis",
+                            symbol: "CORI"
+                        }
+                      },
+                    ],
+                  });
+              } catch (addError) {
+                console.log("addError",addError);
+                // Handle "add" error.
+              }
+            }
+            console.log("Other Error");
+            // Handle other "switch" errors.
+          }
         // Get the signer (MetaMask account)
         const signer = await provider.getSigner();
         window.wallet = signer;
