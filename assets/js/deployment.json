@@ -1,16 +1,16 @@
 {
     "RPC": "https://rpc.stromkonto.net/",
     "account": {
-        "co2SavingTKN":"0x8C7fA1066c88b9532F45Bb04763535F41791d840",
-        "co2EmissionTKN":"0xE2a72e97F54B10068aD027855A17e6F794487799",
-        "consumptionTKN":"0x0EfcA68f60Dba3F811cB65008e39A35462EAF329",
-        "generationTKN":"0x3590E3196B4a447951eBBc6A028C1e2b9f85eAb7"
+        "co2SavingTKN":"0x42a0fD82c2104963D36e14e3E42A72f9bCCed13E",
+        "co2EmissionTKN":"0x5F195C03472acEDc5D5b67880e8dD8A0977B0CE0",
+        "consumptionTKN":"0xA1b192B291dd2b68A706b040a226b7bfc9b318c5",
+        "generationTKN":"0x53D222D4f92Daa0616486589ebb95c6bDd0aba8b"
      },
      "label": {
-        "0x8C7fA1066c88b9532F45Bb04763535F41791d840": { "display": "CO2 Einsparung", "unit":"kg", "div":1000,"type":"bid" },
-        "0xE2a72e97F54B10068aD027855A17e6F794487799": { "display": "CO2 Emission", "unit":"kg", "div":1000,"type":"ask" },
-        "0x0EfcA68f60Dba3F811cB65008e39A35462EAF329": { "display": "Stromnutzung", "unit":"kWh", "div":1000,"type":"ask" },
-        "0x3590E3196B4a447951eBBc6A028C1e2b9f85eAb7": { "display": "Stromerzeugung", "unit":"kWh", "div":1000,"type":"bid" }
+        "0x42a0fD82c2104963D36e14e3E42A72f9bCCed13E": { "display": "CO2 Einsparung", "unit":"kg", "div":1000,"type":"bid" },
+        "0x5F195C03472acEDc5D5b67880e8dD8A0977B0CE0": { "display": "CO2 Emission", "unit":"kg", "div":1000,"type":"ask" },
+        "0xA1b192B291dd2b68A706b040a226b7bfc9b318c5": { "display": "Stromnutzung", "unit":"kWh", "div":1000,"type":"ask" },
+        "0x53D222D4f92Daa0616486589ebb95c6bDd0aba8b": { "display": "Stromerzeugung", "unit":"kWh", "div":1000,"type":"bid" }
      },
      "mpo": {
         "registry": "0x86D1570f94856525848110c95c0F5FFA154b57E3",
@@ -86,10 +86,10 @@
      },
      "HKNfactory":{
         "account":"0xCe438d6C372b7B9C7371621627c5d1ADD7824089",
-        "0x8C7fA1066c88b9532F45Bb04763535F41791d840": "0x6280202ff2c3313FE16131dddc85071eFdf4cc7f",
-        "0xE2a72e97F54B10068aD027855A17e6F794487799": "0x96ED598d9eC72bDce1F4219d2361F2c264541ff3",
-        "0x0EfcA68f60Dba3F811cB65008e39A35462EAF329": "0xAaf060b5A234cc429484BC410C310e71E3ef4354",
-        "0x3590E3196B4a447951eBBc6A028C1e2b9f85eAb7": "0x85f44F0401f2921bB165D765cd23E6AdC18Bd908",
+        "0x42a0fD82c2104963D36e14e3E42A72f9bCCed13E": "0x5Ba9cd5B502Fc5893C591239CeF7e1EB3bF7D0a3",
+        "0x5F195C03472acEDc5D5b67880e8dD8A0977B0CE0": "0xD3232F1A0f99897519cb17AEEdcDbA5dD2a99192",
+        "0xA1b192B291dd2b68A706b040a226b7bfc9b318c5": "0xC1b0AEb6d0A29Cb2DA38aa0c5E020f164fe636E5",
+        "0x53D222D4f92Daa0616486589ebb95c6bDd0aba8b": "0x4d1161A83937a0cCB3906e698A55b9D22aBd744F",
         "ABI":[
             {
                 "inputs": [
