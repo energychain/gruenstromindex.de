@@ -33,7 +33,7 @@
       }
     },
     "mpo": {
-      "registry": "0x86D1570f94856525848110c95c0F5FFA154b57E3",
+      "registry": "0xf80410880f5259748888231aF89e1426a1ED4c9d",
       "ABI": [
         {
           "inputs": [
@@ -1081,7 +1081,7 @@
       ]
     },
     "IPFSRegistry": {
-      "account": "0xb11f098C786eC74783808d71CDa7Ae1fBd544906",
+      "account": "0x2d003832bB233fC35ad527cC33eB1cD08580D54a",
       "ABI": [
         {
           "inputs": [],
