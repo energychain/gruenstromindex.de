@@ -1,6 +1,6 @@
 {
     "RPC": "https://rpc.stromkonto.net/",
-    "REST_API":"https://api.corrently.io/v2.0/",
+    "REST_API":"https://api.corrently.io/v2.0/coriwallet",
     "account": {
       "co2SavingTKN": "0x6e36701e4eA9d09d60f1C176db9aE868Bb2925A9",
       "co2EmissionTKN": "0x1826Bac55a15916238350062F79E52D3798f7C5d",
