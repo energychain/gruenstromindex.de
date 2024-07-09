@@ -2,31 +2,31 @@
    "RPC": "https://rpc.stromkonto.net/",
    "REST_API": "https://api.corrently.io/v2.0/coriwallet",
    "account": {
-     "co2SavingTKN": "0xED027D13af1B4c81E3A6A7e4B08FDE93b8d4c868",
-     "co2EmissionTKN": "0xFA1B72fE458D63E63c557EAAc211840427F57BAF",
-     "consumptionTKN": "0x372dAa0a754eC7c3fBDc068CE9550a7e68B9c87B",
-     "generationTKN": "0x3Dc03C9B44cF569b169cDeED9BeA1A64aa0C4192"
+     "co2SavingTKN": "0x2F457e71DcEB0bEcEb4219ef7637236E7005929d",
+     "co2EmissionTKN": "0xEb65AC5E144eAb1532E2ff5864C10489a3B7BA3b",
+     "consumptionTKN": "0x435469a08d501c1433A49eB846C3B18F27EDA871",
+     "generationTKN": "0x50920EB69cBb799B7C958327e4D0503A3E47cDCf"
    },
    "label": {
-     "0xFA1B72fE458D63E63c557EAAc211840427F57BAF": {
+     "0xEb65AC5E144eAb1532E2ff5864C10489a3B7BA3b": {
        "display": "CO2 Emission",
        "unit": "kg",
        "div": 1000,
        "type": "ask"
      },
-     "0xED027D13af1B4c81E3A6A7e4B08FDE93b8d4c868": {
+     "0x2F457e71DcEB0bEcEb4219ef7637236E7005929d": {
        "display": "CO2 Einsparung",
        "unit": "kg",
        "div": 1000,
        "type": "bid"
      },
-     "0x372dAa0a754eC7c3fBDc068CE9550a7e68B9c87B": {
+     "0x435469a08d501c1433A49eB846C3B18F27EDA871": {
        "display": "Stromnutzung",
        "unit": "kWh",
        "div": 1000,
        "type": "ask"
      },
-     "0x3Dc03C9B44cF569b169cDeED9BeA1A64aa0C4192": {
+     "0x50920EB69cBb799B7C958327e4D0503A3E47cDCf": {
        "display": "Stromerzeugung",
        "unit": "kWh",
        "div": 1000,
@@ -561,10 +561,10 @@
          "type": "function"
        }
      ],
-     "0xFA1B72fE458D63E63c557EAAc211840427F57BAF": "0xdCa06D9118c83954BC11CC9c4e2a3f99e810b623",
-     "0xED027D13af1B4c81E3A6A7e4B08FDE93b8d4c868": "0x709c5216158D42D869C6b8552044C615476a28c2",
-     "0x372dAa0a754eC7c3fBDc068CE9550a7e68B9c87B": "0x264aaA42b52015F4F6891aEc556302FA171c0C4E",
-     "0x3Dc03C9B44cF569b169cDeED9BeA1A64aa0C4192": "0x55cA0DF0BC628216005274757534B23De68fBb8c"
+     "0xEb65AC5E144eAb1532E2ff5864C10489a3B7BA3b": "0x68118026c7Aa408826C272A482008114e53c02c8",
+     "0x2F457e71DcEB0bEcEb4219ef7637236E7005929d": "0xc9552912Ce4f139f09101308A55d7107bf5fa855",
+     "0x435469a08d501c1433A49eB846C3B18F27EDA871": "0x72Ef7Ae4F9028f15d876074eE9D0E31f18ea60A4",
+     "0x50920EB69cBb799B7C958327e4D0503A3E47cDCf": "0x07F9bB17416D2d45B260C33a85873FB9990dFCCE"
    },
    "HKN": {
      "ABI": [
