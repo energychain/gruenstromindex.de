@@ -108,459 +108,465 @@
    "HKNfactory": {
      "account": "0xCe438d6C372b7B9C7371621627c5d1ADD7824089",
      "ABI": [
-       {
+      {
          "inputs": [
-           {
-             "internalType": "address",
-             "name": "_ipfsRegistry",
-             "type": "address"
-           },
-           {
-             "internalType": "string",
-             "name": "_name",
-             "type": "string"
-           },
-           {
-             "internalType": "string",
-             "name": "_symbol",
-             "type": "string"
-           },
-           {
-             "internalType": "address",
-             "name": "_secondIssuer",
-             "type": "address"
-           }
+            {
+               "internalType": "address",
+               "name": "_ipfsRegistry",
+               "type": "address"
+            },
+            {
+               "internalType": "string",
+               "name": "_name",
+               "type": "string"
+            },
+            {
+               "internalType": "string",
+               "name": "_symbol",
+               "type": "string"
+            },
+            {
+               "internalType": "address",
+               "name": "_secondIssuer",
+               "type": "address"
+            }
          ],
          "stateMutability": "nonpayable",
          "type": "constructor"
-       },
-       {
+      },
+      {
          "anonymous": false,
          "inputs": [
-           {
-             "indexed": false,
-             "internalType": "address",
-             "name": "_factory",
-             "type": "address"
-           }
+            {
+               "indexed": false,
+               "internalType": "address",
+               "name": "_factory",
+               "type": "address"
+            }
          ],
          "name": "DelegateToken",
          "type": "event"
-       },
-       {
+      },
+      {
          "anonymous": false,
          "inputs": [
-           {
-             "indexed": false,
-             "internalType": "address",
-             "name": "_hkn",
-             "type": "address"
-           },
-           {
-             "indexed": false,
-             "internalType": "address",
-             "name": "_owner",
-             "type": "address"
-           },
-           {
-             "indexed": false,
-             "internalType": "uint256",
-             "name": "_amount",
-             "type": "uint256"
-           },
-           {
-             "indexed": false,
-             "internalType": "address",
-             "name": "_event",
-             "type": "address"
-           }
+            {
+               "indexed": true,
+               "internalType": "address",
+               "name": "_hkn",
+               "type": "address"
+            },
+            {
+               "indexed": false,
+               "internalType": "address",
+               "name": "_owner",
+               "type": "address"
+            },
+            {
+               "indexed": false,
+               "internalType": "uint256",
+               "name": "_amount",
+               "type": "uint256"
+            },
+            {
+               "indexed": false,
+               "internalType": "address",
+               "name": "_event",
+               "type": "address"
+            },
+            {
+               "indexed": true,
+               "internalType": "uint256",
+               "name": "_nft",
+               "type": "uint256"
+            }
          ],
          "name": "IssuedHKN",
          "type": "event"
-       },
-       {
+      },
+      {
          "anonymous": false,
          "inputs": [
-           {
-             "indexed": true,
-             "internalType": "address",
-             "name": "previousOwner",
-             "type": "address"
-           },
-           {
-             "indexed": true,
-             "internalType": "address",
-             "name": "newOwner",
-             "type": "address"
-           }
+            {
+               "indexed": true,
+               "internalType": "address",
+               "name": "previousOwner",
+               "type": "address"
+            },
+            {
+               "indexed": true,
+               "internalType": "address",
+               "name": "newOwner",
+               "type": "address"
+            }
          ],
          "name": "OwnershipTransferred",
          "type": "event"
-       },
-       {
+      },
+      {
          "anonymous": false,
          "inputs": [
-           {
-             "indexed": true,
-             "internalType": "address",
-             "name": "_hkn",
-             "type": "address"
-           },
-           {
-             "indexed": true,
-             "internalType": "address",
-             "name": "_holder",
-             "type": "address"
-           },
-           {
-             "indexed": false,
-             "internalType": "uint256",
-             "name": "_acount",
-             "type": "uint256"
-           }
+            {
+               "indexed": true,
+               "internalType": "address",
+               "name": "_hkn",
+               "type": "address"
+            },
+            {
+               "indexed": true,
+               "internalType": "address",
+               "name": "_holder",
+               "type": "address"
+            },
+            {
+               "indexed": false,
+               "internalType": "uint256",
+               "name": "_acount",
+               "type": "uint256"
+            }
          ],
          "name": "ShareHolderChange",
          "type": "event"
-       },
-       {
+      },
+      {
          "anonymous": false,
          "inputs": [
-           {
-             "indexed": false,
-             "internalType": "address",
-             "name": "_newToken",
-             "type": "address"
-           }
+            {
+               "indexed": false,
+               "internalType": "address",
+               "name": "_newToken",
+               "type": "address"
+            }
          ],
          "name": "TokenUpdate",
          "type": "event"
-       },
-       {
+      },
+      {
          "inputs": [
-           {
-             "internalType": "address",
-             "name": "",
-             "type": "address"
-           }
+            {
+               "internalType": "address",
+               "name": "",
+               "type": "address"
+            }
          ],
          "name": "birthBlock",
          "outputs": [
-           {
-             "internalType": "uint256",
-             "name": "",
-             "type": "uint256"
-           }
+            {
+               "internalType": "uint256",
+               "name": "",
+               "type": "uint256"
+            }
          ],
          "stateMutability": "view",
          "type": "function"
-       },
-       {
+      },
+      {
          "inputs": [
-           {
-             "internalType": "address",
-             "name": "_holder",
-             "type": "address"
-           },
-           {
-             "internalType": "uint256",
-             "name": "_amount",
-             "type": "uint256"
-           },
-           {
-             "internalType": "address",
-             "name": "_event",
-             "type": "address"
-           }
+            {
+               "internalType": "address",
+               "name": "_holder",
+               "type": "address"
+            },
+            {
+               "internalType": "uint256",
+               "name": "_amount",
+               "type": "uint256"
+            },
+            {
+               "internalType": "address",
+               "name": "_event",
+               "type": "address"
+            }
          ],
          "name": "createHKN",
          "outputs": [],
          "stateMutability": "nonpayable",
          "type": "function"
-       },
-       {
+      },
+      {
          "inputs": [
-           {
-             "internalType": "address",
-             "name": "_toFactory",
-             "type": "address"
-           }
+            {
+               "internalType": "address",
+               "name": "_toFactory",
+               "type": "address"
+            }
          ],
          "name": "delegateToken",
          "outputs": [],
          "stateMutability": "nonpayable",
          "type": "function"
-       },
-       {
+      },
+      {
          "inputs": [
-           {
-             "internalType": "address",
-             "name": "",
-             "type": "address"
-           },
-           {
-             "internalType": "uint256",
-             "name": "",
-             "type": "uint256"
-           }
+            {
+               "internalType": "address",
+               "name": "",
+               "type": "address"
+            },
+            {
+               "internalType": "uint256",
+               "name": "",
+               "type": "uint256"
+            }
          ],
          "name": "hkns",
          "outputs": [
-           {
-             "internalType": "contract CoriHKN",
-             "name": "",
-             "type": "address"
-           }
+            {
+               "internalType": "contract CoriHKN",
+               "name": "",
+               "type": "address"
+            }
          ],
          "stateMutability": "view",
          "type": "function"
-       },
-       {
+      },
+      {
          "inputs": [
-           {
-             "internalType": "address",
-             "name": "",
-             "type": "address"
-           }
+            {
+               "internalType": "address",
+               "name": "",
+               "type": "address"
+            }
          ],
          "name": "hknscount",
          "outputs": [
-           {
-             "internalType": "uint256",
-             "name": "",
-             "type": "uint256"
-           }
+            {
+               "internalType": "uint256",
+               "name": "",
+               "type": "uint256"
+            }
          ],
          "stateMutability": "view",
          "type": "function"
-       },
-       {
+      },
+      {
          "inputs": [],
          "name": "ipfsRegistry",
          "outputs": [
-           {
-             "internalType": "address",
-             "name": "",
-             "type": "address"
-           }
+            {
+               "internalType": "address",
+               "name": "",
+               "type": "address"
+            }
          ],
          "stateMutability": "view",
          "type": "function"
-       },
-       {
+      },
+      {
          "inputs": [
-           {
-             "internalType": "address",
-             "name": "",
-             "type": "address"
-           }
+            {
+               "internalType": "address",
+               "name": "",
+               "type": "address"
+            }
          ],
          "name": "issuer",
          "outputs": [
-           {
-             "internalType": "uint256",
-             "name": "",
-             "type": "uint256"
-           }
+            {
+               "internalType": "uint256",
+               "name": "",
+               "type": "uint256"
+            }
          ],
          "stateMutability": "view",
          "type": "function"
-       },
-       {
+      },
+      {
          "inputs": [],
          "name": "lastHKN",
          "outputs": [
-           {
-             "internalType": "address",
-             "name": "",
-             "type": "address"
-           }
+            {
+               "internalType": "address",
+               "name": "",
+               "type": "address"
+            }
          ],
          "stateMutability": "view",
          "type": "function"
-       },
-       {
+      },
+      {
          "inputs": [
-           {
-             "internalType": "address",
-             "name": "",
-             "type": "address"
-           }
+            {
+               "internalType": "address",
+               "name": "",
+               "type": "address"
+            }
          ],
          "name": "managedhkn",
          "outputs": [
-           {
-             "internalType": "contract CoriHKN",
-             "name": "",
-             "type": "address"
-           }
+            {
+               "internalType": "contract CoriHKN",
+               "name": "",
+               "type": "address"
+            }
          ],
          "stateMutability": "view",
          "type": "function"
-       },
-       {
+      },
+      {
          "inputs": [],
          "name": "name",
          "outputs": [
-           {
-             "internalType": "string",
-             "name": "",
-             "type": "string"
-           }
+            {
+               "internalType": "string",
+               "name": "",
+               "type": "string"
+            }
          ],
          "stateMutability": "view",
          "type": "function"
-       },
-       {
+      },
+      {
          "inputs": [],
          "name": "nft",
          "outputs": [
-           {
-             "internalType": "contract CoriNFT",
-             "name": "",
-             "type": "address"
-           }
+            {
+               "internalType": "contract CoriNFT",
+               "name": "",
+               "type": "address"
+            }
          ],
          "stateMutability": "view",
          "type": "function"
-       },
-       {
+      },
+      {
          "inputs": [
-           {
-             "internalType": "uint256",
-             "name": "",
-             "type": "uint256"
-           }
+            {
+               "internalType": "uint256",
+               "name": "",
+               "type": "uint256"
+            }
          ],
          "name": "nfts",
          "outputs": [
-           {
-             "internalType": "address",
-             "name": "",
-             "type": "address"
-           }
+            {
+               "internalType": "address",
+               "name": "",
+               "type": "address"
+            }
          ],
          "stateMutability": "view",
          "type": "function"
-       },
-       {
+      },
+      {
          "inputs": [],
          "name": "owner",
          "outputs": [
-           {
-             "internalType": "address",
-             "name": "",
-             "type": "address"
-           }
+            {
+               "internalType": "address",
+               "name": "",
+               "type": "address"
+            }
          ],
          "stateMutability": "view",
          "type": "function"
-       },
-       {
+      },
+      {
          "inputs": [],
          "name": "renounceOwnership",
          "outputs": [],
          "stateMutability": "nonpayable",
          "type": "function"
-       },
-       {
+      },
+      {
          "inputs": [
-           {
-             "internalType": "address",
-             "name": "_issuer",
-             "type": "address"
-           },
-           {
-             "internalType": "uint256",
-             "name": "allowance",
-             "type": "uint256"
-           }
+            {
+               "internalType": "address",
+               "name": "_issuer",
+               "type": "address"
+            },
+            {
+               "internalType": "uint256",
+               "name": "allowance",
+               "type": "uint256"
+            }
          ],
          "name": "setIssuer",
          "outputs": [],
          "stateMutability": "nonpayable",
          "type": "function"
-       },
-       {
+      },
+      {
          "inputs": [],
          "name": "symbol",
          "outputs": [
-           {
-             "internalType": "string",
-             "name": "",
-             "type": "string"
-           }
+            {
+               "internalType": "string",
+               "name": "",
+               "type": "string"
+            }
          ],
          "stateMutability": "view",
          "type": "function"
-       },
-       {
+      },
+      {
          "inputs": [],
          "name": "token",
          "outputs": [
-           {
-             "internalType": "contract CoriToken",
-             "name": "",
-             "type": "address"
-           }
+            {
+               "internalType": "contract CoriToken",
+               "name": "",
+               "type": "address"
+            }
          ],
          "stateMutability": "view",
          "type": "function"
-       },
-       {
+      },
+      {
          "inputs": [
-           {
-             "internalType": "address",
-             "name": "_from",
-             "type": "address"
-           },
-           {
-             "internalType": "address",
-             "name": "_to",
-             "type": "address"
-           },
-           {
-             "internalType": "uint256",
-             "name": "_balanceFrom",
-             "type": "uint256"
-           },
-           {
-             "internalType": "uint256",
-             "name": "_balanceTo",
-             "type": "uint256"
-           }
+            {
+               "internalType": "address",
+               "name": "_from",
+               "type": "address"
+            },
+            {
+               "internalType": "address",
+               "name": "_to",
+               "type": "address"
+            },
+            {
+               "internalType": "uint256",
+               "name": "_balanceFrom",
+               "type": "uint256"
+            },
+            {
+               "internalType": "uint256",
+               "name": "_balanceTo",
+               "type": "uint256"
+            }
          ],
          "name": "trackShareHolderChange",
          "outputs": [],
          "stateMutability": "nonpayable",
          "type": "function"
-       },
-       {
+      },
+      {
          "inputs": [
-           {
-             "internalType": "address",
-             "name": "newOwner",
-             "type": "address"
-           }
+            {
+               "internalType": "address",
+               "name": "newOwner",
+               "type": "address"
+            }
          ],
          "name": "transferOwnership",
          "outputs": [],
          "stateMutability": "nonpayable",
          "type": "function"
-       },
-       {
+      },
+      {
          "inputs": [
-           {
-             "internalType": "contract CoriToken",
-             "name": "_newToken",
-             "type": "address"
-           }
+            {
+               "internalType": "contract CoriToken",
+               "name": "_newToken",
+               "type": "address"
+            }
          ],
          "name": "updateToken",
          "outputs": [],
          "stateMutability": "nonpayable",
          "type": "function"
-       }
-     ],
+      }
+   ],
      "0x390b1cA66c0C86B15E46301326a3977f8B30bd0b": "0x4F8688e30887a9258eF7b49a9F3B529AB38f798b",
      "0x520BA6e1b9bea2228BB63E6a43E76C147e0a8A29": "0x58c52953A1CE63A63004EdDf745E6e3F917f4d50",
      "0xfeECD8d11e982dDADba3c7a589c274F29A111881": "0xdA1CF4Ee43D4437d57f94a867f3a6A447979Aa67",
