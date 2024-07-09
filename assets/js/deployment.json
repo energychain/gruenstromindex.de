@@ -2,31 +2,31 @@
    "RPC": "https://rpc.stromkonto.net/",
    "REST_API": "https://api.corrently.io/v2.0/coriwallet",
    "account": {
-     "co2SavingTKN": "0xc8132787ce584CfC3c76Bcb0754C378f84B274EF",
-     "co2EmissionTKN": "0x9926236B3fBb23EEbcbB8D9115979126b0AeB820",
-     "consumptionTKN": "0x5f7fbD847899Ef0969cD032FC227E8d58AAd258E",
-     "generationTKN": "0xA8aAA9E5d980Dc05D7d7368BAE692527b96B1Cfc"
+     "co2SavingTKN": "0x520BA6e1b9bea2228BB63E6a43E76C147e0a8A29",
+     "co2EmissionTKN": "0x390b1cA66c0C86B15E46301326a3977f8B30bd0b",
+     "consumptionTKN": "0xfeECD8d11e982dDADba3c7a589c274F29A111881",
+     "generationTKN": "0xA19140e2e8882D78d0ce7fA7155958A4D16849CF"
    },
    "label": {
-     "0x9926236B3fBb23EEbcbB8D9115979126b0AeB820": {
+     "0x390b1cA66c0C86B15E46301326a3977f8B30bd0b": {
        "display": "CO2 Emission",
        "unit": "kg",
        "div": 1000,
        "type": "ask"
      },
-     "0xc8132787ce584CfC3c76Bcb0754C378f84B274EF": {
+     "0x520BA6e1b9bea2228BB63E6a43E76C147e0a8A29": {
        "display": "CO2 Einsparung",
        "unit": "kg",
        "div": 1000,
        "type": "bid"
      },
-     "0x5f7fbD847899Ef0969cD032FC227E8d58AAd258E": {
+     "0xfeECD8d11e982dDADba3c7a589c274F29A111881": {
        "display": "Stromnutzung",
        "unit": "kWh",
        "div": 1000,
        "type": "ask"
      },
-     "0xA8aAA9E5d980Dc05D7d7368BAE692527b96B1Cfc": {
+     "0xA19140e2e8882D78d0ce7fA7155958A4D16849CF": {
        "display": "Stromerzeugung",
        "unit": "kWh",
        "div": 1000,
@@ -561,10 +561,10 @@
          "type": "function"
        }
      ],
-     "0x9926236B3fBb23EEbcbB8D9115979126b0AeB820": "0xF2a2DF5eFBb33BfbFd8a690d7b2Ef6205a47F6E8",
-     "0xc8132787ce584CfC3c76Bcb0754C378f84B274EF": "0xd155E4871E49Fe405F43d94899Db5EAA7B9d41ee",
-     "0x5f7fbD847899Ef0969cD032FC227E8d58AAd258E": "0xcC231330fdcDD3430aea9234887Ec490C4aE870d",
-     "0xA8aAA9E5d980Dc05D7d7368BAE692527b96B1Cfc": "0x3e254936020849c510ce7589481344113d24862A"
+     "0x390b1cA66c0C86B15E46301326a3977f8B30bd0b": "0x4F8688e30887a9258eF7b49a9F3B529AB38f798b",
+     "0x520BA6e1b9bea2228BB63E6a43E76C147e0a8A29": "0x58c52953A1CE63A63004EdDf745E6e3F917f4d50",
+     "0xfeECD8d11e982dDADba3c7a589c274F29A111881": "0xdA1CF4Ee43D4437d57f94a867f3a6A447979Aa67",
+     "0xA19140e2e8882D78d0ce7fA7155958A4D16849CF": "0x48Ac084372764122985126128E1EECA10e3cB1Ce"
    },
    "HKN": {
      "ABI": [
