@@ -2,31 +2,31 @@
    "RPC": "https://rpc.stromkonto.net/",
    "REST_API": "https://api.corrently.io/v2.0/coriwallet",
    "account": {
-     "co2SavingTKN": "0x2F457e71DcEB0bEcEb4219ef7637236E7005929d",
-     "co2EmissionTKN": "0xEb65AC5E144eAb1532E2ff5864C10489a3B7BA3b",
-     "consumptionTKN": "0x435469a08d501c1433A49eB846C3B18F27EDA871",
-     "generationTKN": "0x50920EB69cBb799B7C958327e4D0503A3E47cDCf"
+     "co2SavingTKN": "0xc8132787ce584CfC3c76Bcb0754C378f84B274EF",
+     "co2EmissionTKN": "0x9926236B3fBb23EEbcbB8D9115979126b0AeB820",
+     "consumptionTKN": "0x5f7fbD847899Ef0969cD032FC227E8d58AAd258E",
+     "generationTKN": "0xA8aAA9E5d980Dc05D7d7368BAE692527b96B1Cfc"
    },
    "label": {
-     "0xEb65AC5E144eAb1532E2ff5864C10489a3B7BA3b": {
+     "0x9926236B3fBb23EEbcbB8D9115979126b0AeB820": {
        "display": "CO2 Emission",
        "unit": "kg",
        "div": 1000,
        "type": "ask"
      },
-     "0x2F457e71DcEB0bEcEb4219ef7637236E7005929d": {
+     "0xc8132787ce584CfC3c76Bcb0754C378f84B274EF": {
        "display": "CO2 Einsparung",
        "unit": "kg",
        "div": 1000,
        "type": "bid"
      },
-     "0x435469a08d501c1433A49eB846C3B18F27EDA871": {
+     "0x5f7fbD847899Ef0969cD032FC227E8d58AAd258E": {
        "display": "Stromnutzung",
        "unit": "kWh",
        "div": 1000,
        "type": "ask"
      },
-     "0x50920EB69cBb799B7C958327e4D0503A3E47cDCf": {
+     "0xA8aAA9E5d980Dc05D7d7368BAE692527b96B1Cfc": {
        "display": "Stromerzeugung",
        "unit": "kWh",
        "div": 1000,
@@ -561,10 +561,10 @@
          "type": "function"
        }
      ],
-     "0xEb65AC5E144eAb1532E2ff5864C10489a3B7BA3b": "0x68118026c7Aa408826C272A482008114e53c02c8",
-     "0x2F457e71DcEB0bEcEb4219ef7637236E7005929d": "0xc9552912Ce4f139f09101308A55d7107bf5fa855",
-     "0x435469a08d501c1433A49eB846C3B18F27EDA871": "0x72Ef7Ae4F9028f15d876074eE9D0E31f18ea60A4",
-     "0x50920EB69cBb799B7C958327e4D0503A3E47cDCf": "0x07F9bB17416D2d45B260C33a85873FB9990dFCCE"
+     "0x9926236B3fBb23EEbcbB8D9115979126b0AeB820": "0xF2a2DF5eFBb33BfbFd8a690d7b2Ef6205a47F6E8",
+     "0xc8132787ce584CfC3c76Bcb0754C378f84B274EF": "0xd155E4871E49Fe405F43d94899Db5EAA7B9d41ee",
+     "0x5f7fbD847899Ef0969cD032FC227E8d58AAd258E": "0xcC231330fdcDD3430aea9234887Ec490C4aE870d",
+     "0xA8aAA9E5d980Dc05D7d7368BAE692527b96B1Cfc": "0x3e254936020849c510ce7589481344113d24862A"
    },
    "HKN": {
      "ABI": [
