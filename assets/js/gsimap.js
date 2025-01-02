@@ -132,13 +132,13 @@ $(function() {
         }
   }
 
-  $.getJSON("https://api.corrently.io/v2.0/gsi/live?t="+new Date().getTime(), function(data_to_map) {
+  $.getJSON("https://api.corrently.io/v2.0/gsi/live?t="+new Date().getTime()+"&token="+token, function(data_to_map) {
     updateMap(data_to_map,true,hridx);
   });
 
   // Update map periodically (optional)
   setInterval(function() {
-    $.getJSON("https://api.corrently.io/v2.0/gsi/live?t="+new Date().getTime(), function(data_to_map) {
+    $.getJSON("https://api.corrently.io/v2.0/gsi/live?t="+new Date().getTime()+"&token="+token, function(data_to_map) {
       updateMap(data_to_map,false,hridx);
     });
   }, 30000); 

@@ -40,7 +40,8 @@ const securitization = async function() {
   const url = 'https://api.corrently.io/v2.0/scope2/eventSecuritization';
   let startData = {
     jwt: $('#presentJWTContent').val(),
-    iat: Math.round(new Date().getTime() / 1000)
+    iat: Math.round(new Date().getTime() / 1000),
+    token:token
   };
   $('#alertSecuri').html('');
   fetch(url, {
@@ -145,7 +146,8 @@ const qrVerify = function () {
   const url = 'https://api.corrently.io/v2.0/scope2/eventResolver';
 
   let startData = {
-    jwt: $('#jwtInput').val()
+    jwt: $('#jwtInput').val(),
+    token:token
   };
 
   fetch(url, {
@@ -242,7 +244,7 @@ const renderDID = function (data2) {
     addTkn(deployment.account.consumptionTKN,"kwh+");
     addTkn(deployment.account.generationTKN,"kwh-");
     }
-    $.getJSON("https://api.corrently.io/v2.0/scope2/eventTokens?eventId=" + data2.json.jti,async function(tokens) { 
+    $.getJSON("https://api.corrently.io/v2.0/scope2/eventTokens?token="+token+"&eventId=" + data2.json.jti,async function(tokens) { 
         window.deploymentJSON = deployment;
         let html = '';
         let openConsumption = 0;
@@ -404,7 +406,8 @@ const handleReadingButtonEvents = function () {
             eventId: $('#modalShare').attr('data'),
             delegated: $('#shareTo').val(),
             did: JSON.parse(data.did),
-            iat: Math.round(new Date().getTime() / 1000)
+            iat: Math.round(new Date().getTime() / 1000),
+            token:token
           };
 
           fetch(url, {
@@ -447,7 +450,8 @@ const handleReadingButtonEvents = function () {
           eventId: $('#modalTransferTracker').attr('data'),
           transferTo: $('#transferTo').val(),
           did: getTrackerById($('#modalTransferTracker').attr('data')).did,
-          iat: Math.round(new Date().getTime() / 1000)
+          iat: Math.round(new Date().getTime() / 1000),
+          token:token
         };
 
         fetch(url, {
@@ -491,7 +495,8 @@ const handleReadingButtonEvents = function () {
     $('#secTable').html('');
         let vpdata = {
           did: getTrackerById($(e.currentTarget).attr("data-eventId")).did,
-          iat: Math.round(new Date().getTime() / 1000)
+          iat: Math.round(new Date().getTime() / 1000),
+          token:token
         }
         const vp = await signJSON(vpdata);
         const url = 'https://api.corrently.io/v2.0/scope2/eventJWT';
@@ -550,7 +555,8 @@ const validateDelegation = async function (delegationId, delegationCb) {
   const url = 'https://api.corrently.io/v2.0/scope2/eventDelegation';
   let startData = {
     delegationId: delegationId,
-    iat: Math.round(new Date().getTime() / 1000)
+    iat: Math.round(new Date().getTime() / 1000),
+    token:token
   };
   if(typeof window.validateDelegationSignatures == 'undefined') window.validateDelegationSignatures = {};
   if(typeof window.validateDelegationSignatures[delegationId] == 'undefined') {
@@ -820,7 +826,8 @@ $(document).ready(function () {
     const url = 'https://api.corrently.io/v2.0/scope2/eventOwned';
     let startData = {
       request: "Sources",
-      iat: Math.round(new Date().getTime() / 1000)
+      iat: Math.round(new Date().getTime() / 1000),
+      token:token
     };
     let sourcesSig = null;
     let storedSig = window.localStorage.getItem("sources_sig");
