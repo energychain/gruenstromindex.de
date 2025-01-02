@@ -1,3 +1,5 @@
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiJsbzNrd2Q3amtmbmdkaTV4djZhdTlnIiwiZ3JvdXAiOiJhbm9ueW1vdXMiLCJhcHBpZCI6IjB4RjUzNzAwZjQ1MGUwMzUxZGI0YzlmRjFGZWZBZjEwRWI4NURBM0I3MCIsImV4cCI6MTczOTAwNjk4MywiaWF0IjoxNzM1ODEwMTgzfQ.eipNvVVwwgOivtuZp4BCK89mWWmtEMdal7AN7w9ZUg0";
+
 $(document).ready(function() {
     function renderGSI(zip) {
       let account = "0x0";
@@ -42,7 +44,7 @@ $(document).ready(function() {
           $('#modalDispatch').modal('show');
           $('#dispatchBody').html('');
           $('#dispatchTitle').html('wird geladen...');
-          $.getJSON("https://api.corrently.io/v2.0/gsi/dispatch?zip="+zip+"&account="+account,function(data) {
+          $.getJSON("https://api.corrently.io/v2.0/gsi/dispatch?zip="+zip+"&account="+account+"&token="+token,function(data) {
             let html = '<h4>Energiequellen</h4>';
             html += '<table class="table table-condensed">';
             let sources = [];
@@ -74,7 +76,7 @@ $(document).ready(function() {
             $('#dispatchBtn'+zip).removeAttr('disabled');
           });         
         })
-        $.getJSON("https://api.corrently.io/v2.0/gsi/prediction?zip="+zip+"&account="+account,function(data) {
+        $.getJSON("https://api.corrently.io/v2.0/gsi/prediction?zip="+zip+"&account="+account+"&token="+token,function(data) {
             let points = [];
             let now = new Date().getTime();
             let firstStamp = -1;
